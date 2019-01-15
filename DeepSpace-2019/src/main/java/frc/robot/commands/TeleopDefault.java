@@ -8,11 +8,29 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+import frc.robot.Robot;
+import frc.robot.RobotMap;
 
 public class TeleopDefault extends Command {
-  public TeleopDefault() {
-    // Use requires() here to declare subsystem dependencies
-    // requires(RobotMap.driveTrain);
+
+  private double leftPower;
+  private double rightPower;
+  private double deadZone = 0.15;  
+
+  public TeleopDefault(){
+    requires(RobotMap.driveTrain);
+  }
+
+  public double scaleInputs(double input){
+    if (Math.abs(input) < deadZone) {
+			input = 0;
+		} else if (input > 0) {
+			input = (input - deadZone) * 1 / (1 - deadZone);
+		} else if (input < 0) {
+			input = (input + deadZone) * 1 / (1 - deadZone);
+		}
+
+		return Math.pow(input, 3);
   }
 
   // Called just before this Command runs the first time
@@ -23,6 +41,10 @@ public class TeleopDefault extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+    leftPower = scaleInputs(Robot.oi.driver.getRawAxis(1));
+    rightPower = scaleInputs(Robot.oi.driver.getRawAxis(4));
+
+    RobotMap.driveTrain.drive(leftPower + rightPower, leftPower - rightPower);
   }
 
   // Make this return true when this Command no longer needs to run execute()

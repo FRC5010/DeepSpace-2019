@@ -7,6 +7,10 @@
 
 package frc.robot;
 
+
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import frc.robot.subsystems.DriveTrain;
+
 /**
  * The RobotMap is a mapping from the ports sensors and actuators are wired into
  * to a variable name. This provides flexibility changing wiring, makes checking
@@ -14,6 +18,16 @@ package frc.robot;
  * floating around.
  */
 public class RobotMap {
+  public static TalonSRX rightMotor1;
+  public static TalonSRX rightMotor2;
+  public static TalonSRX rightMotor3;
+
+  public static TalonSRX leftMotor1;
+  public static TalonSRX leftMotor2;
+  public static TalonSRX leftMotor3;
+
+  public static DriveTrain driveTrain;
+
   // For example to map the left and right motors, you could define the
   // following variables to use with your drivetrain subsystem.
   // public static int leftMotor = 1;
@@ -25,6 +39,20 @@ public class RobotMap {
   // public static int rangefinderModule = 1;
 
   public static void init() {
-    
+    rightMotor1 = new TalonSRX(4);
+    rightMotor2 = new TalonSRX(5);
+    rightMotor3 = new TalonSRX(6);
+
+    leftMotor1 = new TalonSRX(1);
+    leftMotor2 = new TalonSRX(2);
+    leftMotor3 = new TalonSRX(3);
+
+    rightMotor2.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 4);
+		rightMotor3.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 4);
+
+		leftMotor2.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 1);
+    leftMotor3.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 1);
+
+    driveTrain = new DriveTrain();
   }
 }
