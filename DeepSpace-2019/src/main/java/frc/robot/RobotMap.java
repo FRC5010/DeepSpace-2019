@@ -9,6 +9,9 @@ package frc.robot;
 
 
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+
+import edu.wpi.first.wpilibj.Solenoid;
+import frc.robot.subsystems.Shifter;
 import frc.robot.subsystems.DriveTrain;
 
 /**
@@ -26,7 +29,11 @@ public class RobotMap {
   public static TalonSRX leftMotor2;
   public static TalonSRX leftMotor3;
 
+  public static Solenoid shiftSolenoid;
+  
+  public static Shifter shifter;
   public static DriveTrain driveTrain;
+  
 
   // For example to map the left and right motors, you could define the
   // following variables to use with your drivetrain subsystem.
@@ -53,6 +60,10 @@ public class RobotMap {
 		leftMotor2.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 1);
     leftMotor3.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 1);
 
+    
+    shiftSolenoid = new Solenoid(0);
+
+    shifter = new Shifter();
     driveTrain = new DriveTrain();
   }
 }
