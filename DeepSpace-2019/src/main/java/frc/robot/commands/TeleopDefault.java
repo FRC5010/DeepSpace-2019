@@ -42,7 +42,7 @@ public class TeleopDefault extends Command {
   @Override
   protected void execute() {
     leftPower = scaleInputs(Robot.oi.driver.getRawAxis(1));
-    rightPower = scaleInputs(Robot.oi.driver.getRawAxis(4));
+    rightPower = -scaleInputs(Robot.oi.driver.getRawAxis(4));
 
     RobotMap.driveTrain.drive(leftPower + rightPower, leftPower - rightPower);
   }
