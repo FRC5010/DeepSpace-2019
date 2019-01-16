@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.RobotMap;
 
 public class ShiftUp extends Command {
+  
   public ShiftUp() {
     // Use requires() here to declare subsystem dependencies
     requires(RobotMap.shifter);
