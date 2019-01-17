@@ -13,6 +13,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.Solenoid;
 import frc.robot.subsystems.Shifter;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Vision;
 
 /**
  * The RobotMap is a mapping from the ports sensors and actuators are wired into
@@ -33,7 +34,8 @@ public class RobotMap {
   
   public static Shifter shifter;
   public static DriveTrain driveTrain;
-  
+  public static Vision vision;
+
 
   // For example to map the left and right motors, you could define the
   // following variables to use with your drivetrain subsystem.
@@ -65,5 +67,6 @@ public class RobotMap {
 
     shifter = new Shifter();
     driveTrain = new DriveTrain();
+    vision = new Vision();
   }
 }

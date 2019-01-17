@@ -25,10 +25,12 @@ public class Shifter extends Subsystem {
 
   public void shiftUp(){
     RobotMap.shiftSolenoid.set(false);
+    System.out.print("High Gear");
   }
 
   public void shiftDown(){
     RobotMap.shiftSolenoid.set(true);
+    System.out.print("Low Gear");
   }
 
   public void stop(){

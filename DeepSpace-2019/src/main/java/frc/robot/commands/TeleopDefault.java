@@ -13,8 +13,8 @@ import frc.robot.RobotMap;
 
 public class TeleopDefault extends Command {
 
-  private double leftPower;
-  private double rightPower;
+  private double moveAmt;
+  private double steerAmt;
   private double deadZone = 0.15;  
 
   public TeleopDefault(){
@@ -41,10 +41,16 @@ public class TeleopDefault extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    leftPower = scaleInputs(Robot.oi.driver.getRawAxis(1));
-    rightPower = -scaleInputs(Robot.oi.driver.getRawAxis(4));
 
-    RobotMap.driveTrain.drive(leftPower + rightPower, leftPower - rightPower);
+    if (Robot.oi.driver.getRawButton(6) && RobotMap.vision.getX() != 0) {
+      steerAmt = RobotMap.vision.turnTowardsTarget();
+      moveAmt = RobotMap.vision.moveTowardsTarget();
+      RobotMap.driveTrain.drive(steerAmt + moveAmt, -steerAmt + moveAmt);
+    } else {
+      moveAmt = scaleInputs(Robot.oi.driver.getRawAxis(1));
+      steerAmt = -scaleInputs(Robot.oi.driver.getRawAxis(4));
+      RobotMap.driveTrain.drive(moveAmt + steerAmt, moveAmt - steerAmt);
+    }
   }
 
   // Make this return true when this Command no longer needs to run execute()
