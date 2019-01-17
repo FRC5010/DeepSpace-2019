@@ -45,6 +45,7 @@ public class TeleopDefault extends Command {
     if (Robot.oi.driver.getRawButton(6) && RobotMap.vision.getX() != 0) {
       steerAmt = RobotMap.vision.turnTowardsTarget();
       moveAmt = RobotMap.vision.moveTowardsTarget();
+      System.out.println("moveAmt: " + moveAmt + ", steerAmt: " + steerAmt);
       RobotMap.driveTrain.drive(steerAmt + moveAmt, -steerAmt + moveAmt);
     } else {
       moveAmt = scaleInputs(Robot.oi.driver.getRawAxis(1));
