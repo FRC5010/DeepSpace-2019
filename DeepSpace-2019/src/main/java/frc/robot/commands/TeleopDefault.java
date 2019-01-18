@@ -42,10 +42,13 @@ public class TeleopDefault extends Command {
   @Override
   protected void execute() {
 
+    //System.out.println("Distance: " + RobotMap.vision.distanceFromTarget());
+    //RobotMap.tiltSensor.values();
+
     if (Robot.oi.driver.getRawButton(6) && RobotMap.vision.getX() != 0) {
-      steerAmt = RobotMap.vision.turnTowardsTarget();
+      // steerAmt = RobotMap.vision.turnTowardsTarget();
       moveAmt = RobotMap.vision.moveTowardsTarget();
-      System.out.println("moveAmt: " + moveAmt + ", steerAmt: " + steerAmt);
+      steerAmt = RobotMap.vision.arcTowardsTarget();
       RobotMap.driveTrain.drive(steerAmt + moveAmt, -steerAmt + moveAmt);
     } else {
       moveAmt = scaleInputs(Robot.oi.driver.getRawAxis(1));
