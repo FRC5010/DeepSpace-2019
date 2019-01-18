@@ -26,8 +26,8 @@ public class Vision extends Subsystem {
   NetworkTableEntry ta;
 
   double steerKp = 0.023;
-  double moveKp = 0.05;
-  double moveMin = 0.19;
+  double moveKp = 0.015;
+  double moveMin = 0.07;
 
   double limelightHeight = 36;
   double targetHeight = 24;
@@ -58,18 +58,9 @@ public class Vision extends Subsystem {
     return table.getEntry("ta").getDouble(0.0);
   }
 
-  static double prevSteerError = 0.0;
-
   //returns a steering motor output to turn robot towards target
   public double turnTowardsTarget() {
     double steerAmt = steerKp * getX();
-    // prevSteerError = (getX() + prevSteerError) / 2.0;
-    // double steerAmt = 0.0;
-
-    // if (getX() != 0) {
-    //   steerAmt = steerKp * (Math.abs(prevSteerError) > 1 ? prevSteerError : 0);
-    // }
-    //return -((steerAmt != 0) && (steerAmt < moveMin) ? moveMin : steerAmt);
 
     if (getX() > 1.0) {
       steerAmt += moveMin;
@@ -91,22 +82,37 @@ public class Vision extends Subsystem {
     return 0;
   }
 
-  static double prevMoveError = 0.0;
-
   public double moveTowardsTarget() {
     double moveAmt = 0;
-    // if (getX() != 0) {
-    //   double error = distanceFromTarget() - desiredDistance;
-    //   prevMoveError = (error + prevMoveError) / 2.0;
-    //   moveAmt = moveKp * (Math.abs(prevMoveError) >= 2.0 ? prevMoveError : 0);
-    //   return -(moveAmt > 0.3 ? 0.3 : moveAmt);
-    // }
 
     if (getX() != 0) {
-      moveAmt = moveKp * (11.0 - -getY());
+      double error = distanceFromTarget() - desiredDistance;
+      moveAmt = moveKp * error;
+
+      if (error > 1.0) {
+        moveAmt += moveMin;
+      } else if (error < 1.0) {
+        moveAmt -= moveMin;
+      }
+
       return -moveAmt;
     }
     return 0;
+  }
+
+  public double arcTowardsTarget() {
+    double distance = distanceFromTarget();
+    double angle = getX();
+    double error = (distance / 3.0) - Math.abs(angle);
+    double steerAmt = steerKp * error * (angle / Math.abs(angle));
+    System.out.println("Error: " + error + ", Angle: " + angle + ", Distance/3: " + (distance / 3) + ", steerAmt: " + steerAmt);
+
+    if (error > 1.0) {
+      steerAmt += moveMin;
+    } else if (error < 1.0) {
+      steerAmt -= moveMin;
+    }
+    return -steerAmt;
   }
 
 }

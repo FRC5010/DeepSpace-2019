@@ -10,8 +10,11 @@ package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
+import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.interfaces.Accelerometer;
 import frc.robot.subsystems.Shifter;
+import frc.robot.subsystems.TiltSensor;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Vision;
 
@@ -32,6 +35,9 @@ public class RobotMap {
 
   public static Solenoid shiftSolenoid;
   
+  public static Accelerometer builtInAccelerometer;
+
+  public static TiltSensor tiltSensor;
   public static Shifter shifter;
   public static DriveTrain driveTrain;
   public static Vision vision;
@@ -61,10 +67,12 @@ public class RobotMap {
 
 		leftMotor2.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 1);
     leftMotor3.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 1);
-
     
-    shiftSolenoid = new Solenoid(0);
+    shiftSolenoid = new Solenoid(1);
 
+    builtInAccelerometer = new BuiltInAccelerometer(Accelerometer.Range.k4G);
+
+    tiltSensor = new TiltSensor();
     shifter = new Shifter();
     driveTrain = new DriveTrain();
     vision = new Vision();
