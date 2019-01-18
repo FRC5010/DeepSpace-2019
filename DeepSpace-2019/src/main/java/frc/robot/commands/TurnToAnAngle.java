@@ -20,7 +20,7 @@ public class TurnToAnAngle extends Command {
   double moveMin = 0.19;
   double steerKp = 0.023;
   Gyro gyro;
-  int angle = 90;
+
   public double turnTowardsTarget(int angle) {
     double angleDiff = angle - gyro.getAngle();
     double steerAmt = steerKp * angle;
