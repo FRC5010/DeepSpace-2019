@@ -10,6 +10,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
+import frc.robot.subsystems.Pose;
 
 public class TeleopDefault extends Command {
 
@@ -46,9 +47,9 @@ public class TeleopDefault extends Command {
     //RobotMap.tiltSensor.values();
 
     if (Robot.oi.driver.getRawButton(6) && RobotMap.vision.getX() != 0) {
-      // steerAmt = RobotMap.vision.turnTowardsTarget();
-      moveAmt = RobotMap.vision.moveTowardsTarget();
-      steerAmt = RobotMap.vision.arcTowardsTarget();
+      steerAmt = RobotMap.visionDrive.turnTowardsTarget();
+      moveAmt = RobotMap.visionDrive.moveTowardsTarget();
+      //steerAmt = RobotMap.visionDrive.arcTowardsTarget();
       RobotMap.driveTrain.drive(steerAmt + moveAmt, -steerAmt + moveAmt);
     } else {
       moveAmt = scaleInputs(Robot.oi.driver.getRawAxis(1));

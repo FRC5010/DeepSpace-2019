@@ -14,9 +14,9 @@ import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.interfaces.Accelerometer;
 import frc.robot.subsystems.Shifter;
-import frc.robot.subsystems.TiltSensor;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Vision;
+import frc.robot.subsystems.VisionAssistedDrive;
 
 /**
  * The RobotMap is a mapping from the ports sensors and actuators are wired into
@@ -37,11 +37,10 @@ public class RobotMap {
   
   public static Accelerometer builtInAccelerometer;
 
-  public static TiltSensor tiltSensor;
   public static Shifter shifter;
   public static DriveTrain driveTrain;
   public static Vision vision;
-
+  public static VisionAssistedDrive visionDrive;
 
   // For example to map the left and right motors, you could define the
   // following variables to use with your drivetrain subsystem.
@@ -72,9 +71,9 @@ public class RobotMap {
 
     builtInAccelerometer = new BuiltInAccelerometer(Accelerometer.Range.k4G);
 
-    tiltSensor = new TiltSensor();
     shifter = new Shifter();
     driveTrain = new DriveTrain();
     vision = new Vision();
+    visionDrive = new VisionAssistedDrive();
   }
 }
