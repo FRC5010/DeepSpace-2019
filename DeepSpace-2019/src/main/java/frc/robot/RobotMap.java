@@ -18,6 +18,8 @@ import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.VisionAssistedDrive;
 
+import frc.robot.RobotMapJQ;
+
 /**
  * The RobotMap is a mapping from the ports sensors and actuators are wired into
  * to a variable name. This provides flexibility changing wiring, makes checking
@@ -34,6 +36,8 @@ public class RobotMap {
   public static TalonSRX leftMotor3;
 
   public static Solenoid shiftSolenoid;
+
+  public static RobotMapJQ robotMapJQ;
   
   public static Accelerometer builtInAccelerometer;
 
@@ -75,5 +79,7 @@ public class RobotMap {
     driveTrain = new DriveTrain();
     vision = new Vision();
     visionDrive = new VisionAssistedDrive();
+    
+    robotMapJQ = new RobotMapJQ();
   }
 }
