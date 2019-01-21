@@ -17,7 +17,7 @@ public class RobotMapJQ {
     public static BeakIntake beakIntake;
 }
 
-public static void init(){
+public static void init() {
     beakSolenoid = new Solenoid(2);
     beakIntake = new BeakIntake();
 }
