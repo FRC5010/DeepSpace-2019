@@ -21,9 +21,9 @@ public static Trajectory testR;
 
     
 public static void init(){
-     testL = PathfinderFRC.getTrajectory("Unnamed.left");
+     testL = PathfinderFRC.getTrajectory("testPathTest.left");
      System.out.println("testL"+testL.toString());
-     testR = PathfinderFRC.getTrajectory("Unnamed.right");
+     testR = PathfinderFRC.getTrajectory("testPathTest.right");
      System.out.println("testT"+testR.toString());
 }
 }
