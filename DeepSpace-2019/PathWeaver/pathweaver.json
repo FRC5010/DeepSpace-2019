@@ -1,0 +1,10 @@
+{
+  "lengthUnit": "Foot",
+  "timeStep": 15.0,
+  "maxVelocity": 13.0,
+  "maxAcceleration": 6.0,
+  "maxJerk": 2.0,
+  "wheelBase": 2.0,
+  "gameName": "FIRST Power Up",
+  "outputDir": ""
+}

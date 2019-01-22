@@ -7,20 +7,9 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.Solenoid;
-import frc.robot.subsystems.BeakIntake;
 /**
  * Add your docs here.
  */
-public class RobotMapJQ {
-    public static Solenoid beakSolenoid;
-    public static BeakIntake beakIntake;
-
-    public static void init() {
-        beakSolenoid = new Solenoid(2);
-        beakIntake = new BeakIntake();
-    }
+public class RobotMapBL {
+    
 }
-
-
-
