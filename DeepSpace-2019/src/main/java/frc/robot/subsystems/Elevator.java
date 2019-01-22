@@ -7,31 +7,27 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import frc.robot.RobotMapJQ;
 
 /**
  * Add your docs here.
  */
-public class BeakIntake extends Subsystem {
+public class Elevator extends Subsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
-
+  Victor elevMotor = new Victor(8);
 
   @Override
   public void initDefaultCommand() {
+    
     // Set the default command for a subsystem here.
     // setDefaultCommand(new MySpecialCommand());
   }
-
-  public void beakOpen(){
-    RobotMapJQ.beakSolenoid.set(true);
+  public void raiseElevator(double power) {
+    elevMotor.set(power);
   }
-
-  public void beakClose(){
-    RobotMapJQ.beakSolenoid.set(false);
+  public void lowerElevator(double power){
+    elevMotor.set(-power);
   }
-
-
-
 }

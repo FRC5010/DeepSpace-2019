@@ -20,6 +20,7 @@ import frc.robot.subsystems.Shifter;
 import frc.robot.subsystems.DirectionSensor;
 import frc.robot.subsystems.DistanceSensor;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.VisionAssistedDrive;
 
@@ -48,10 +49,11 @@ public class RobotMap {
   public static VisionAssistedDrive visionDrive;
   public static Encoder leftEncoder;
   public static Encoder rightEncoder;
-public static int encoderPPR;
+  public static int encoderPPR;
   public static DistanceSensor distance;
   public static Gyro gyro;
   public static DirectionSensor direction;
+  public static Elevator elevator;
   // For example to map the left and right motors, you could define the
   // following variables to use with your drivetrain subsystem.
   // public static int leftMotor = 1;
@@ -88,7 +90,7 @@ public static int encoderPPR;
     gyro = new ADXRS450_Gyro(); 
     direction = new DirectionSensor();
     
-
+    elevator = new Elevator();
     shifter = new Shifter();
     driveTrain = new DriveTrain();
     vision = new Vision();

@@ -8,29 +8,48 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
-import frc.robot.RobotMapJQ;
+import frc.robot.Robot;
+import frc.robot.RobotMap;
+
+public class LowerElevator extends Command {
+  private double moveDown;
+  private double deadZone = 0.15;  
 
 
-public class BeakClose extends Command {
-  public BeakClose() {
-    requires(RobotMapJQ.beakIntake);
+  public LowerElevator() {
+    // Use requires() here to declare subsystem dependencies
+    // eg. requires(chassis);
+    requires(RobotMap.elevator);
+  }
+
+  private double scaleInputs(double input){
+    if (Math.abs(input) < deadZone) {
+			input = 0;
+		} else if (input > 0) {
+			input = (input - deadZone) * 1 / (1 - deadZone);
+		} else if (input < 0) {
+			input = (input + deadZone) * 1 / (1 - deadZone);
+		}
+
+		return Math.pow(input, 3);
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    RobotMapJQ.beakIntake.beakClose();
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+    moveDown = scaleInputs(Robot.oi.driver.getRawAxis(4));
+    RobotMap.elevator.lowerElevator(moveDown);
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return false;
+    return true;
   }
 
   // Called once after isFinished returns true
