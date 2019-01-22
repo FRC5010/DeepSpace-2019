@@ -7,35 +7,27 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.interfaces.Gyro;
-import frc.robot.RobotMap;
 
 /**
  * Add your docs here.
  */
-public class DirectionSensor extends Subsystem {
-  
-  private Gyro gyro;
-// this is to reset the gyro so it can detect the next angle
-  public DirectionSensor() {
-    RobotMap.gyro.reset();
-    this.gyro = RobotMap.gyro;
-  }
-  
-  public double angle() {
-		return gyro.getAngle();
-	}
-	
-	public void reset() {
-		gyro.reset();
-	}
+public class Elevator extends Subsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
+  Victor elevMotor = new Victor(8);
 
   @Override
   public void initDefaultCommand() {
+    
     // Set the default command for a subsystem here.
     // setDefaultCommand(new MySpecialCommand());
+  }
+  public void raiseElevator(double power) {
+    elevMotor.set(power);
+  }
+  public void lowerElevator(double power){
+    elevMotor.set(-power);
   }
 }

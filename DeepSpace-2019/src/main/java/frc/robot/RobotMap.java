@@ -10,15 +10,13 @@ package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
-import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 import edu.wpi.first.wpilibj.Solenoid;
-import edu.wpi.first.wpilibj.interfaces.Accelerometer;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
 import frc.robot.subsystems.Shifter;
+import frc.robot.subsystems.DirectionSensor;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Vision;
-import frc.robot.subsystems.VisionAssistedDrive;
-
-import frc.robot.RobotMapJQ;
+import frc.robot.subsystems.Elevator;
 
 /**
  * The RobotMap is a mapping from the ports sensors and actuators are wired into
@@ -36,15 +34,15 @@ public class RobotMap {
   public static TalonSRX leftMotor3;
 
   public static Solenoid shiftSolenoid;
-
-  public static RobotMapJQ robotMapJQ;
   
-  public static Accelerometer builtInAccelerometer;
-
   public static Shifter shifter;
   public static DriveTrain driveTrain;
   public static Vision vision;
-  public static VisionAssistedDrive visionDrive;
+  public static Gyro gyro;
+  public static DirectionSensor direction;
+
+  public static Elevator elevator;
+
 
   // For example to map the left and right motors, you could define the
   // following variables to use with your drivetrain subsystem.
@@ -57,6 +55,7 @@ public class RobotMap {
   // public static int rangefinderModule = 1;
 
   public static void init() {
+// defining the motors
     rightMotor1 = new TalonSRX(4);
     rightMotor2 = new TalonSRX(5);
     rightMotor3 = new TalonSRX(6);
@@ -70,16 +69,13 @@ public class RobotMap {
 
 		leftMotor2.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 1);
     leftMotor3.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 1);
-    
-    shiftSolenoid = new Solenoid(1);
 
-    builtInAccelerometer = new BuiltInAccelerometer(Accelerometer.Range.k4G);
-
+//variables for subsystems
+    shiftSolenoid = new Solenoid(0);
     shifter = new Shifter();
     driveTrain = new DriveTrain();
     vision = new Vision();
-    visionDrive = new VisionAssistedDrive();
-    
-    robotMapJQ = new RobotMapJQ();
+    direction = new DirectionSensor();
+    elevator = new Elevator();
   }
 }
