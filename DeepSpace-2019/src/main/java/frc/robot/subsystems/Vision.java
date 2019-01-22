@@ -10,7 +10,6 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
 /**
@@ -23,15 +22,15 @@ public class Vision extends Subsystem {
   private static NetworkTable table;
   
   public static final double LIME_LIGHT_HEIGHT = 36;
-  private static double tXs;
-  private static double tYs;
-  private static double tAs;
-  private static double tXc;
-  private static double tYc;
-  private static double tAc;
-  private static boolean tValids = false;
+  private static Double tXs;
+  private static Double tYs;
+  private static Double tAs;
+  private static Double tXc;
+  private static Double tYc;
+  private static Double tAc;
   private static boolean tValidc = false;
-  private static boolean tValidl = false;
+  private static boolean tValids = false;
+  private static long lastValid = 0;
 
   @Override
   public void initDefaultCommand() {
@@ -44,30 +43,39 @@ public class Vision extends Subsystem {
     tValidc = table.getEntry("tv").getDouble(0.0) == 0.0 ? false : true;
     SmartDashboard.putBoolean("Valid Target", tValidc);
 
+    if (tValidc) { 
+      tValids = true;
+      lastValid = System.currentTimeMillis();
+    } else { 
+      // If target is invalid for more that 0.5 seconds, it is likely off screen
+      if (lastValid + 500 > System.currentTimeMillis()) {
+        tValids = false;
+      }
+    }
     tXc = table.getEntry("tx").getDouble(0.0);
-    tXs = tValidc ? (tXs + tXc) / 2 : tXs;
+    tXs = tValidc & tValids ? (tXs + tXc) / 2 : tValids ? tXs : null;
     SmartDashboard.putNumber("Target X", tXs);
     
     tYc = table.getEntry("ty").getDouble(0.0);
-    tYs = tValidc ? (tYs + tYc) / 2 : tYs;
+    tYs = tValidc & tValids ? (tYs + tYc) / 2 : tValids ? tYs : null;
     SmartDashboard.putNumber("Target Y", tYs);
     
     tAc = table.getEntry("ta").getDouble(0.0);
-    tAs = tValidc ? (tAs + tAc) / 2 : tAs;
+    tAs = tValidc & tValids ? (tAs + tAc) / 2 : tValids ? tAs : null;
     SmartDashboard.putNumber("Target Area", tAs);
   }
 
-  public double getX() {
+  public Double getX() {
     return tXs;
   }
   
-  public double getY() {
+  public Double getY() {
     return tYs;
   }
 
-  public double getA() {
+  public Double getA() {
     return tAs;
   }
 
-  public boolean isTargetValid() { return tValidc; }
+  public boolean isTargetValid() { return tValids; }
 }

@@ -10,10 +10,15 @@ package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
+import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.BuiltInAccelerometer;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.interfaces.Accelerometer;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
 import frc.robot.subsystems.Shifter;
+import frc.robot.subsystems.DirectionSensor;
+import frc.robot.subsystems.DistanceSensor;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.VisionAssistedDrive;
@@ -41,7 +46,12 @@ public class RobotMap {
   public static DriveTrain driveTrain;
   public static Vision vision;
   public static VisionAssistedDrive visionDrive;
-
+  public static Encoder leftEncoder;
+  public static Encoder rightEncoder;
+public static int encoderPPR;
+  public static DistanceSensor distance;
+  public static Gyro gyro;
+  public static DirectionSensor direction;
   // For example to map the left and right motors, you could define the
   // following variables to use with your drivetrain subsystem.
   // public static int leftMotor = 1;
@@ -53,6 +63,7 @@ public class RobotMap {
   // public static int rangefinderModule = 1;
 
   public static void init() {
+    RobotMap_Paths.init();
     rightMotor1 = new TalonSRX(4);
     rightMotor2 = new TalonSRX(5);
     rightMotor3 = new TalonSRX(6);
@@ -70,6 +81,13 @@ public class RobotMap {
     shiftSolenoid = new Solenoid(1);
 
     builtInAccelerometer = new BuiltInAccelerometer(Accelerometer.Range.k4G);
+    rightEncoder = new Encoder(0,1);
+    leftEncoder = new Encoder(2,3);
+    encoderPPR=480;
+    distance = new DistanceSensor();
+    gyro = new ADXRS450_Gyro(); 
+    direction = new DirectionSensor();
+    
 
     shifter = new Shifter();
     driveTrain = new DriveTrain();

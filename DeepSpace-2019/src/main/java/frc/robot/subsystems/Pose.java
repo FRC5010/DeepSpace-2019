@@ -20,11 +20,11 @@ import frc.robot.RobotMap;
  */
 public class Pose {
     public final long timestamp;
-    public final double limeLightTx;
-    public final double limeLightTy;
-    public final double limeLightTa;
-    public final double limeLightTl;
-    public final double limeLightTs;
+    public final Double limeLightTx;
+    public final Double limeLightTy;
+    public final Double limeLightTa;
+    public final Double limeLightTl;
+    public final Double limeLightTs;
     public final boolean limeLightValid;
 
     public final double driveTrainEncoderLeft;
@@ -32,7 +32,7 @@ public class Pose {
     public final double heading;
     public final double elevatorEncoder;
 
-    public static final Map<Long, Pose> poseMap = new HashMap<Long, Pose>();
+    //public static final Map<Long, Pose> poseMap = new HashMap<Long, Pose>();
     public static final List<Pose> poseList = new ArrayList<Pose>();
     private static Pose currentPose;
     private static long poseListLimit = 200;
@@ -66,11 +66,12 @@ public class Pose {
         poseList.add(currentPose);
         if (poseList.size() > poseListLimit) {
             Pose removePose = poseList.remove(0);
-            poseMap.remove(removePose.timestamp, removePose);
+            //poseMap.remove(removePose.timestamp, removePose);
         }
 
-        poseMap.put(currentPose.timestamp, currentPose);
+        //poseMap.put(currentPose.timestamp, currentPose);
 
+        // TODO: Remove, only being called here so it always logs
         VisionAssistedDrive.distanceFromTarget();
         return currentPose;
     }

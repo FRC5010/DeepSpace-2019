@@ -9,7 +9,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.RobotMap;
+
 
 /**
  * Add your docs here.
@@ -32,12 +32,15 @@ public class VisionAssistedDrive extends Subsystem {
   
   //returns a steering motor output to turn robot towards target
   public double turnTowardsTarget() {
-    double steerAmt = steerKp * Pose.currentPose().limeLightTx;
+    double steerAmt = 0;
+    if (Pose.currentPose().limeLightTx != null) {
+      steerAmt = steerKp * Pose.currentPose().limeLightTx;
 
-    if (Pose.currentPose().limeLightTx > 1.0) {
-      steerAmt += moveMin;
-    } else if (Pose.currentPose().limeLightTx < 1.0) {
-      steerAmt -= moveMin;
+      if (Pose.currentPose().limeLightTx > 1.0) {
+        steerAmt += moveMin;
+      } else if (Pose.currentPose().limeLightTx < 1.0) {
+        steerAmt -= moveMin;
+      }
     }
     return -steerAmt;
   }
@@ -47,23 +50,25 @@ public class VisionAssistedDrive extends Subsystem {
   public static double distanceFromTarget() {
     double distance = prevDist;
 
-    if (Pose.currentPose().limeLightValid) {
+    if (Pose.currentPose().limeLightTy != null) {
       double yInRadians = Math.toRadians(Pose.currentPose().limeLightTy);
       distance = (Vision.LIME_LIGHT_HEIGHT - targetHeight) / Math.tan(yInRadians);
       SmartDashboard.putNumber("TanY", Math.tan(yInRadians));
       prevDist = (prevDist + distance) / 2;
       distance = prevDist;
+    } else {
+      distance = -1;
     }
     SmartDashboard.putNumber("DistanceFromTarget", distance);
     return distance;
-}
+  }
 
   public double moveTowardsTarget() {
     double moveAmt = 0;
 
     double distanceFromTarget = distanceFromTarget();
-    if (Pose.currentPose().limeLightValid && -1 != distanceFromTarget) {
-      double error = distanceFromTarget - desiredDistance;
+    if (-1 != distanceFromTarget) {
+      double error = desiredDistance - distanceFromTarget;
       moveAmt = moveKp * error;
 
       if (error > 1.0) {
@@ -79,11 +84,11 @@ public class VisionAssistedDrive extends Subsystem {
 
   public double arcTowardsTarget() {
     double distance = distanceFromTarget();
-    if (Pose.currentPose().limeLightValid && -1 != distance) {
+    if (-1 != distance) {
       System.out.println("-------");
       double angle = Pose.currentPose().limeLightTx;
       System.out.println("Angle: " + angle);
-      double calcDistance = distance - (desiredDistance);
+      double calcDistance = distance - desiredDistance;
       System.out.println("CalcDist: " + calcDistance);
       double desiredAngle = (calcDistance > 0) ? calcDistance / 3.0 : 0.0;
       System.out.println("DesAngle: " + desiredAngle);
@@ -92,10 +97,10 @@ public class VisionAssistedDrive extends Subsystem {
       double steerAmt = steerKp * error * (angle / Math.abs(angle));
       System.out.println("SteerAmt: " + steerAmt);
 
-      if (error > 1.0) {
-        steerAmt += moveMin;
-      } else if (error < 1.0) {
-        steerAmt -= moveMin;
+      if (steerAmt < moveMin && steerAmt > 0) {
+        steerAmt = moveMin;
+      } else if (steerAmt > -moveMin && steerAmt < 0) {
+        steerAmt = -moveMin;
       }
       return -steerAmt;
     }
