@@ -9,13 +9,13 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.buttons.Button;
 import frc.robot.commands.ShiftUp;
 import frc.robot.commands.TurnToAnAngle;
-import frc.robot.commands.BeakClose;
-import frc.robot.commands.BeakOpen;
 import frc.robot.commands.ShiftDown;
+import frc.robot.commands.commands_auto.FieldMovement;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -54,16 +54,12 @@ public class OI {
 
   public Button joystickRB = new JoystickButton(driver, 10);
   public Button joystickLB = new JoystickButton(driver, 9);
-
-  public Button joystickRT = new JoystickButton(driver,3);
-  public Button joystickLT = new JoystickButton(driver,2);
+  public Button driverBack = new JoystickButton(driver, 7);
 
   public OI() {
     joystickLB.whenPressed(new ShiftUp());
     joystickRB.whenPressed(new ShiftDown());
-
-    joystickRT.whenPressed(new BeakOpen());
-    joystickLT.whenPressed(new BeakClose());
+    driverBack.whenPressed(new FieldMovement());
   }
 
 }
