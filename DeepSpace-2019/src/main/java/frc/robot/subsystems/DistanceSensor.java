@@ -26,7 +26,7 @@ public class DistanceSensor extends Subsystem {
 		dpp = RobotMap.rightEncoder.getDistancePerPulse();
 		SmartDashboard.getNumber("Distance per pulse r", dpp);
 		
-		 dpp = RobotMap.leftEncoder.getDistancePerPulse();
+		dpp = RobotMap.leftEncoder.getDistancePerPulse();
 		SmartDashboard.getNumber("Distance per pulse l", dpp);
 		
 	}

@@ -22,12 +22,12 @@ public class Vision extends Subsystem {
   private static NetworkTable table;
   
   public static final double LIME_LIGHT_HEIGHT = 36;
-  private static Double tXs;
-  private static Double tYs;
-  private static Double tAs;
-  private static Double tXc;
-  private static Double tYc;
-  private static Double tAc;
+  private static Double tXs = Double.valueOf(0);
+  private static Double tYs = Double.valueOf(0);
+  private static Double tAs = Double.valueOf(0);
+  private static Double tXc = Double.valueOf(0);
+  private static Double tYc = Double.valueOf(0);
+  private static Double tAc = Double.valueOf(0);
   private static boolean tValidc = false;
   private static boolean tValids = false;
   private static long lastValid = 0;
@@ -52,17 +52,32 @@ public class Vision extends Subsystem {
         tValids = false;
       }
     }
-    tXc = table.getEntry("tx").getDouble(0.0);
-    tXs = tValidc & tValids ? (tXs + tXc) / 2 : tValids ? tXs : null;
-    SmartDashboard.putNumber("Target X", tXs);
+    tXc = Double.valueOf(table.getEntry("tx").getDouble(0.0));
+    Double tXtmp = tValids ? tXs : Double.NaN;
+    if (tValidc & tValids) {
+      tXs = Double.valueOf(Double.valueOf((tXs + tXc)) / 2.0);
+     } else {
+       tXs = tXtmp;
+     }
+    SmartDashboard.putNumber("Target X", (null != tXs) ? tXs : 0.0);
     
-    tYc = table.getEntry("ty").getDouble(0.0);
-    tYs = tValidc & tValids ? (tYs + tYc) / 2 : tValids ? tYs : null;
-    SmartDashboard.putNumber("Target Y", tYs);
+    tYc = Double.valueOf(table.getEntry("ty").getDouble(0.0));
+    Double tYtmp = tValids ? tYs : Double.NaN;
+    if (tValidc & tValids) {
+      tYs = (tYs + tYc) / 2.0;
+     } else {
+       tYs = tYtmp;
+     }
+    SmartDashboard.putNumber("Target Y", (null != tYs) ? tYs : 0.0);
     
-    tAc = table.getEntry("ta").getDouble(0.0);
-    tAs = tValidc & tValids ? (tAs + tAc) / 2 : tValids ? tAs : null;
-    SmartDashboard.putNumber("Target Area", tAs);
+    tAc = Double.valueOf(table.getEntry("ta").getDouble(0.0));
+    Double tAtmp = tValids ? tAs : Double.NaN;
+    if (tValidc & tValids) {
+      tAs = (tAs + tAc) / 2.0;
+     } else {
+       tAs = tAtmp;
+     }
+    SmartDashboard.putNumber("Target Area", (null != tAs) ? tAs : 0.0);
   }
 
   public Double getX() {

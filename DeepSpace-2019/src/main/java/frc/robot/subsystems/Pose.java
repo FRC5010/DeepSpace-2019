@@ -37,13 +37,13 @@ public class Pose {
     private static Pose currentPose;
     private static long poseListLimit = 200;
 
-    public Pose(double tx, double ty, double ta, boolean tv, double tl, double ts, double el, double er, double h, double ee) {
+    public Pose(Double tx, Double ty, Double ta, boolean tv, Double tl, Double ts, double el, double er, double h, double ee) {
         timestamp = System.currentTimeMillis() / 10; // round down to minimum resolution
         limeLightTa = ta;
         limeLightTl = tl;
         limeLightTs = ts;
         limeLightTx = tx;
-        limeLightTy = tx;
+        limeLightTy = ty;
         limeLightValid = tv;
         driveTrainEncoderLeft = el;
         driveTrainEncoderRight = er;
@@ -56,9 +56,9 @@ public class Pose {
     public static Pose update() {
         RobotMap.vision.update();
      
-        double limeLightTa = RobotMap.vision.getA();
-        double limeLightTx = RobotMap.vision.getX();
-        double limeLightTy = RobotMap.vision.getY();
+        Double limeLightTa = RobotMap.vision.getA();
+        Double limeLightTx = RobotMap.vision.getX();
+        Double limeLightTy = RobotMap.vision.getY();
         boolean limeLightValid = RobotMap.vision.isTargetValid();
 
         currentPose = new Pose(limeLightTx, limeLightTy, limeLightTa, limeLightValid, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);

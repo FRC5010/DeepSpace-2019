@@ -29,28 +29,12 @@ public class VisionAssistedDrive extends Subsystem {
     // setDefaultCommand(new MySpecialCommand());
   }
 
-  
-  //returns a steering motor output to turn robot towards target
-  public double turnTowardsTarget() {
-    double steerAmt = 0;
-    if (Pose.currentPose().limeLightTx != null) {
-      steerAmt = steerKp * Pose.currentPose().limeLightTx;
-
-      if (Pose.currentPose().limeLightTx > 1.0) {
-        steerAmt += moveMin;
-      } else if (Pose.currentPose().limeLightTx < 1.0) {
-        steerAmt -= moveMin;
-      }
-    }
-    return -steerAmt;
-  }
-
   private static double prevDist = 0.0;
 
   public static double distanceFromTarget() {
     double distance = prevDist;
 
-    if (Pose.currentPose().limeLightTy != null) {
+    if (Pose.currentPose().limeLightTy != Double.NaN) {
       double yInRadians = Math.toRadians(Pose.currentPose().limeLightTy);
       distance = (Vision.LIME_LIGHT_HEIGHT - targetHeight) / Math.tan(yInRadians);
       SmartDashboard.putNumber("TanY", Math.tan(yInRadians));
@@ -61,6 +45,21 @@ public class VisionAssistedDrive extends Subsystem {
     }
     SmartDashboard.putNumber("DistanceFromTarget", distance);
     return distance;
+  }
+
+  //returns a steering motor output to turn robot towards target
+  public double turnTowardsTarget() {
+    double steerAmt = 0;
+    if (Pose.currentPose().limeLightTx != Double.NaN) {
+      steerAmt = steerKp * Pose.currentPose().limeLightTx;
+
+      if (Pose.currentPose().limeLightTx > 1.0) {
+        steerAmt += moveMin;
+      } else if (Pose.currentPose().limeLightTx < 1.0) {
+        steerAmt -= moveMin;
+      }
+    }
+    return -steerAmt;
   }
 
   public double moveTowardsTarget() {
