@@ -7,7 +7,7 @@
 
 package frc.robot;
 
-import java.nio.file.DirectoryStream;
+//import java.nio.file.DirectoryStream;
 
 import jaci.pathfinder.PathfinderFRC;
 import jaci.pathfinder.Trajectory;
@@ -21,9 +21,9 @@ public static Trajectory testR;
 
     
 public static void init(){
-     testL = PathfinderFRC.getTrajectory("testPath.left");
+     testL = PathfinderFRC.getTrajectory("testPath.left" );
      System.out.println("testL"+testL.toString());
      testR = PathfinderFRC.getTrajectory("testPath.right");
-     System.out.println("testT"+testR.toString());
+     System.out.println("testR"+testR.toString());
 }
 }

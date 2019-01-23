@@ -22,6 +22,7 @@ public class VisionAssistedDrive extends Subsystem {
   static final double moveMin = 0.07;
   static final double targetHeight = 24;
   double desiredDistance = 25;
+  private static double prevDist = 0.0;
 
   @Override
   public void initDefaultCommand() {
@@ -29,8 +30,7 @@ public class VisionAssistedDrive extends Subsystem {
     // setDefaultCommand(new MySpecialCommand());
   }
 
-  private static double prevDist = 0.0;
-
+  //returns the distance from the vision target
   public static double distanceFromTarget() {
     double distance = prevDist;
 
@@ -62,6 +62,7 @@ public class VisionAssistedDrive extends Subsystem {
     return -steerAmt;
   }
 
+  //returns a motor output that will move the robot towards target
   public double moveTowardsTarget() {
     double moveAmt = 0;
 
@@ -69,7 +70,7 @@ public class VisionAssistedDrive extends Subsystem {
     if (-1 != distanceFromTarget) {
       double error = desiredDistance - distanceFromTarget;
       moveAmt = moveKp * error;
-
+      
       if (error > 1.0) {
         moveAmt += moveMin;
       } else if (error < 1.0) {

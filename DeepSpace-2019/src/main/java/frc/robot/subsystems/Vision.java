@@ -52,6 +52,10 @@ public class Vision extends Subsystem {
         tValids = false;
       }
     }
+    
+    //System.out.println("validC: " + tValidc + ", validS: " + tValids);
+
+
     tXc = Double.valueOf(table.getEntry("tx").getDouble(0.0));
     Double tXtmp = tValids ? tXs : Double.NaN;
     if (tValidc & tValids) {
@@ -59,7 +63,7 @@ public class Vision extends Subsystem {
      } else {
        tXs = tXtmp;
      }
-    SmartDashboard.putNumber("Target X", (null != tXs) ? tXs : 0.0);
+    SmartDashboard.putNumber("Target X", (Double.NaN != tXs) ? tXs : 0.0);
     
     tYc = Double.valueOf(table.getEntry("ty").getDouble(0.0));
     Double tYtmp = tValids ? tYs : Double.NaN;
@@ -68,7 +72,7 @@ public class Vision extends Subsystem {
      } else {
        tYs = tYtmp;
      }
-    SmartDashboard.putNumber("Target Y", (null != tYs) ? tYs : 0.0);
+    SmartDashboard.putNumber("Target Y", (Double.NaN != tYs) ? tYs : 0.0);
     
     tAc = Double.valueOf(table.getEntry("ta").getDouble(0.0));
     Double tAtmp = tValids ? tAs : Double.NaN;
@@ -77,7 +81,7 @@ public class Vision extends Subsystem {
      } else {
        tAs = tAtmp;
      }
-    SmartDashboard.putNumber("Target Area", (null != tAs) ? tAs : 0.0);
+    SmartDashboard.putNumber("Target Area", (Double.NaN != tAs) ? tAs : 0.0);
   }
 
   public Double getX() {

@@ -25,7 +25,7 @@ public class PathForward extends Command {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
     
-    left = new EncoderFollower();
+    left = new EncoderFollower(lTraj);
 		right = new EncoderFollower(rTraj);
   }
 
