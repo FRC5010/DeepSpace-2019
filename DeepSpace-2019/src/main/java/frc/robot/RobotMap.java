@@ -91,7 +91,7 @@ public class RobotMap {
     direction = new DirectionSensor();
     
     elevator = new Elevator();
-    shifter = new Shifter();
+      shifter = new Shifter();
     driveTrain = new DriveTrain();
     vision = new Vision();
     visionDrive = new VisionAssistedDrive();

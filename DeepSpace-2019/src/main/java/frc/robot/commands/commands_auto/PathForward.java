@@ -83,8 +83,8 @@ public class PathForward extends Command {
 			 double distance_covered = ((double)(RobotMap.distance.getLeftRaw() - 0) / RobotMap.encoderPPR)
 		                * .5;
 			SmartDashboard.putNumber("distance covered", distance_covered);
-		double l = left.calculate(RobotMap.distance.getLeftRaw());
-		double r = right.calculate(RobotMap.distance.getRightRaw());
+		double l = -left.calculate(RobotMap.distance.getLeftRaw());
+		double r = -right.calculate(RobotMap.distance.getRightRaw());
 
 		double gyro_heading = (-RobotMap.direction.angle());// Assuming the gyro is giving a value in degrees
 		SmartDashboard.putNumber("gyro heading", gyro_heading);
