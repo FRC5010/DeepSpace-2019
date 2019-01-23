@@ -16,14 +16,17 @@ import frc.robot.subsystems.Elevator;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.command.PIDCommand;
 
-/**
- * An example command.  You can replace me with your own command.
- */
 public class SetHeight extends PIDCommand {
   double height;
   double lastHeight = 0;
   byte immobileCount = 0;
   private PIDController PID;
+  double hatchHeight = 48;
+  //Ground to hatch hole center
+  double cargoHeightOffset = 22;
+  //Hatch hole center to corresponding cargo hole height-wise
+  double repeatHeight = 70;
+  //Hatch hole center to next hatch hole center (height)
 
   public SetHeight(double inputHeight) {
     super(0.2,0.0,0.0);
@@ -34,6 +37,33 @@ public class SetHeight extends PIDCommand {
     PID.setAbsoluteTolerance(5);
     PID.setOutputRange(-1,1);
     PID.reset();
+  }
+
+  private double snapToHeight() {
+    //Returns height of what the bot is closest to height-wise
+    //Locations:
+    //48, 70, 118, 140, 188, 210
+    //Alternates hatch locations and rocket cargo holes
+    double snapHeight = 0;
+    
+    //double curHeight = RobotMap.elevator.getHeight();
+    double curHeight = 48;
+
+    if (curHeight < hatchHeight) {
+      snapHeight = hatchHeight;
+    }
+    if (curHeight > repeatHeight * 3) {
+      snapHeight = repeatHeight * 3;
+    }
+    for (int i = 0; i < 3; i++) {
+      if (curHeight >= repeatHeight * i + hatchHeight/2 && curHeight < repeatHeight * i + hatchHeight + cargoHeightOffset/2) {
+        snapHeight = repeatHeight * i + hatchHeight;
+      }
+      if (curHeight >= repeatHeight * (i + 1) - cargoHeightOffset/2 && curHeight < repeatHeight * (i + 1) + hatchHeight/2) {
+        snapHeight = repeatHeight * (i + 1);
+      }
+    }
+    return snapHeight;
   }
 
   // Called just before this Command runs the first time
