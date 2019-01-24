@@ -39,11 +39,11 @@ public class Pose {
 
     public Pose(double tx, double ty, double ta, boolean tv, double tl, Double ts, double el, double er, double h, double ee) {
         timestamp = System.currentTimeMillis() / 10; // round down to minimum resolution
+        limeLightTx = tx;
+        limeLightTy = ty;
         limeLightTa = ta;
         limeLightTl = tl;
         limeLightTs = ts;
-        limeLightTx = tx;
-        limeLightTy = ty;
         limeLightValid = tv;
         driveTrainEncoderLeft = el;
         driveTrainEncoderRight = er;
@@ -51,7 +51,9 @@ public class Pose {
         elevatorEncoder = ee;
     }
 
-    public static Pose currentPose() { return currentPose; }
+    public static Pose currentPose() {
+        return currentPose;
+    }
 
     public static Pose update() {
         RobotMap.vision.update();

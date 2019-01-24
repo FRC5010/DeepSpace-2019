@@ -19,9 +19,9 @@ public class VisionAssistedDrive extends Subsystem {
   // here. Call these from Commands.
   static final double steerKp = 0.023;
   static final double moveKp = 0.015;
-  static final double moveMin = 0.07;
+  static final double moveMin = 0.0;
   static final double targetHeight = 24;
-  double desiredDistance = 25;
+  double desiredDistance = 40;
   private static double prevDist = 0.0;
 
   @Override
@@ -36,7 +36,7 @@ public class VisionAssistedDrive extends Subsystem {
 
     if (Pose.currentPose().limeLightValid) {
       double yInRadians = Math.toRadians(Pose.currentPose().limeLightTy);
-      distance = (Vision.LIME_LIGHT_HEIGHT - targetHeight) / Math.tan(yInRadians);
+      distance = Math.abs((Vision.LIME_LIGHT_HEIGHT - targetHeight) / Math.tan(yInRadians));
       SmartDashboard.putNumber("TanY", Math.tan(yInRadians));
       prevDist = (prevDist + distance) / 2;
       distance = prevDist;
@@ -71,13 +71,13 @@ public class VisionAssistedDrive extends Subsystem {
     if (Pose.currentPose().limeLightValid) {
       double error = desiredDistance - distanceFromTarget;
       moveAmt = moveKp * error;
-      
+
       if (error > 1.0) {
         moveAmt += moveMin;
       } else if (error < 1.0) {
         moveAmt -= moveMin;
       }
-
+      
       return -moveAmt;
     }
     return 0;

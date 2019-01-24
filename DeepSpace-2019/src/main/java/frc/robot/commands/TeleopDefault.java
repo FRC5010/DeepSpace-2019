@@ -10,6 +10,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
+import frc.robot.subsystems.Pose;
 
 public class TeleopDefault extends Command {
 
@@ -42,10 +43,10 @@ public class TeleopDefault extends Command {
   @Override
   protected void execute() {
 
-    //System.out.println("Distance: " + RobotMap.vision.distanceFromTarget());
+    System.out.println("Distance: " + RobotMap.visionDrive.distanceFromTarget());
     //RobotMap.tiltSensor.values();
 
-    if (Robot.oi.driver.getRawButton(6) && RobotMap.vision.getX() != 0) {
+    if (Robot.oi.driver.getRawButton(6) && Pose.currentPose().limeLightValid) {
       steerAmt = RobotMap.visionDrive.turnTowardsTarget();
       moveAmt = RobotMap.visionDrive.moveTowardsTarget();
       //steerAmt = RobotMap.visionDrive.arcTowardsTarget();
