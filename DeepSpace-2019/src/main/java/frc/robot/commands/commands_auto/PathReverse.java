@@ -16,12 +16,12 @@ import jaci.pathfinder.Trajectory;
 import jaci.pathfinder.Waypoint;
 import jaci.pathfinder.followers.EncoderFollower;
 
-public class PathForward extends Command {
+public class PathReverse extends Command {
   private static final double max_velocity = 17.89;
   Trajectory trajectory;
   EncoderFollower left, right;
 
-  public PathForward(Trajectory lTraj, Trajectory rTraj) {
+  public PathReverse(Trajectory lTraj, Trajectory rTraj) {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
     
@@ -83,8 +83,8 @@ public class PathForward extends Command {
 			 double distance_covered = ((double)(RobotMap.distance.getLeftRaw() - 0) / RobotMap.encoderPPR)
 		                * .5;
 			SmartDashboard.putNumber("distance covered", distance_covered);
-		double l = -left.calculate(RobotMap.distance.getLeftRaw());
-		double r = -right.calculate(RobotMap.distance.getRightRaw());
+		double l = left.calculate(RobotMap.distance.getLeftRaw());
+		double r = right.calculate(RobotMap.distance.getRightRaw());
 
 		double gyro_heading = (-RobotMap.direction.angle());// Assuming the gyro is giving a value in degrees
 		SmartDashboard.putNumber("gyro heading", gyro_heading);
