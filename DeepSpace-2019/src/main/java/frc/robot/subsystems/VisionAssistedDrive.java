@@ -17,9 +17,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class VisionAssistedDrive extends Subsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
-  static final double steerKp = 0.023;
+  static final double steerKp = 0.02;
   static final double moveKp = 0.015;
-  static final double moveMin = 0.0;
+  static final double moveMin = 0.07;
   static final double targetHeight = 24;
   double desiredDistance = 40;
   private static double prevDist = 0.0;
@@ -77,8 +77,8 @@ public class VisionAssistedDrive extends Subsystem {
       } else if (error < 1.0) {
         moveAmt -= moveMin;
       }
-      
-      return -moveAmt;
+
+      return moveAmt;
     }
     return 0;
   }

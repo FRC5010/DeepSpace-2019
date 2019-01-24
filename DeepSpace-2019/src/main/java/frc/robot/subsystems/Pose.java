@@ -57,7 +57,7 @@ public class Pose {
 
     public static Pose update() {
         RobotMap.vision.update();
-     
+        
         double limeLightTa = RobotMap.vision.getA();
         double limeLightTx = RobotMap.vision.getX();
         double limeLightTy = RobotMap.vision.getY();
@@ -70,7 +70,7 @@ public class Pose {
             Pose removePose = poseList.remove(0);
             //poseMap.remove(removePose.timestamp, removePose);
         }
-
+        
         //poseMap.put(currentPose.timestamp, currentPose);
 
         // TODO: Remove, only being called here so it always logs
