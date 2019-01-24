@@ -22,14 +22,14 @@ public class Vision extends Subsystem {
   private static NetworkTable table;
   
   public static final double LIME_LIGHT_HEIGHT = 36;
-  private static Double tXs = Double.valueOf(0);
-  private static Double tYs = Double.valueOf(0);
-  private static Double tAs = Double.valueOf(0);
-  private static Double tXc = Double.valueOf(0);
-  private static Double tYc = Double.valueOf(0);
-  private static Double tAc = Double.valueOf(0);
-  private static boolean tValidc = false;
-  private static boolean tValids = false;
+  private static double tgtXsave = 0.0;
+  private static double tgtYsave = 0.0;
+  private static double tgtAsave = 0.0;
+  private static double tgtXcur = 0.0;
+  private static double tgtYcur = 0.0;
+  private static double tgtAcur = 0.0;
+  private static boolean tgtValidCur = false;
+  private static boolean tgtValidSave = false;
   private static long lastValid = 0;
 
   @Override
@@ -40,61 +40,63 @@ public class Vision extends Subsystem {
 
   public void update() {
     table = NetworkTableInstance.getDefault().getTable("limelight");
-    tValidc = table.getEntry("tv").getDouble(0.0) == 0.0 ? false : true;
-    SmartDashboard.putBoolean("Valid Target", tValidc);
+    tgtValidCur = table.getEntry("tv").getDouble(0.0) == 0.0 ? false : true;
+    SmartDashboard.putBoolean("Valid Target", tgtValidCur);
 
-    if (tValidc) { 
-      tValids = true;
+    if (tgtValidCur) {
+      if (!tgtValidSave) {
+        // If tgtValidSave was false, our previous saved position data
+        // is also bad (we set to NaN), reset to 0.0.
+        tgtAsave = tgtYsave = tgtXsave = 0.0;
+        // Anytime the current frame is valid, the saved valid becomes true
+        tgtValidSave = true;
+      }
       lastValid = System.currentTimeMillis();
     } else { 
       // If target is invalid for more that 0.5 seconds, it is likely off screen
-      if (lastValid + 500 > System.currentTimeMillis()) {
-        tValids = false;
+      if (tgtValidSave && (lastValid + 500) > System.currentTimeMillis()) {
+        // Don't need to run this code if tgtValidSave is already false
+        tgtValidSave = false;
+        // If the target has been invalid too long, set to NaN
+        tgtAsave = tgtYsave = tgtXsave = Double.NaN;
       }
     }
     
-    //System.out.println("validC: " + tValidc + ", validS: " + tValids);
-
-
-    tXc = Double.valueOf(table.getEntry("tx").getDouble(0.0));
-    Double tXtmp = tValids ? tXs : Double.NaN;
-    if (tValidc & tValids) {
-      tXs = Double.valueOf(Double.valueOf((tXs + tXc)) / 2.0);
-     } else {
-       tXs = tXtmp;
-     }
-    SmartDashboard.putNumber("Target X", (Double.NaN != tXs) ? tXs : 0.0);
-    
-    tYc = Double.valueOf(table.getEntry("ty").getDouble(0.0));
-    Double tYtmp = tValids ? tYs : Double.NaN;
-    if (tValidc & tValids) {
-      tYs = (tYs + tYc) / 2.0;
-     } else {
-       tYs = tYtmp;
-     }
-    SmartDashboard.putNumber("Target Y", (Double.NaN != tYs) ? tYs : 0.0);
-    
-    tAc = Double.valueOf(table.getEntry("ta").getDouble(0.0));
-    Double tAtmp = tValids ? tAs : Double.NaN;
-    if (tValidc & tValids) {
-      tAs = (tAs + tAc) / 2.0;
-     } else {
-       tAs = tAtmp;
-     }
-    SmartDashboard.putNumber("Target Area", (Double.NaN != tAs) ? tAs : 0.0);
+    if (tgtValidCur) {
+      tgtXcur = table.getEntry("tx").getDouble(0.0);
+      tgtYcur = table.getEntry("ty").getDouble(0.0);
+      tgtAcur = table.getEntry("ta").getDouble(0.0);
+      // Use update algorithm
+      // Right not this is just averaging the last saved
+      // data with the current data, but this is not
+      // enough to really smooth out the data and needs
+      // to rely on more pose data to better smooth things out
+      tgtXsave = (tgtXsave + tgtXcur) / 2.0;
+      tgtYsave = (tgtYsave + tgtYcur) / 2.0;
+      tgtAsave = (tgtAsave + tgtAcur) / 2.0;
+    } else if (tgtValidSave) {
+      // We don't currently have valid data, but
+      // we can use a projection algorithm
+      // Currently, that means not changing the saved values
+      // Eventually, we should try to use past pose
+      // data to predict current updated values.
+    }
+    SmartDashboard.putNumber("Target X", (Double.isNaN(tgtXsave) ? 0.0 : tgtXsave));  
+    SmartDashboard.putNumber("Target Y", (Double.isNaN(tgtYsave) ? 0.0 : tgtYsave ));
+    SmartDashboard.putNumber("Target Area", (Double.isNaN(tgtAsave) ? 0.0 : tgtAsave));
   }
 
-  public Double getX() {
-    return tXs;
+  public double getX() {
+    return tgtXsave;
   }
   
-  public Double getY() {
-    return tYs;
+  public double getY() {
+    return tgtYsave;
   }
 
-  public Double getA() {
-    return tAs;
+  public double getA() {
+    return tgtAsave;
   }
 
-  public boolean isTargetValid() { return tValids; }
+  public boolean isTargetValid() { return tgtValidSave; }
 }
