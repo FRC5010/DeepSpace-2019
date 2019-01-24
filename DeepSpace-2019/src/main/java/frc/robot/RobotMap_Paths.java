@@ -7,6 +7,8 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motion.TrajectoryPoint;
+
 //import java.nio.file.DirectoryStream;
 
 import jaci.pathfinder.PathfinderFRC;
@@ -18,6 +20,12 @@ import jaci.pathfinder.Trajectory;
 public class RobotMap_Paths {
  public static Trajectory testL;
 public static Trajectory testR;
+public static Trajectory drive1R;
+public static Trajectory drive1L;
+public static Trajectory drive2R;
+public static Trajectory drive2L;
+public static Trajectory driveFinR;
+public static Trajectory driveFinL;
 
     
 public static void init(){
