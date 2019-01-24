@@ -20,11 +20,11 @@ import frc.robot.RobotMap;
  */
 public class Pose {
     public final long timestamp;
-    public final Double limeLightTx;
-    public final Double limeLightTy;
-    public final Double limeLightTa;
-    public final Double limeLightTl;
-    public final Double limeLightTs;
+    public final double limeLightTx;
+    public final double limeLightTy;
+    public final double limeLightTa;
+    public final double limeLightTl;
+    public final double limeLightTs;
     public final boolean limeLightValid;
 
     public final double driveTrainEncoderLeft;
@@ -37,7 +37,7 @@ public class Pose {
     private static Pose currentPose;
     private static long poseListLimit = 200;
 
-    public Pose(Double tx, Double ty, Double ta, boolean tv, Double tl, Double ts, double el, double er, double h, double ee) {
+    public Pose(double tx, double ty, double ta, boolean tv, double tl, Double ts, double el, double er, double h, double ee) {
         timestamp = System.currentTimeMillis() / 10; // round down to minimum resolution
         limeLightTa = ta;
         limeLightTl = tl;
@@ -56,9 +56,9 @@ public class Pose {
     public static Pose update() {
         RobotMap.vision.update();
      
-        Double limeLightTa = RobotMap.vision.getA();
-        Double limeLightTx = RobotMap.vision.getX();
-        Double limeLightTy = RobotMap.vision.getY();
+        double limeLightTa = RobotMap.vision.getA();
+        double limeLightTx = RobotMap.vision.getX();
+        double limeLightTy = RobotMap.vision.getY();
         boolean limeLightValid = RobotMap.vision.isTargetValid();
 
         currentPose = new Pose(limeLightTx, limeLightTy, limeLightTa, limeLightValid, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);

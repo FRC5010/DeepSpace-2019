@@ -34,14 +34,15 @@ public class VisionAssistedDrive extends Subsystem {
   public static double distanceFromTarget() {
     double distance = prevDist;
 
-    if (Pose.currentPose().limeLightTy != Double.NaN) {
+    if (Pose.currentPose().limeLightValid) {
       double yInRadians = Math.toRadians(Pose.currentPose().limeLightTy);
       distance = (Vision.LIME_LIGHT_HEIGHT - targetHeight) / Math.tan(yInRadians);
       SmartDashboard.putNumber("TanY", Math.tan(yInRadians));
       prevDist = (prevDist + distance) / 2;
       distance = prevDist;
     } else {
-      distance = -1;
+      distance = Double.NaN;
+      prevDist = 0.0;
     }
     SmartDashboard.putNumber("DistanceFromTarget", distance);
     return distance;
@@ -50,7 +51,7 @@ public class VisionAssistedDrive extends Subsystem {
   //returns a steering motor output to turn robot towards target
   public double turnTowardsTarget() {
     double steerAmt = 0;
-    if (Pose.currentPose().limeLightTx != Double.NaN) {
+    if (Pose.currentPose().limeLightValid) {
       steerAmt = steerKp * Pose.currentPose().limeLightTx;
 
       if (Pose.currentPose().limeLightTx > 1.0) {
@@ -67,7 +68,7 @@ public class VisionAssistedDrive extends Subsystem {
     double moveAmt = 0;
 
     double distanceFromTarget = distanceFromTarget();
-    if (-1 != distanceFromTarget) {
+    if (Pose.currentPose().limeLightValid) {
       double error = desiredDistance - distanceFromTarget;
       moveAmt = moveKp * error;
       
@@ -84,7 +85,7 @@ public class VisionAssistedDrive extends Subsystem {
 
   public double arcTowardsTarget() {
     double distance = distanceFromTarget();
-    if (-1 != distance) {
+    if (Pose.currentPose().limeLightValid) {
       System.out.println("-------");
       double angle = Pose.currentPose().limeLightTx;
       System.out.println("Angle: " + angle);
