@@ -44,7 +44,7 @@ public class TeleopDefault extends Command {
   protected void execute() {
     System.out.println("Distance: " + RobotMap.visionDrive.distanceFromTarget());
 
-    if (Robot.oi.driver.getRawButton(6) && Pose.currentPose().limeLightValid) {
+    if (Robot.oi.driver.getRawButton(6) && Pose.getCurrentPose().limeLightValid) {
       steerAmt = RobotMap.visionDrive.turnTowardsTarget();
       moveAmt = RobotMap.visionDrive.moveTowardsTarget();
       //steerAmt = RobotMap.visionDrive.arcTowardsTarget();

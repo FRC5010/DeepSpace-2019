@@ -31,11 +31,11 @@ public class VisionAssistedDrive extends Subsystem {
   }
 
   //returns the distance from the vision target
-  public static double distanceFromTarget() {
+  /* public double distanceFromTarget() {
     double distance = prevDist;
 
-    if (Pose.currentPose().limeLightValid) {
-      double yInRadians = Math.toRadians(Pose.currentPose().limeLightTy);
+    if (Pose.getCurrentPose().limeLightValid) {
+      double yInRadians = Math.toRadians(Pose.getCurrentPose().limeLightTy);
       distance = Math.abs((Vision.LIME_LIGHT_HEIGHT - targetHeight) / Math.tan(yInRadians));
       SmartDashboard.putNumber("TanY", Math.tan(yInRadians));
       prevDist = (prevDist + distance) / 2;
@@ -46,17 +46,17 @@ public class VisionAssistedDrive extends Subsystem {
     }
     SmartDashboard.putNumber("DistanceFromTarget", distance);
     return distance;
-  }
+  } */
 
   //returns a steering motor output to turn robot towards target
   public double turnTowardsTarget() {
     double steerAmt = 0;
-    if (Pose.currentPose().limeLightValid) {
-      steerAmt = steerKp * Pose.currentPose().limeLightTx;
+    if (Pose.getCurrentPose().limeLightValid) {
+      steerAmt = steerKp * Pose.getCurrentPose().limeLightTx;
 
-      if (Pose.currentPose().limeLightTx > 1.0) {
+      if (Pose.getCurrentPose().limeLightTx > 1.0) {
         steerAmt += moveMin;
-      } else if (Pose.currentPose().limeLightTx < 1.0) {
+      } else if (Pose.getCurrentPose().limeLightTx < 1.0) {
         steerAmt -= moveMin;
       }
     }
@@ -67,8 +67,8 @@ public class VisionAssistedDrive extends Subsystem {
   public double moveTowardsTarget() {
     double moveAmt = 0;
 
-    double distanceFromTarget = distanceFromTarget();
-    if (Pose.currentPose().limeLightValid) {
+    double distanceFromTarget = Pose.getCurrentPose().limeLightDistance;
+    if (Pose.getCurrentPose().limeLightValid) {
       double error = desiredDistance - distanceFromTarget;
       moveAmt = moveKp * error;
 
@@ -85,9 +85,9 @@ public class VisionAssistedDrive extends Subsystem {
 
   public double arcTowardsTarget() {
     double distance = distanceFromTarget();
-    if (Pose.currentPose().limeLightValid) {
+    if (Pose.getCurrentPose().limeLightValid) {
       System.out.println("-------");
-      double angle = Pose.currentPose().limeLightTx;
+      double angle = Pose.getCurrentPose().limeLightTx;
       System.out.println("Angle: " + angle);
       double calcDistance = distance - desiredDistance;
       System.out.println("CalcDist: " + calcDistance);
