@@ -84,7 +84,7 @@ public class VisionAssistedDrive extends Subsystem {
   }
 
   public double arcTowardsTarget() {
-    double distance = distanceFromTarget();
+    double distance = Pose.getCurrentPose().limeLightDistance;
     if (Pose.getCurrentPose().limeLightValid) {
       System.out.println("-------");
       double angle = Pose.getCurrentPose().limeLightTx;

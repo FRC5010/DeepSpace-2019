@@ -42,7 +42,7 @@ public class TeleopDefault extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    System.out.println("Distance: " + RobotMap.visionDrive.distanceFromTarget());
+    System.out.println("Distance: " + Pose.getCurrentPose().limeLightDistance);
 
     if (Robot.oi.driver.getRawButton(6) && Pose.getCurrentPose().limeLightValid) {
       steerAmt = RobotMap.visionDrive.turnTowardsTarget();
