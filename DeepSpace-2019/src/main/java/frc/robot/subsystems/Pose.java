@@ -62,17 +62,6 @@ public class Pose {
         boolean limeLightValid = RobotMap.vision.isTargetValid();
         double limeLightDistance = RobotMap.vision.getDistance();
 
-        Pose previousPose = poseList.get(poseList.size() - 1);
-
-        // if we have previous data, then smooth (average) it out
-        // if we don't, then continue using the first raw values
-        if (previousPose.limeLightValid && limeLightValid) {
-            limeLightTx = (previousPose.limeLightTx + limeLightTx) / 2.0;
-            limeLightTy = (previousPose.limeLightTy + limeLightTy) / 2.0;
-            limeLightTa = (previousPose.limeLightTa + limeLightTa) / 2.0;
-            limeLightDistance = (previousPose.limeLightDistance + limeLightDistance) / 2.0;
-        }
-
         currentPose = new Pose(limeLightTx, limeLightTy, limeLightTa, limeLightValid, limeLightDistance, 0.0, 0.0, 0.0, 0.0);
         poseList.add(currentPose);
 

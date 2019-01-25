@@ -15,38 +15,17 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * Add your docs here.
  */
 public class VisionAssistedDrive extends Subsystem {
-  // Put methods for controlling this subsystem
-  // here. Call these from Commands.
+  
   static final double steerKp = 0.02;
   static final double moveKp = 0.015;
   static final double moveMin = 0.07;
-  static final double targetHeight = 24;
   double desiredDistance = 40;
-  private static double prevDist = 0.0;
 
   @Override
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
     // setDefaultCommand(new MySpecialCommand());
   }
-
-  //returns the distance from the vision target
-  /* public double distanceFromTarget() {
-    double distance = prevDist;
-
-    if (Pose.getCurrentPose().limeLightValid) {
-      double yInRadians = Math.toRadians(Pose.getCurrentPose().limeLightTy);
-      distance = Math.abs((Vision.LIME_LIGHT_HEIGHT - targetHeight) / Math.tan(yInRadians));
-      SmartDashboard.putNumber("TanY", Math.tan(yInRadians));
-      prevDist = (prevDist + distance) / 2;
-      distance = prevDist;
-    } else {
-      distance = Double.NaN;
-      prevDist = 0.0;
-    }
-    SmartDashboard.putNumber("DistanceFromTarget", distance);
-    return distance;
-  } */
 
   //returns a steering motor output to turn robot towards target
   public double turnTowardsTarget() {
@@ -83,7 +62,7 @@ public class VisionAssistedDrive extends Subsystem {
     return 0;
   }
 
-  public double arcTowardsTarget() {
+  /* public double arcTowardsTarget() {
     double distance = Pose.getCurrentPose().limeLightDistance;
     if (Pose.getCurrentPose().limeLightValid) {
       System.out.println("-------");
@@ -106,6 +85,5 @@ public class VisionAssistedDrive extends Subsystem {
       return -steerAmt;
     }
     return 0.0;
-  }
-
+  } */
 }
