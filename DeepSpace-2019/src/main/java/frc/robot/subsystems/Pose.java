@@ -23,9 +23,8 @@ public class Pose {
     public final double limeLightTx;
     public final double limeLightTy;
     public final double limeLightTa;
-    public final double limeLightTl;
-    public final double limeLightTs;
     public final boolean limeLightValid;
+    public final double limeLightDistance;
 
     public final double driveTrainEncoderLeft;
     public final double driveTrainEncoderRight;
@@ -37,13 +36,12 @@ public class Pose {
     private static Pose currentPose;
     private static long poseListLimit = 200;
 
-    public Pose(double tx, double ty, double ta, boolean tv, double tl, Double ts, double el, double er, double h, double ee) {
+    public Pose(double tx, double ty, double ta, boolean tv, double distance, double el, double er, double h, double ee) {
         timestamp = System.currentTimeMillis() / 10; // round down to minimum resolution
-        limeLightTa = ta;
-        limeLightTl = tl;
-        limeLightTs = ts;
         limeLightTx = tx;
         limeLightTy = ty;
+        limeLightTa = ta;
+        limeLightDistance = distance;
         limeLightValid = tv;
         driveTrainEncoderLeft = el;
         driveTrainEncoderRight = er;
@@ -51,28 +49,28 @@ public class Pose {
         elevatorEncoder = ee;
     }
 
-    public static Pose currentPose() { return currentPose; }
+    public static Pose getCurrentPose() {
+        return currentPose;
+    }
 
     public static Pose update() {
         RobotMap.vision.update();
-     
-        double limeLightTa = RobotMap.vision.getA();
+
         double limeLightTx = RobotMap.vision.getX();
         double limeLightTy = RobotMap.vision.getY();
+        double limeLightTa = RobotMap.vision.getA();
         boolean limeLightValid = RobotMap.vision.isTargetValid();
+        double limeLightDistance = RobotMap.vision.getDistance();
 
-        currentPose = new Pose(limeLightTx, limeLightTy, limeLightTa, limeLightValid, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
-        
+        currentPose = new Pose(limeLightTx, limeLightTy, limeLightTa, limeLightValid, limeLightDistance, 0.0, 0.0, 0.0, 0.0);
         poseList.add(currentPose);
+
         if (poseList.size() > poseListLimit) {
             Pose removePose = poseList.remove(0);
             //poseMap.remove(removePose.timestamp, removePose);
         }
-
+        
         //poseMap.put(currentPose.timestamp, currentPose);
-
-        // TODO: Remove, only being called here so it always logs
-        VisionAssistedDrive.distanceFromTarget();
         return currentPose;
     }
 }

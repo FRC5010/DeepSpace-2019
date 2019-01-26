@@ -21,16 +21,24 @@ public class Vision extends Subsystem {
 
   private static NetworkTable table;
   
-  public static final double LIME_LIGHT_HEIGHT = 36;
-  private static double tgtXsave = 0.0;
-  private static double tgtYsave = 0.0;
-  private static double tgtAsave = 0.0;
-  private static double tgtXcur = 0.0;
-  private static double tgtYcur = 0.0;
-  private static double tgtAcur = 0.0;
-  private static boolean tgtValidCur = false;
-  private static boolean tgtValidSave = false;
+  //current values
+  private static double tXc = 0.0;
+  private static double tYc = 0.0;
+  private static double tAc = 0.0;
+  private static double tDistanceC = 0.0;
+  
+  //smoothed values
+  private static double tXs = 0.0;
+  private static double tYs = 0.0;
+  private static double tAs = 0.0;
+  private static double tDistanceS = 0.0;
+
+  private static boolean tValidc = false;
+  private static boolean tValids = false;
   private static long lastValid = 0;
+
+  public static final double LIME_LIGHT_HEIGHT = 36;
+  public static final double targetHeight = 24;
 
   @Override
   public void initDefaultCommand() {
@@ -40,63 +48,93 @@ public class Vision extends Subsystem {
 
   public void update() {
     table = NetworkTableInstance.getDefault().getTable("limelight");
-    tgtValidCur = table.getEntry("tv").getDouble(0.0) == 0.0 ? false : true;
-    SmartDashboard.putBoolean("Valid Target", tgtValidCur);
+    tValidc = table.getEntry("tv").getDouble(0.0) == 0.0 ? false : true;
 
-    if (tgtValidCur) {
-      if (!tgtValidSave) {
-        // If tgtValidSave was false, our previous saved position data
-        // is also bad (we set to NaN), reset to 0.0.
-        tgtAsave = tgtYsave = tgtXsave = 0.0;
+    if (tValidc) {
+      if (!tValids) {
+        // If tValids was false, our previous saved position data is also bad (we set to NaN), reset to 0.0.
+        //tAs = tYs = tXs = 0.0;
         // Anytime the current frame is valid, the saved valid becomes true
-        tgtValidSave = true;
+        tValids = true;
       }
       lastValid = System.currentTimeMillis();
     } else { 
       // If target is invalid for more that 0.5 seconds, it is likely off screen
-      if (tgtValidSave && (lastValid + 500) > System.currentTimeMillis()) {
-        // Don't need to run this code if tgtValidSave is already false
-        tgtValidSave = false;
+      if (tValids && (lastValid + 500) > System.currentTimeMillis()) {
+        // Don't need to run this code if tValids is already false
+        tValids = false;
         // If the target has been invalid too long, set to NaN
-        tgtAsave = tgtYsave = tgtXsave = Double.NaN;
+        tAc = tYc = tXc = Double.NaN;
       }
     }
     
-    if (tgtValidCur) {
-      tgtXcur = table.getEntry("tx").getDouble(0.0);
-      tgtYcur = table.getEntry("ty").getDouble(0.0);
-      tgtAcur = table.getEntry("ta").getDouble(0.0);
-      // Use update algorithm
-      // Right not this is just averaging the last saved
-      // data with the current data, but this is not
-      // enough to really smooth out the data and needs
-      // to rely on more pose data to better smooth things out
-      tgtXsave = (tgtXsave + tgtXcur) / 2.0;
-      tgtYsave = (tgtYsave + tgtYcur) / 2.0;
-      tgtAsave = (tgtAsave + tgtAcur) / 2.0;
-    } else if (tgtValidSave) {
+    SmartDashboard.putBoolean("Valid Target c", tValidc);
+    SmartDashboard.putBoolean("Valid Target s", tValids);
+
+    if (tValidc && tValids) {
+      //get the raw values from the camera, then smooth them out
+      tXc = table.getEntry("tx").getDouble(0.0);
+      tYc = table.getEntry("ty").getDouble(0.0);
+      tAc = table.getEntry("ta").getDouble(0.0);
+      tDistanceC = calculateDistance();
+      smoothValues();
+    } else if (tValids) {
       // We don't currently have valid data, but
       // we can use a projection algorithm
       // Currently, that means not changing the saved values
       // Eventually, we should try to use past pose
       // data to predict current updated values.
     }
-    SmartDashboard.putNumber("Target X", (Double.isNaN(tgtXsave) ? 0.0 : tgtXsave));  
-    SmartDashboard.putNumber("Target Y", (Double.isNaN(tgtYsave) ? 0.0 : tgtYsave ));
-    SmartDashboard.putNumber("Target Area", (Double.isNaN(tgtAsave) ? 0.0 : tgtAsave));
+
+    SmartDashboard.putNumber("Target X raw", Double.isNaN(tXc) ? 0.0 : tXc);  
+    SmartDashboard.putNumber("Target Y raw", Double.isNaN(tYc) ? 0.0 : tYc);
+    SmartDashboard.putNumber("Target Area raw", Double.isNaN(tAc) ? 0.0 : tAc);
+    SmartDashboard.putNumber("Target Distance raw", Double.isNaN(tDistanceC) ? 0.0 : tDistanceC);
+
+    SmartDashboard.putNumber("Target X smoothed", Double.isNaN(tXs) ? 0.0 : tXs);  
+    SmartDashboard.putNumber("Target Y smoothed", Double.isNaN(tYs) ? 0.0 : tYs);
+    SmartDashboard.putNumber("Target Area smoothed", Double.isNaN(tAs) ? 0.0 : tAs);
+    SmartDashboard.putNumber("Target Distance smoothed", Double.isNaN(tDistanceS) ? 0.0 : tDistanceS);
+  }
+
+  private void smoothValues() {
+    Pose previousPose = Pose.poseList.get(Pose.poseList.indexOf(Pose.getCurrentPose()) - 1);
+    if (previousPose.limeLightValid && tValids) {
+      tXs = (previousPose.limeLightTx + tXc) / 2.0;
+      tYs = (previousPose.limeLightTy + tYc) / 2.0;
+      tAs = (previousPose.limeLightTa + tAc) / 2.0;
+      tDistanceS = (previousPose.limeLightDistance + tDistanceC) / 2.0;
+    }
   }
 
   public double getX() {
-    return tgtXsave;
+    return tXs;
   }
   
   public double getY() {
-    return tgtYsave;
+    return tYs;
   }
 
   public double getA() {
-    return tgtAsave;
+    return tAs;
   }
 
-  public boolean isTargetValid() { return tgtValidSave; }
+  public boolean isTargetValid() {
+    return tValids;
+  }
+
+  private double calculateDistance() {
+    double distance = Double.NaN;
+    if (tValids) {
+      double yInRadians = Math.toRadians(tYc);
+      distance = Math.abs((LIME_LIGHT_HEIGHT - targetHeight) / Math.tan(yInRadians));
+    } else {
+      distance = Double.NaN;
+    }
+    return distance;
+  }
+
+  public double getDistance() {
+    return tDistanceS;
+  }
 }
