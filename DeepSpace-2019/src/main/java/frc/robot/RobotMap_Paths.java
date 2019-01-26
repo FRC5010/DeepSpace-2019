@@ -37,12 +37,16 @@ public static void init(){
      System.out.println("testL"+testL.toString());
      testR = PathfinderFRC.getTrajectory("testPath.right");
      System.out.println("testR"+testR.toString());
-    //  drive1L = PathfinderFRC.getTrajectory("drive1.left");
+     
+     //revL = PathfinderFRC.getTrajectory("testPath.left");
+     //revR = PathfinderFRC.getTrajectory("testPath.right");
+
+      drive1L = PathfinderFRC.getTrajectory("drive1.left");
       drive1R = PathfinderFRC.getTrajectory("drive1.right");
-     // revR = PathfinderFRC.getTrajectory("backUp1.right");
-     // revL = PathfinderFRC.getTrajectory("backUp1.left");
-     // drive2R = PathfinderFRC.getTrajectory("HatchGrab.right");
-     // drive2L = PathfinderFRC.getTrajectory("HatchGrab.left");
+      revR = PathfinderFRC.getTrajectory("backup.right");
+     revL = PathfinderFRC.getTrajectory("backup.left");
+      drive2R = PathfinderFRC.getTrajectory("HatchGrab.right");
+      drive2L = PathfinderFRC.getTrajectory("HatchGrab.left");
      // drive3L = PathfinderFRC.getTrajectory("return.left");
      // drive3R = PathfinderFRC.getTrajectory("return.right");
      // driveFinR = PathfinderFRC.getTrajectory("backUp2.right");

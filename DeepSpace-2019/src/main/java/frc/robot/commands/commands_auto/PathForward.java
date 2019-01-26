@@ -24,9 +24,11 @@ public class PathForward extends Command {
   public PathForward(Trajectory lTraj, Trajectory rTraj) {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
-    
-    left = new EncoderFollower(lTraj);
-		right = new EncoderFollower(rTraj);
+	
+	//Swapped because of Pathweaver issues for the time being.
+	//TODO: REVERSED WHEN FIXED!!!!!!!!!!!!
+    	left = new EncoderFollower(rTraj);
+		right = new EncoderFollower(lTraj);
   }
 
   // Called just before this Command runs the first time
@@ -42,7 +44,7 @@ public class PathForward extends Command {
 		// in meters
 		RobotMap.leftEncoder.reset();
 		RobotMap.rightEncoder.reset();
-		RobotMap.direction.reset();
+		
 		left.configureEncoder(RobotMap.distance.getLeftRaw(),RobotMap.encoderPPR, .5);
 		right.configureEncoder(RobotMap.distance.getRightRaw(),RobotMap.encoderPPR, .5);
 
@@ -66,7 +68,8 @@ public class PathForward extends Command {
 	Trajectory.Segment seg = left.getSegment();
     SmartDashboard.putNumber("left accel", seg.acceleration);
 			SmartDashboard.putNumber("left time delta", seg.dt);
-			SmartDashboard.putNumber("left heading", seg.heading);
+			//TODO: REVERSE NEGATION AFTER PATHWEAVER FIX.
+			SmartDashboard.putNumber("left heading", -Pathfinder.r2d(seg.heading));
 			SmartDashboard.putNumber("left jerk", seg.jerk);
 			SmartDashboard.putNumber("left pos", seg.position);
 			SmartDashboard.putNumber("left velocity", seg.velocity);
@@ -74,7 +77,8 @@ public class PathForward extends Command {
 			SmartDashboard.putNumber("left y", seg.y);
 			
 			SmartDashboard.putNumber("right accel", right.getSegment().acceleration);
-			SmartDashboard.putNumber("right time delta", right.getSegment().dt);
+			//TODO: REVERSE NEGATION AFTER PATHWEAVER FIX.
+			SmartDashboard.putNumber("right time delta", -Pathfinder.r2d(right.getSegment().dt));
 			SmartDashboard.putNumber("right heading", right.getSegment().heading);
 			SmartDashboard.putNumber("right jerk", right.getSegment().jerk);
 			SmartDashboard.putNumber("right pos", right.getSegment().position);
@@ -84,16 +88,20 @@ public class PathForward extends Command {
 			 double distance_covered = ((double)(RobotMap.distance.getLeftRaw() - 0) / RobotMap.encoderPPR)
 		                * .5;
 			SmartDashboard.putNumber("distance covered", distance_covered);
-		double l = -left.calculate(RobotMap.distance.getLeftRaw());
-		double r = -right.calculate(RobotMap.distance.getRightRaw());
+		//Took out negation.
+		double l = left.calculate(RobotMap.distance.getLeftRaw());
+		
+		//Values negated here so it works.
+		double r = right.calculate(RobotMap.distance.getRightRaw());
+		
+		double gyro_heading = (RobotMap.direction.angle());// Assuming the gyro is giving a value in degrees
+		
+		//TODO: REVERSE NEGATION AFTER PATHWEAVER FIX!!!!!
+		double desired_heading = -Pathfinder.r2d(seg.heading); // Should also be in degrees
+		//TODO: REVERSE NEGATION AFTER PATHWEAVER UPDATE
+		SmartDashboard.putNumber("desired Heading", -desired_heading);
 
-		double gyro_heading = (-RobotMap.direction.angle());// Assuming the gyro is giving a value in degrees
-		SmartDashboard.putNumber("gyro heading", gyro_heading);
-		double desired_heading = Pathfinder.r2d(seg.heading); // Should also be in degrees
-		SmartDashboard.putNumber(" leftHeading",seg.heading);
-		SmartDashboard.putNumber("desired Heading", desired_heading);
-
-		double angleDifference = Pathfinder.boundHalfDegrees(desired_heading) - Pathfinder.boundHalfDegrees(gyro_heading);
+		double angleDifference = Pathfinder.boundHalfDegrees(desired_heading - gyro_heading);
 		SmartDashboard.putNumber("angle difference", angleDifference);
 		double turn = 0.8 * (-1.0 / 80.0) * angleDifference;
 		 //turn = 0;
@@ -101,14 +109,14 @@ public class PathForward extends Command {
 		SmartDashboard.putNumber("left output", (l + turn));
 		SmartDashboard.putNumber("right output", (r - turn));
 		SmartDashboard.putNumber("turn ", turn);
-		RobotMap.driveTrain.drive((l + turn), (r - turn));
+		RobotMap.driveTrain.drive((l + turn), (r + turn));
 
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return false;
+    return left.isFinished() || right.isFinished();
   }
 
   // Called once after isFinished retu0rns true

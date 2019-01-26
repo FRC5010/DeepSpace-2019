@@ -8,6 +8,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.subsystems.Pose;
@@ -50,9 +51,11 @@ public class TeleopDefault extends Command {
       //steerAmt = RobotMap.visionDrive.arcTowardsTarget();
       RobotMap.driveTrain.drive(steerAmt + moveAmt, -steerAmt + moveAmt);
     } else {
-      moveAmt = scaleInputs(Robot.oi.driver.getRawAxis(1));
-      steerAmt = -scaleInputs(Robot.oi.driver.getRawAxis(4));
+      moveAmt = scaleInputs(-Robot.oi.driver.getRawAxis(1));
+      steerAmt = scaleInputs(Robot.oi.driver.getRawAxis(4));
       RobotMap.driveTrain.drive(moveAmt + steerAmt, moveAmt - steerAmt);
+      SmartDashboard.putNumber("Left Encoder output TO", RobotMap.leftEncoder.getRaw());
+      SmartDashboard.putNumber("Right Encoder output TO", RobotMap.rightEncoder.getRaw());
     }
   }
 
