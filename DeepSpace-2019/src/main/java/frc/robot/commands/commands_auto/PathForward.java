@@ -63,14 +63,15 @@ public class PathForward extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    SmartDashboard.putNumber("left accel", left.getSegment().acceleration);
-			SmartDashboard.putNumber("left time delta", left.getSegment().dt);
-			SmartDashboard.putNumber("left heading", left.getSegment().heading);
-			SmartDashboard.putNumber("left jerk", left.getSegment().jerk);
-			SmartDashboard.putNumber("left pos", left.getSegment().position);
-			SmartDashboard.putNumber("left velocity", left.getSegment().velocity);
-			SmartDashboard.putNumber("left x", left.getSegment().x);
-			SmartDashboard.putNumber("left y", left.getSegment().y);
+	Trajectory.Segment seg = left.getSegment();
+    SmartDashboard.putNumber("left accel", seg.acceleration);
+			SmartDashboard.putNumber("left time delta", seg.dt);
+			SmartDashboard.putNumber("left heading", seg.heading);
+			SmartDashboard.putNumber("left jerk", seg.jerk);
+			SmartDashboard.putNumber("left pos", seg.position);
+			SmartDashboard.putNumber("left velocity", seg.velocity);
+			SmartDashboard.putNumber("left x", seg.x);
+			SmartDashboard.putNumber("left y", seg.y);
 			
 			SmartDashboard.putNumber("right accel", right.getSegment().acceleration);
 			SmartDashboard.putNumber("right time delta", right.getSegment().dt);
@@ -88,10 +89,11 @@ public class PathForward extends Command {
 
 		double gyro_heading = (-RobotMap.direction.angle());// Assuming the gyro is giving a value in degrees
 		SmartDashboard.putNumber("gyro heading", gyro_heading);
-		double desired_heading = Pathfinder.r2d(left.getHeading()); // Should also be in degrees
+		double desired_heading = Pathfinder.r2d(seg.heading); // Should also be in degrees
+		SmartDashboard.putNumber(" leftHeading",seg.heading);
 		SmartDashboard.putNumber("desired Heading", desired_heading);
 
-		double angleDifference = Pathfinder.boundHalfDegrees(desired_heading - gyro_heading);
+		double angleDifference = Pathfinder.boundHalfDegrees(desired_heading) - Pathfinder.boundHalfDegrees(gyro_heading);
 		SmartDashboard.putNumber("angle difference", angleDifference);
 		double turn = 0.8 * (-1.0 / 80.0) * angleDifference;
 		 //turn = 0;
@@ -109,7 +111,7 @@ public class PathForward extends Command {
     return false;
   }
 
-  // Called once after isFinished returns true
+  // Called once after isFinished retu0rns true
   @Override
   protected void end() {
   }

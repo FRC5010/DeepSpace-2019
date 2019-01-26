@@ -9,6 +9,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 
 /**
@@ -24,6 +25,7 @@ public class DirectionSensor extends Subsystem {
   }
   
   public double angle() {
+    SmartDashboard.putNumber("gyro", gyro.getAngle());
 		return gyro.getAngle();
 	}
 	

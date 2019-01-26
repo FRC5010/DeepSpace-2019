@@ -15,12 +15,13 @@ public class FieldMovement extends CommandGroup {
    * Add your docs here.
    */
   public FieldMovement() {
-    addSequential(new PathForward(RobotMap_Paths.drive1L,RobotMap_Paths.drive1R));
-    addSequential(new PathReverse(RobotMap_Paths.revL,RobotMap_Paths.revR));
-    addSequential(new PathForward(RobotMap_Paths.drive2L,RobotMap_Paths.drive2R));
-    addSequential(new PathReverse(RobotMap_Paths.drive3L,RobotMap_Paths.drive3R));
-    addSequential(new PathForward(RobotMap_Paths.driveFinL,RobotMap_Paths.driveFinR));
-    // Add Commands here:
+    addSequential(new PathForward(RobotMap_Paths.testL,RobotMap_Paths.testR));
+    // addSequential(new PathForward(RobotMap_Paths.drive1L,RobotMap_Paths.drive1R));
+    // addSequential(new PathReverse(RobotMap_Paths.revL,RobotMap_Paths.revR));
+    // addSequential(new PathForward(RobotMap_Paths.drive2L,RobotMap_Paths.drive2R));
+    // addSequential(new PathReverse(RobotMap_Paths.drive3L,RobotMap_Paths.drive3R));
+    // addSequential(new PathForward(RobotMap_Paths.driveFinL,RobotMap_Paths.driveFinR));
+    // // Add Commands here:
     // e.g. addSequential(new Command1());
     // addSequential(new Command2());
     // these will run in order.
