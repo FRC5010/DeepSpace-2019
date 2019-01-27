@@ -18,39 +18,41 @@ import jaci.pathfinder.Trajectory;
  * Add your docs here.
  */
 public class RobotMap_Paths {
- public static Trajectory testL;
-public static Trajectory testR;
-public static Trajectory drive1R;
-public static Trajectory drive1L;
-public static Trajectory revR;
-public static Trajectory revL;
-public static Trajectory drive2R;
-public static Trajectory drive2L;
-public static Trajectory drive3R;
-public static Trajectory drive3L;
-public static Trajectory driveFinR;
-public static Trajectory driveFinL;
-
-    
-public static void init(){
-     testL = PathfinderFRC.getTrajectory("testPath.left" );
-     System.out.println("testL"+testL.toString());
-     testR = PathfinderFRC.getTrajectory("testPath.right");
-     System.out.println("testR"+testR.toString());
+     public static final double max_velocity = 17.89;
+     public static final double wheel_diameter = 0.5;
      
-     //revL = PathfinderFRC.getTrajectory("testPath.left");
-     //revR = PathfinderFRC.getTrajectory("testPath.right");
+     public static Trajectory testL;
+     public static Trajectory testR;
+     public static Trajectory drive1R;
+     public static Trajectory drive1L;
+     public static Trajectory revR;
+     public static Trajectory revL;
+     public static Trajectory drive2R;
+     public static Trajectory drive2L;
+     public static Trajectory drive3R;
+     public static Trajectory drive3L;
+     public static Trajectory driveFinR;
+     public static Trajectory driveFinL;
 
-      drive1L = PathfinderFRC.getTrajectory("drive1.left");
-      drive1R = PathfinderFRC.getTrajectory("drive1.right");
-      revR = PathfinderFRC.getTrajectory("backup.right");
-     revL = PathfinderFRC.getTrajectory("backup.left");
-      drive2R = PathfinderFRC.getTrajectory("HatchGrab.right");
-      drive2L = PathfinderFRC.getTrajectory("HatchGrab.left");
-     // drive3L = PathfinderFRC.getTrajectory("return.left");
-     // drive3R = PathfinderFRC.getTrajectory("return.right");
-     // driveFinR = PathfinderFRC.getTrajectory("backUp2.right");
-     // driveFinL = PathfinderFRC.getTrajectory("backUp2.left");
+     public static void init() {
+          testL = PathfinderFRC.getTrajectory("testPath.left");
+          System.out.println("testL" + testL.toString());
+          testR = PathfinderFRC.getTrajectory("testPath.right");
+          System.out.println("testR" + testR.toString());
 
-}
+          // revL = PathfinderFRC.getTrajectory("testPath.left");
+          // revR = PathfinderFRC.getTrajectory("testPath.right");
+
+          drive1L = PathfinderFRC.getTrajectory("drive1.left");
+          drive1R = PathfinderFRC.getTrajectory("drive1.right");
+          revR = PathfinderFRC.getTrajectory("backup.right");
+          revL = PathfinderFRC.getTrajectory("backup.left");
+          drive2R = PathfinderFRC.getTrajectory("HatchGrab.right");
+          drive2L = PathfinderFRC.getTrajectory("HatchGrab.left");
+          // drive3L = PathfinderFRC.getTrajectory("return.left");
+          // drive3R = PathfinderFRC.getTrajectory("return.right");
+          // driveFinR = PathfinderFRC.getTrajectory("backUp2.right");
+          // driveFinL = PathfinderFRC.getTrajectory("backUp2.left");
+
+     }
 }

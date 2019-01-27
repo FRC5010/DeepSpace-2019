@@ -99,7 +99,8 @@ public class RobotMap {
     distance = new DistanceSensor();
     gyro = new ADXRS450_Gyro(); 
     direction = new DirectionSensor();
-    
+    direction.reset();
+
     elevator = new Elevator();
       shifter = new Shifter();
     driveTrain = new DriveTrain();
