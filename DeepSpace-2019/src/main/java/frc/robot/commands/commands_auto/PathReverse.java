@@ -90,7 +90,7 @@ public class PathReverse extends Command {
 		
 		double r = right.calculate(-RobotMap.distance.getRightRaw());
 
-		double gyro_heading = (RobotMap.direction.angle());// Assuming the gyro is giving a value in degrees
+		double gyro_heading = -(RobotMap.direction.angle());// Assuming the gyro is giving a value in degrees
 		//SmartDashboard.putNumber("gyro heading", gyro_heading);
 		
 		//TODO: Negate gyro heading after the update if needed.

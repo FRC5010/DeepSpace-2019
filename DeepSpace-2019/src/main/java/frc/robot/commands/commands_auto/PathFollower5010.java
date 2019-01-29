@@ -28,13 +28,9 @@ public class PathFollower5010 extends Command {
 		this.isFwd = isFwd;
 		// Swapped because of Pathweaver issues for the time being.
 		// TODO: REVERSED WHEN FIXED!!!!!!!!!!!!
-		if (isFwd) {
-			left = new EncoderFollower5010(rTraj, false, isFwd);
-			right = new EncoderFollower5010(lTraj, true, isFwd);
-		} else {
-			left = new EncoderFollower5010(lTraj, true, isFwd);
-			right = new EncoderFollower5010(rTraj, false, isFwd);
-		}
+		// The isRight parameter can be determined relative to the isFwd parameter
+		left = new EncoderFollower5010(rTraj, !isFwd, isFwd);
+		right = new EncoderFollower5010(lTraj, isFwd, isFwd);
 	}
 
 	// Called just before this Command runs the first time
@@ -81,9 +77,6 @@ public class PathFollower5010 extends Command {
 	@Override
   protected void execute() {
 	double gyro_heading = RobotMap.direction.angle();
-	if(isFwd) {
-		gyro_heading =  -gyro_heading;
-	}
 	double l = left.calculate(RobotMap.distance.getLeftRaw(), gyro_heading);
 	double r = right.calculate(RobotMap.distance.getRightRaw(), gyro_heading);
 		
@@ -114,7 +107,7 @@ public class PathFollower5010 extends Command {
 	//TODO: REVERSE NEGATION AFTER PATHWEAVER FIX!!!!!
 	double desired_heading = -Pathfinder.r2d(lseg.heading); // Should also be in degrees
 	//TODO: REVERSE NEGATION AFTER PATHWEAVER UPDATE
-	SmartDashboard.putNumber("desired Heading", -desired_heading);
+	SmartDashboard.putNumber("desired Heading", desired_heading);
 
 	SmartDashboard.putNumber("left output", l);
 	SmartDashboard.putNumber("right output", r);

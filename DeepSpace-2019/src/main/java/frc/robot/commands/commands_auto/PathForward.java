@@ -94,7 +94,7 @@ public class PathForward extends Command {
 		//Values negated here so it works.
 		double r = right.calculate(RobotMap.distance.getRightRaw());
 		
-		double gyro_heading = -(RobotMap.direction.angle());// Assuming the gyro is giving a value in degrees
+		double gyro_heading = RobotMap.direction.angle();// Assuming the gyro is giving a value in degrees
 		
 		//TODO: REVERSE NEGATION AFTER PATHWEAVER FIX!!!!!
 		double desired_heading = -Pathfinder.r2d(seg.heading); // Should also be in degrees

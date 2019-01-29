@@ -1,6 +1,7 @@
 package frc.robot.commands.commands_auto;
 
 import frc.robot.RobotMap;
+import frc.robot.subsystems.DirectionSensor;
 import jaci.pathfinder.Pathfinder;
 import jaci.pathfinder.Trajectory;
 
@@ -15,7 +16,7 @@ import jaci.pathfinder.Trajectory;
 public class EncoderFollower5010 {
 
     boolean isRight; boolean isFwd;
-    int encoder_offset, encoder_tick_count;
+    int encoder_offset, encoder_tick_count, last_segment_max, last_segment_count = 0;
     double wheel_circumference;
 
     double kp, ki, kd, kv, ka, ket, kht;
@@ -35,10 +36,16 @@ public class EncoderFollower5010 {
         this.trajectory = traj;
         this.isFwd = isFwd;
         this.isRight = isRight;
+        last_segment_max = 10;
     }
 
     // Private so no one can use it, incorrectly
     private EncoderFollower5010() { }
+
+    /** The number of cycles limit the last segment to */
+    public void setLastSegmentMax(int max) {
+        last_segment_max = max;
+    }
 
     /**
      * Set a new trajectory to follow, and reset the cumulative errors and segment counts
@@ -85,7 +92,7 @@ public class EncoderFollower5010 {
     public void reset() {
         last_error = 0; segment = 0;
         last_heading_error = 0; next_segment = null;
-        encoder_offset = 0;
+        encoder_offset = 0; last_segment_count = 0;
     }
 
     /**
@@ -98,11 +105,12 @@ public class EncoderFollower5010 {
      */
     public double calculate(int encoder_tick, double gyro_heading) {
         // Number of Revolutions * Wheel Circumference
+        if (!isFwd) { encoder_tick = -encoder_tick; }
         double distance_covered = ((double)(encoder_tick - encoder_offset) / encoder_tick_count)
                 * wheel_circumference;
         if (segment < trajectory.length()) {
             next_segment = trajectory.get(segment);
-        }
+        } else { last_segment_count++; }
 
         if (!isFinished()) {
             double error = next_segment.position - distance_covered;
@@ -115,9 +123,12 @@ public class EncoderFollower5010 {
             heading = next_segment.heading;
             double desired_heading = Pathfinder.r2d(heading);
             if (isFwd) {
+                // This moves to the else when PF fixed
                 desired_heading = -desired_heading;
+            } else {
+                gyro_heading = -gyro_heading;
             }
-            double last_heading_error = Pathfinder.boundHalfDegrees(desired_heading - gyro_heading);
+            double last_heading_error = DirectionSensor.boundHalfDegrees(desired_heading - gyro_heading);
             double turn = 0.8 * (-1.0 / 80.0) * last_heading_error;
 
             if (isRight) {
@@ -125,16 +136,16 @@ public class EncoderFollower5010 {
             } else {
                 calculated_value += turn;
             }
-            if (!isFwd) {
-                calculated_value = -calculated_value;
-            }
 
             // Advance the segment, else check the calc value for minimal movement
             // This should ensure the final turn completes
             if (segment < trajectory.length()) {
                 segment++;
             } else {
-                calculated_value = Math.max(calculated_value, RobotMap.moveMin);
+                calculated_value = Math.max(Math.abs(calculated_value), RobotMap.moveMin) * Math.signum(calculated_value);
+            }
+            if (!isFwd) {
+                calculated_value = -calculated_value;
             }
 
             return calculated_value;
@@ -161,7 +172,8 @@ public class EncoderFollower5010 {
     public boolean isFinished() {
         return (segment >= trajectory.length()) && 
         (Math.abs(last_error) < ket) && 
-        (Math.abs(last_heading_error) < kht);
+        (Math.abs(last_heading_error) < kht &&
+        last_segment_max > last_segment_count);
     }
 
 }
