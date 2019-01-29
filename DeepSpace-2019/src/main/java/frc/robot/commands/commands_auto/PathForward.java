@@ -94,12 +94,12 @@ public class PathForward extends Command {
 		//Values negated here so it works.
 		double r = right.calculate(RobotMap.distance.getRightRaw());
 		
-		double gyro_heading = (RobotMap.direction.angle());// Assuming the gyro is giving a value in degrees
+		double gyro_heading = -(RobotMap.direction.angle());// Assuming the gyro is giving a value in degrees
 		
 		//TODO: REVERSE NEGATION AFTER PATHWEAVER FIX!!!!!
 		double desired_heading = -Pathfinder.r2d(seg.heading); // Should also be in degrees
 		//TODO: REVERSE NEGATION AFTER PATHWEAVER UPDATE
-		SmartDashboard.putNumber("desired Heading", -desired_heading);
+		SmartDashboard.putNumber("desired Heading", desired_heading);
 
 		double angleDifference = Pathfinder.boundHalfDegrees(desired_heading - gyro_heading);
 		SmartDashboard.putNumber("angle difference", angleDifference);
@@ -109,7 +109,7 @@ public class PathForward extends Command {
 		SmartDashboard.putNumber("left output", (l + turn));
 		SmartDashboard.putNumber("right output", (r - turn));
 		SmartDashboard.putNumber("turn ", turn);
-		RobotMap.driveTrain.drive((l + turn), (r + turn));
+		RobotMap.driveTrain.drive((l + turn), (r - turn));
 
   }
 

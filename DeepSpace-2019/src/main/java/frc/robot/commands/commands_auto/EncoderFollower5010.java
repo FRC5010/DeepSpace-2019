@@ -113,7 +113,10 @@ public class EncoderFollower5010 {
             last_error = error;
             
             heading = next_segment.heading;
-            double desired_heading = -Pathfinder.r2d(heading);
+            double desired_heading = Pathfinder.r2d(heading);
+            if (isFwd) {
+                desired_heading = -desired_heading;
+            }
             double last_heading_error = Pathfinder.boundHalfDegrees(desired_heading - gyro_heading);
             double turn = 0.8 * (-1.0 / 80.0) * last_heading_error;
 

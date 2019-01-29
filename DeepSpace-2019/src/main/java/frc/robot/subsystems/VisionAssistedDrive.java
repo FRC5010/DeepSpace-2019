@@ -57,7 +57,7 @@ public class VisionAssistedDrive extends Subsystem {
         moveAmt -= moveMin;
       }
 
-      return moveAmt;
+      return -moveAmt;
     }
     return 0;
   }

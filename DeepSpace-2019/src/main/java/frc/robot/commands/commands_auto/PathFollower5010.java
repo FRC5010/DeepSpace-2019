@@ -15,31 +15,32 @@ import jaci.pathfinder.Pathfinder;
 import jaci.pathfinder.Trajectory;
 
 public class PathFollower5010 extends Command {
-  
-  EncoderFollower5010 left, right;
-  public static final boolean kForward = true;
-  public static final boolean kReverse = false;
 
-  public PathFollower5010(Trajectory lTraj, Trajectory rTraj, boolean isFwd) {
-	requires(RobotMap.driveTrain);
-	requires(RobotMap.direction);
-	requires(RobotMap.distance);
+	EncoderFollower5010 left, right;
+	public static final boolean kForward = true;
+	public static final boolean kReverse = false;
+	private boolean isFwd = true;
 
-	//Swapped because of Pathweaver issues for the time being.
-	//TODO: REVERSED WHEN FIXED!!!!!!!!!!!!
-	if (isFwd) {
-    	left = new EncoderFollower5010(rTraj, false, isFwd);
-		right = new EncoderFollower5010(lTraj, true, isFwd);
-	} else {
-    	left = new EncoderFollower5010(lTraj, true, isFwd);
-		right = new EncoderFollower5010(rTraj, false, isFwd);
+	public PathFollower5010(Trajectory lTraj, Trajectory rTraj, boolean isFwd) {
+		requires(RobotMap.driveTrain);
+		requires(RobotMap.direction);
+		requires(RobotMap.distance);
+		this.isFwd = isFwd;
+		// Swapped because of Pathweaver issues for the time being.
+		// TODO: REVERSED WHEN FIXED!!!!!!!!!!!!
+		if (isFwd) {
+			left = new EncoderFollower5010(rTraj, false, isFwd);
+			right = new EncoderFollower5010(lTraj, true, isFwd);
+		} else {
+			left = new EncoderFollower5010(lTraj, true, isFwd);
+			right = new EncoderFollower5010(rTraj, false, isFwd);
+		}
 	}
-  }
 
-  // Called just before this Command runs the first time
-  @Override
-  protected void initialize() {
-    SmartDashboard.putBoolean("Running", true);
+	// Called just before this Command runs the first time
+	@Override
+	protected void initialize() {
+		SmartDashboard.putBoolean("Running", true);
 
 		// Encoder Position is the current, cumulative position of your encoder. If
 		// you're using an SRX, this will be the
@@ -49,8 +50,8 @@ public class PathFollower5010 extends Command {
 		// in the chosen units
 		left.reset();
 		right.reset();
-		left.configureEncoder(RobotMap.distance.getLeftRaw(),RobotMap.encoderPPR, RobotMap_Paths.wheel_diameter);
-		right.configureEncoder(RobotMap.distance.getRightRaw(),RobotMap.encoderPPR, RobotMap_Paths.wheel_diameter);
+		left.configureEncoder(RobotMap.distance.getLeftRaw(), RobotMap.encoderPPR, RobotMap_Paths.wheel_diameter);
+		right.configureEncoder(RobotMap.distance.getRightRaw(), RobotMap.encoderPPR, RobotMap_Paths.wheel_diameter);
 
 		// The first argument is the proportional gain. Usually this will be quite high
 		double kp = 1.0;
@@ -59,25 +60,32 @@ public class PathFollower5010 extends Command {
 		// the tracking of the trajectory
 		double kd = 0.01;
 		// The fourth argument is the velocity ratio. This is 1 over the maximum
-		// velocity you provided in the trajectory configuration (it translates m/s to a -1 to 1 scale that your
+		// velocity you provided in the trajectory configuration (it translates m/s to a
+		// -1 to 1 scale that your
 		// motors can read)
 		double kv = 1.0 / RobotMap_Paths.max_velocity;
 		// The fifth argument is your acceleration gain. Tweak this if you want to get
 		// to a higher or lower speed quicker
 		double ka = 0.1;
-		// Sixth - The position error tolerance to achieve before isFinished will return true
+		// Sixth - The position error tolerance to achieve before isFinished will return
+		// true
 		double ket = .1;
-		// Seventh - The heading error tolerance to achieve before isFinished will return true
-		double kht = 1;	
+		// Seventh - The heading error tolerance to achieve before isFinished will
+		// return true
+		double kht = 1;
 		left.configurePIDVA(kp, 0.0, kd, kv, ka, ket, kht);
 		right.configurePIDVA(kp, 0.0, kd, kv, ka, ket, kht);
-  }
+	}
 
-  // Called repeatedly when this Command is scheduled to run
-  @Override
+	// Called repeatedly when this Command is scheduled to run
+	@Override
   protected void execute() {
-	double l = left.calculate(RobotMap.distance.getLeftRaw(), RobotMap.direction.angle());
-	double r = right.calculate(RobotMap.distance.getRightRaw(), RobotMap.direction.angle());
+	double gyro_heading = RobotMap.direction.angle();
+	if(isFwd) {
+		gyro_heading =  -gyro_heading;
+	}
+	double l = left.calculate(RobotMap.distance.getLeftRaw(), gyro_heading);
+	double r = right.calculate(RobotMap.distance.getRightRaw(), gyro_heading);
 		
 	Trajectory.Segment lseg = left.getSegment();
 	Trajectory.Segment rseg = right.getSegment();
@@ -113,20 +121,20 @@ public class PathFollower5010 extends Command {
 	RobotMap.driveTrain.drive(l, r);
   }
 
-  // Make this return true when this Command no longer needs to run execute()
-  @Override
-  protected boolean isFinished() {
-    return left.isFinished() || right.isFinished();
-  }
+	// Make this return true when this Command no longer needs to run execute()
+	@Override
+	protected boolean isFinished() {
+		return left.isFinished() || right.isFinished();
+	}
 
-  // Called once after isFinished retu0rns true
-  @Override
-  protected void end() {
-  }
+	// Called once after isFinished retu0rns true
+	@Override
+	protected void end() {
+	}
 
-  // Called when another command which requires one or more of the same
-  // subsystems is scheduled to run
-  @Override
-  protected void interrupted() {
-  }
+	// Called when another command which requires one or more of the same
+	// subsystems is scheduled to run
+	@Override
+	protected void interrupted() {
+	}
 }
