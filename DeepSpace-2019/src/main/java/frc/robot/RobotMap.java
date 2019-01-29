@@ -54,6 +54,7 @@ public class RobotMap {
   public static Gyro gyro;
   public static DirectionSensor direction;
   public static Elevator elevator;
+  public static double moveMin = 0.2;
   // For example to map the left and right motors, you could define the
   // following variables to use with your drivetrain subsystem.
   // public static int leftMotor = 1;
@@ -74,6 +75,15 @@ public class RobotMap {
     leftMotor2 = new TalonSRX(2);
     leftMotor3 = new TalonSRX(3);
 
+    //Inverted for motion profiling purposes.
+    /*leftMotor1.setInverted(true);
+    leftMotor2.setInverted(true);
+    leftMotor3.setInverted(true);*/
+
+    rightMotor1.setInverted(true);
+    rightMotor2.setInverted(true);
+    rightMotor3.setInverted(true);
+
     rightMotor2.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 4);
 		rightMotor3.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 4);
 
@@ -89,9 +99,10 @@ public class RobotMap {
     distance = new DistanceSensor();
     gyro = new ADXRS450_Gyro(); 
     direction = new DirectionSensor();
-    
+    direction.reset();
+
     elevator = new Elevator();
-    shifter = new Shifter();
+      shifter = new Shifter();
     driveTrain = new DriveTrain();
     vision = new Vision();
     visionDrive = new VisionAssistedDrive();

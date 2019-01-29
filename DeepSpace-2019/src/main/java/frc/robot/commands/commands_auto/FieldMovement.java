@@ -8,19 +8,31 @@
 package frc.robot.commands.commands_auto;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import frc.robot.RobotMap;
 import frc.robot.RobotMap_Paths;
+import frc.robot.commands.TurnToAngle;
 
 public class FieldMovement extends CommandGroup {
   /**
    * Add your docs here.
    */
   public FieldMovement() {
-    addSequential(new PathForward(RobotMap_Paths.drive1L,RobotMap_Paths.drive1R));
-    addSequential(new PathReverse(RobotMap_Paths.revL,RobotMap_Paths.revR));
-    addSequential(new PathForward(RobotMap_Paths.drive2L,RobotMap_Paths.drive2R));
-    addSequential(new PathReverse(RobotMap_Paths.drive3L,RobotMap_Paths.drive3R));
-    addSequential(new PathForward(RobotMap_Paths.driveFinL,RobotMap_Paths.driveFinR));
-    // Add Commands here:
+    // Basic Test paths
+    //addSequential(new PathFollower5010(RobotMap_Paths.testL,RobotMap_Paths.testR, PathFollower5010.kForward));
+    //addSequential(new PathFollower5010(RobotMap_Paths.revL,RobotMap_Paths.revR, PathFollower5010.kReverse));
+
+    // Basic test paths
+    //addSequential(new PathForward(RobotMap_Paths.testL,RobotMap_Paths.testR));
+    //addSequential(new PathReverse(RobotMap_Paths.testL,RobotMap_Paths.testR));
+
+    // Actual routines
+   addSequential(new PathForward(RobotMap_Paths.drive1L,RobotMap_Paths.drive1R));
+//     addSequential(new PathReverse(RobotMap_Paths.revL,RobotMap_Paths.revR));
+//    addSequential(new PathForward(RobotMap_Paths.drive2L,RobotMap_Paths.drive2R));
+    //  addSequential(new PathReverse(RobotMap_Paths.drive3L,RobotMap_Paths.drive3R));
+    // addSequential(new PathForward(RobotMap_Paths.driveFinL,RobotMap_Paths.driveFinR));
+    //addSequential(new TurnToAngle(90));
+    // // Add Commands here:
     // e.g. addSequential(new Command1());
     // addSequential(new Command2());
     // these will run in order.

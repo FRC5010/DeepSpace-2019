@@ -42,7 +42,8 @@ public class PathReverse extends Command {
 		// in meters
 		RobotMap.leftEncoder.reset();
 		RobotMap.rightEncoder.reset();
-		RobotMap.direction.reset();
+		
+		//TODO: Eventually needs to be flipped after pathweaver update.
 		left.configureEncoder(RobotMap.distance.getLeftRaw(),RobotMap.encoderPPR, .5);
 		right.configureEncoder(RobotMap.distance.getRightRaw(),RobotMap.encoderPPR, .5);
 
@@ -63,50 +64,56 @@ public class PathReverse extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    SmartDashboard.putNumber("left accel", left.getSegment().acceleration);
-			SmartDashboard.putNumber("left time delta", left.getSegment().dt);
-			SmartDashboard.putNumber("left heading", left.getSegment().heading);
-			SmartDashboard.putNumber("left jerk", left.getSegment().jerk);
-			SmartDashboard.putNumber("left pos", left.getSegment().position);
-			SmartDashboard.putNumber("left velocity", left.getSegment().velocity);
-			SmartDashboard.putNumber("left x", left.getSegment().x);
-			SmartDashboard.putNumber("left y", left.getSegment().y);
+	Trajectory.Segment seg = left.getSegment();
+	Trajectory.Segment segR = right.getSegment();
+    SmartDashboard.putNumber("left accel", seg.acceleration);
+			SmartDashboard.putNumber("left time delta", seg.dt);
+			SmartDashboard.putNumber("left heading", seg.heading);
+			SmartDashboard.putNumber("left jerk", seg.jerk);
+			SmartDashboard.putNumber("left pos", seg.position);
+			SmartDashboard.putNumber("left velocity", seg.velocity);
+			SmartDashboard.putNumber("left x", seg.x);
+			SmartDashboard.putNumber("left y", seg.y);
 			
-			SmartDashboard.putNumber("right accel", right.getSegment().acceleration);
-			SmartDashboard.putNumber("right time delta", right.getSegment().dt);
-			SmartDashboard.putNumber("right heading", right.getSegment().heading);
-			SmartDashboard.putNumber("right jerk", right.getSegment().jerk);
-			SmartDashboard.putNumber("right pos", right.getSegment().position);
-			SmartDashboard.putNumber("right velocity", right.getSegment().velocity);
-			SmartDashboard.putNumber("right x", right.getSegment().x);
-			SmartDashboard.putNumber("right y", right.getSegment().y);
+			SmartDashboard.putNumber("right accel", segR.acceleration);
+			SmartDashboard.putNumber("right time delta", segR.dt);
+			SmartDashboard.putNumber("right heading", segR.heading);
+			SmartDashboard.putNumber("right jerk", segR.jerk);
+			SmartDashboard.putNumber("right pos", segR.position);
+			SmartDashboard.putNumber("right velocity", segR.velocity);
+			SmartDashboard.putNumber("right x", segR.x);
+			SmartDashboard.putNumber("right y", segR.y);
 			 double distance_covered = ((double)(RobotMap.distance.getLeftRaw() - 0) / RobotMap.encoderPPR)
 		                * .5;
 			SmartDashboard.putNumber("distance covered", distance_covered);
-		double l = left.calculate(RobotMap.distance.getLeftRaw());
-		double r = right.calculate(RobotMap.distance.getRightRaw());
+		double l = left.calculate(-RobotMap.distance.getLeftRaw());
+		
+		double r = right.calculate(-RobotMap.distance.getRightRaw());
 
-		double gyro_heading = (-RobotMap.direction.angle());// Assuming the gyro is giving a value in degrees
-		SmartDashboard.putNumber("gyro heading", gyro_heading);
-		double desired_heading = Pathfinder.r2d(left.getHeading()); // Should also be in degrees
+		double gyro_heading = (RobotMap.direction.angle());// Assuming the gyro is giving a value in degrees
+		//SmartDashboard.putNumber("gyro heading", gyro_heading);
+		
+		//TODO: Negate gyro heading after the update if needed.
+		double desired_heading = Pathfinder.r2d(seg.heading); // Should also be in degree
 		SmartDashboard.putNumber("desired Heading", desired_heading);
+		
 
 		double angleDifference = Pathfinder.boundHalfDegrees(desired_heading - gyro_heading);
 		SmartDashboard.putNumber("angle difference", angleDifference);
 		double turn = 0.8 * (-1.0 / 80.0) * angleDifference;
 		 //turn = 0;
 
-		SmartDashboard.putNumber("left output", (l + turn));
-		SmartDashboard.putNumber("right output", (r - turn));
+		SmartDashboard.putNumber("left output", -(l + turn));
+		SmartDashboard.putNumber("right output", -(r - turn));
 		SmartDashboard.putNumber("turn ", turn);
-		RobotMap.driveTrain.drive((l + turn), (r - turn));
+		RobotMap.driveTrain.drive(-(l + turn), -(r - turn));
 
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return false;
+    return left.isFinished() || right.isFinished();
   }
 
   // Called once after isFinished returns true

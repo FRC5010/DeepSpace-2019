@@ -67,7 +67,7 @@ public class VisionAssistedDrive extends Subsystem {
         moveAmt -= Shifter.isLowGear ? lowGear.moveMin : highGear.moveMin;
       }
 
-      return moveAmt;
+      return -moveAmt;
     }
     return 0;
   }

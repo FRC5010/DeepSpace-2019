@@ -28,9 +28,14 @@ public class DriveTrain extends Subsystem {
     // setDefaultCommand(new TeleopDefault());
     setDefaultCommand(new TeleopDefault());
   }
+
+  public void stop(){
+    leftMotors.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, 0);
+    rightMotors.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, 0);
+  }
   
   public void drive(double leftPower, double rightPower){
-    leftMotors.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, -leftPower);
+    leftMotors.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, leftPower);
     rightMotors.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, rightPower);
   }
 }
