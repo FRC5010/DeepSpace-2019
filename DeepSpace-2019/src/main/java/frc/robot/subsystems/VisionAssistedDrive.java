@@ -72,28 +72,26 @@ public class VisionAssistedDrive extends Subsystem {
     return 0;
   }
 
-  /* public double arcTowardsTarget() {
-    double distance = Pose.getCurrentPose().limeLightDistance;
+  public double arcTowardsTarget() {
     if (Pose.getCurrentPose().limeLightValid) {
+      double distance = Pose.getCurrentPose().limeLightDistance;
       System.out.println("-------");
       double angle = Pose.getCurrentPose().limeLightTx;
       System.out.println("Angle: " + angle);
-      double calcDistance = distance - desiredDistance;
-      System.out.println("CalcDist: " + calcDistance);
-      double desiredAngle = (calcDistance > 0) ? calcDistance / 3.0 : 0.0;
+      double errorDistance = distance - desiredDistance;
+      System.out.println("ErrorDistance: " + errorDistance);
+      double desiredAngle = (errorDistance > 0) ? errorDistance / 3.0 : 0.0;
       System.out.println("DesAngle: " + desiredAngle);
-      double error = desiredAngle - Math.abs(angle);
+      double error = (Math.signum(angle) * desiredAngle) - angle;
       System.out.println("Error: " + error);
-      double steerAmt = steerKp * error * (angle / Math.abs(angle));
+      double steerAmt = (Shifter.isLowGear ? lowGear.steerKp : highGear.steerKp) * error;
       System.out.println("SteerAmt: " + steerAmt);
 
-      if (steerAmt < moveMin && steerAmt > 0) {
-        steerAmt = moveMin;
-      } else if (steerAmt > -moveMin && steerAmt < 0) {
-        steerAmt = -moveMin;
-      }
-      return -steerAmt;
+      double moveMin = Shifter.isLowGear ? lowGear.moveMin : highGear.moveMin;
+      steerAmt = Math.signum(steerAmt) * Math.max(Math.abs(steerAmt), moveMin);
+
+      return steerAmt;
     }
     return 0.0;
-  } */
+  }
 }

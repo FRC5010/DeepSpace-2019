@@ -73,7 +73,7 @@ public class Vision extends Subsystem {
     SmartDashboard.putBoolean("Valid Target c", tValidc);
     SmartDashboard.putBoolean("Valid Target s", tValids);
 
-    if (tValidc && tValids) {
+    if (tValidc) {
       //get the raw values from the camera, then smooth them out
       tXc = table.getEntry("tx").getDouble(0.0);
       tYc = table.getEntry("ty").getDouble(0.0);
@@ -100,8 +100,8 @@ public class Vision extends Subsystem {
   }
 
   private void smoothValues() {
-    Pose previousPose = Pose.poseList.get(Pose.poseList.indexOf(Pose.getCurrentPose()) - 1);
-    if (previousPose.limeLightValid && tValids) {
+    Pose previousPose = Pose.getCurrentPose();
+    if (previousPose.limeLightValid) {
       tXs = (previousPose.limeLightTx + tXc) / 2.0;
       tYs = (previousPose.limeLightTy + tYc) / 2.0;
       tAs = (previousPose.limeLightTa + tAc) / 2.0;

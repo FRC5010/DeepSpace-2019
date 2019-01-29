@@ -33,7 +33,7 @@ public class Pose {
 
     //public static final Map<Long, Pose> poseMap = new HashMap<Long, Pose>();
     public static final List<Pose> poseList = new ArrayList<Pose>();
-    private static Pose currentPose;
+    private static Pose currentPose = new Pose(0.0,0.0,0.0,false,0.0,0.0,0.0,0.0,0.0);
     private static long poseListLimit = 200;
 
     public Pose(double tx, double ty, double ta, boolean tv, double distance, double el, double er, double h, double ee) {
