@@ -106,7 +106,7 @@ public class Vision extends Subsystem {
 
   private void smoothValues() {
     Pose previousPose = Pose.getCurrentPose();
-    if (previousPose.limeLightValid) {
+    if (previousPose.limeLightValid && tValids) {
       tXs = (previousPose.limeLightTx + tXc) / 2.0;
       tYs = (previousPose.limeLightTy + tYc) / 2.0;
       tAs = (previousPose.limeLightTa + tAc) / 2.0;
@@ -132,7 +132,7 @@ public class Vision extends Subsystem {
 
   private double calculateDistance() {
     double distance = Double.NaN;
-    if (tValids) {
+    if (tValidc) {
       double yInRadians = Math.toRadians(tYc);
       distance = Math.abs((LIME_LIGHT_HEIGHT - targetHeight) / Math.tan(yInRadians));
     } else {

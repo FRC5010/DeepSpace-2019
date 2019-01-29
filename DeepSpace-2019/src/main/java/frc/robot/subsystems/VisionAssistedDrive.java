@@ -42,14 +42,14 @@ public class VisionAssistedDrive extends Subsystem {
     double steerAmt = 0;
     if (Pose.getCurrentPose().limeLightValid) {
       steerAmt = (Shifter.isLowGear ? lowGear.steerKp : highGear.steerKp) * Pose.getCurrentPose().limeLightTx;
-
+      
       if (Pose.getCurrentPose().limeLightTx > 1.0) {
         steerAmt += Shifter.isLowGear ? lowGear.moveMin : highGear.moveMin;
       } else if (Pose.getCurrentPose().limeLightTx < 1.0) {
         steerAmt -= Shifter.isLowGear ? lowGear.moveMin : highGear.moveMin;
       }
     }
-    return -steerAmt;
+    return steerAmt;
   }
 
   // returns a motor output that will move the robot towards target
@@ -90,7 +90,7 @@ public class VisionAssistedDrive extends Subsystem {
       double moveMin = Shifter.isLowGear ? lowGear.moveMin : highGear.moveMin;
       steerAmt = Math.signum(steerAmt) * Math.max(Math.abs(steerAmt), moveMin);
 
-      return steerAmt;
+      return -steerAmt;
     }
     return 0.0;
   }
