@@ -10,21 +10,21 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-
 /**
  * Add your docs here.
  */
 public class VisionAssistedDrive extends Subsystem {
-  
+
   class GearVars {
     public final double steerKp, moveKp, moveMin;
-    public GearVars (double psteerKp, double pmoveKp, double pmoveMin) {
+
+    public GearVars(double psteerKp, double pmoveKp, double pmoveMin) {
       steerKp = psteerKp;
       moveKp = pmoveKp;
       moveMin = pmoveMin;
     }
   }
-  
+
   // two different sets of Kp values for different gears
   GearVars lowGear = new GearVars(0.02, 0.015, 0.07);
   GearVars highGear = new GearVars(0.02, 0.015, 0.07);

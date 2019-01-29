@@ -20,14 +20,14 @@ public class Vision extends Subsystem {
   // here. Call these from Commands.
 
   private static NetworkTable table;
-  
-  //current values
+
+  // current values
   private static double tXc = 0.0;
   private static double tYc = 0.0;
   private static double tAc = 0.0;
   private static double tDistanceC = 0.0;
-  
-  //smoothed values
+
+  // smoothed values
   private static double tXs = 0.0;
   private static double tYs = 0.0;
   private static double tAs = 0.0;
@@ -53,14 +53,24 @@ public class Vision extends Subsystem {
     tValidc = table.getEntry("tv").getDouble(0.0) == 0.0 ? false : true;
 
     if (tValidc) {
+      // get the raw values from the camera, then smooth them out
+      tXc = table.getEntry("tx").getDouble(0.0);
+      tYc = table.getEntry("ty").getDouble(0.0);
+      tAc = table.getEntry("ta").getDouble(0.0);
+      tDistanceC = calculateDistance();
+
       if (!tValids) {
-        // If tValids was false, our previous saved position data is also bad (we set to NaN), reset to 0.0.
-        //tAs = tYs = tXs = 0.0;
+        // If tValids was false, our previous saved position data is also bad (we set to
+        // NaN), reset to 0.0.
+        tXs = tXc;
+        tYs = tYc;
+        tAs = tAc;
+        tDistanceS = tDistanceC;
         // Anytime the current frame is valid, the saved valid becomes true
         tValids = true;
       }
       lastValid = System.currentTimeMillis();
-    } else { 
+    } else {
       // If target is invalid for more that 0.5 seconds, it is likely off screen
       if (tValids && (lastValid + 500) > System.currentTimeMillis()) {
         // Don't need to run this code if tValids is already false
@@ -69,16 +79,11 @@ public class Vision extends Subsystem {
         tAc = tYc = tXc = Double.NaN;
       }
     }
-    
+
     SmartDashboard.putBoolean("Valid Target c", tValidc);
     SmartDashboard.putBoolean("Valid Target s", tValids);
 
     if (tValidc) {
-      //get the raw values from the camera, then smooth them out
-      tXc = table.getEntry("tx").getDouble(0.0);
-      tYc = table.getEntry("ty").getDouble(0.0);
-      tAc = table.getEntry("ta").getDouble(0.0);
-      tDistanceC = calculateDistance();
       smoothValues();
     } else if (tValids) {
       // We don't currently have valid data, but
@@ -88,12 +93,12 @@ public class Vision extends Subsystem {
       // data to predict current updated values.
     }
 
-    SmartDashboard.putNumber("Target X raw", Double.isNaN(tXc) ? 0.0 : tXc);  
+    SmartDashboard.putNumber("Target X raw", Double.isNaN(tXc) ? 0.0 : tXc);
     SmartDashboard.putNumber("Target Y raw", Double.isNaN(tYc) ? 0.0 : tYc);
     SmartDashboard.putNumber("Target Area raw", Double.isNaN(tAc) ? 0.0 : tAc);
     SmartDashboard.putNumber("Target Distance raw", Double.isNaN(tDistanceC) ? 0.0 : tDistanceC);
 
-    SmartDashboard.putNumber("Target X smoothed", Double.isNaN(tXs) ? 0.0 : tXs);  
+    SmartDashboard.putNumber("Target X smoothed", Double.isNaN(tXs) ? 0.0 : tXs);
     SmartDashboard.putNumber("Target Y smoothed", Double.isNaN(tYs) ? 0.0 : tYs);
     SmartDashboard.putNumber("Target Area smoothed", Double.isNaN(tAs) ? 0.0 : tAs);
     SmartDashboard.putNumber("Target Distance smoothed", Double.isNaN(tDistanceS) ? 0.0 : tDistanceS);
@@ -112,7 +117,7 @@ public class Vision extends Subsystem {
   public double getX() {
     return tXs;
   }
-  
+
   public double getY() {
     return tYs;
   }

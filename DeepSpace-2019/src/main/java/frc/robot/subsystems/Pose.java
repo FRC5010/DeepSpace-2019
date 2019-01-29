@@ -31,12 +31,13 @@ public class Pose {
     public final double heading;
     public final double elevatorEncoder;
 
-    //public static final Map<Long, Pose> poseMap = new HashMap<Long, Pose>();
+    // public static final Map<Long, Pose> poseMap = new HashMap<Long, Pose>();
     public static final List<Pose> poseList = new ArrayList<Pose>();
-    private static Pose currentPose = new Pose(0.0,0.0,0.0,false,0.0,0.0,0.0,0.0,0.0);
+    private static Pose currentPose = new Pose(0.0, 0.0, 0.0, false, 0.0, 0.0, 0.0, 0.0, 0.0);
     private static long poseListLimit = 200;
 
-    public Pose(double tx, double ty, double ta, boolean tv, double distance, double el, double er, double h, double ee) {
+    public Pose(double tx, double ty, double ta, boolean tv, double distance, double el, double er, double h,
+            double ee) {
         timestamp = System.currentTimeMillis() / 10; // round down to minimum resolution
         limeLightTx = tx;
         limeLightTy = ty;
@@ -62,15 +63,16 @@ public class Pose {
         boolean limeLightValid = RobotMap.vision.isTargetValid();
         double limeLightDistance = RobotMap.vision.getDistance();
 
-        currentPose = new Pose(limeLightTx, limeLightTy, limeLightTa, limeLightValid, limeLightDistance, 0.0, 0.0, 0.0, 0.0);
+        currentPose = new Pose(limeLightTx, limeLightTy, limeLightTa, limeLightValid, limeLightDistance, 0.0, 0.0, 0.0,
+                0.0);
         poseList.add(currentPose);
 
         if (poseList.size() > poseListLimit) {
             Pose removePose = poseList.remove(0);
-            //poseMap.remove(removePose.timestamp, removePose);
+            // poseMap.remove(removePose.timestamp, removePose);
         }
-        
-        //poseMap.put(currentPose.timestamp, currentPose);
+
+        // poseMap.put(currentPose.timestamp, currentPose);
         return currentPose;
     }
 }
