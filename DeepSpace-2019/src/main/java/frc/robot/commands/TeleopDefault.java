@@ -44,7 +44,7 @@ public class TeleopDefault extends Command {
   protected void execute() {
     System.out.println("Distance: " + Pose.getCurrentPose().limeLightDistance);
 
-    if (Robot.oi.driver.getRawButton(6) && Pose.getCurrentPose().limeLightValid) {
+    if (Robot.oi.driverRB.get() && Pose.getCurrentPose().limeLightValid) {
       steerAmt = RobotMap.visionDrive.turnTowardsTarget();
       moveAmt = RobotMap.visionDrive.moveTowardsTarget();
       //steerAmt = RobotMap.visionDrive.arcTowardsTarget();
@@ -53,6 +53,10 @@ public class TeleopDefault extends Command {
       moveAmt = scaleInputs(Robot.oi.driver.getRawAxis(1));
       steerAmt = -scaleInputs(Robot.oi.driver.getRawAxis(4));
       RobotMap.driveTrain.drive(moveAmt + steerAmt, moveAmt - steerAmt);
+    }
+
+    if (Robot.oi.driverStart.get()) {
+      RobotMap.vision.toggleLimelight();
     }
   }
 

@@ -16,9 +16,19 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class VisionAssistedDrive extends Subsystem {
   
-  static final double steerKp = 0.02;
-  static final double moveKp = 0.015;
-  static final double moveMin = 0.07;
+  class GearVars {
+    public final double steerKp, moveKp, moveMin;
+    public GearVars (double psteerKp, double pmoveKp, double pmoveMin) {
+      steerKp = psteerKp;
+      moveKp = pmoveKp;
+      moveMin = pmoveMin;
+    }
+  }
+  
+  // two different sets of Kp values for different gears
+  GearVars lowGear = new GearVars(0.02, 0.015, 0.07);
+  GearVars highGear = new GearVars(0.02, 0.015, 0.07);
+
   double desiredDistance = 40;
 
   @Override
@@ -27,34 +37,34 @@ public class VisionAssistedDrive extends Subsystem {
     // setDefaultCommand(new MySpecialCommand());
   }
 
-  //returns a steering motor output to turn robot towards target
+  // returns a steering motor output to turn robot towards target
   public double turnTowardsTarget() {
     double steerAmt = 0;
     if (Pose.getCurrentPose().limeLightValid) {
-      steerAmt = steerKp * Pose.getCurrentPose().limeLightTx;
+      steerAmt = (Shifter.isLowGear ? lowGear.steerKp : highGear.steerKp) * Pose.getCurrentPose().limeLightTx;
 
       if (Pose.getCurrentPose().limeLightTx > 1.0) {
-        steerAmt += moveMin;
+        steerAmt += Shifter.isLowGear ? lowGear.moveMin : highGear.moveMin;
       } else if (Pose.getCurrentPose().limeLightTx < 1.0) {
-        steerAmt -= moveMin;
+        steerAmt -= Shifter.isLowGear ? lowGear.moveMin : highGear.moveMin;
       }
     }
     return -steerAmt;
   }
 
-  //returns a motor output that will move the robot towards target
+  // returns a motor output that will move the robot towards target
   public double moveTowardsTarget() {
     double moveAmt = 0;
 
     double distanceFromTarget = Pose.getCurrentPose().limeLightDistance;
     if (Pose.getCurrentPose().limeLightValid) {
       double error = desiredDistance - distanceFromTarget;
-      moveAmt = moveKp * error;
+      moveAmt = (Shifter.isLowGear ? lowGear.moveKp : highGear.moveKp) * error;
 
       if (error > 1.0) {
-        moveAmt += moveMin;
+        moveAmt += Shifter.isLowGear ? lowGear.moveMin : highGear.moveMin;
       } else if (error < 1.0) {
-        moveAmt -= moveMin;
+        moveAmt -= Shifter.isLowGear ? lowGear.moveMin : highGear.moveMin;
       }
 
       return moveAmt;

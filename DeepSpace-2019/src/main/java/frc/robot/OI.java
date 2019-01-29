@@ -50,15 +50,25 @@ public class OI {
   // until it is finished as determined by it's isFinished method.
   // button.whenReleased(new ExampleCommand());
   public Joystick driver = new Joystick(0);
-  public Joystick coDrive = new Joystick(1);
+  public Joystick coDriver = new Joystick(1);
 
-  public Button joystickRB = new JoystickButton(driver, 10);
-  public Button joystickLB = new JoystickButton(driver, 9);
+  public Button driverLB = new JoystickButton(driver, 5);
+  public Button driverRB = new JoystickButton(driver, 6);
   public Button driverBack = new JoystickButton(driver, 7);
+  public Button driverStart = new JoystickButton(driver, 8);
+  public Button driverJoyLB = new JoystickButton(driver, 9);
+  public Button driverJoyRB = new JoystickButton(driver, 10);
+
+  public Button coDriverA = new JoystickButton(coDriver, 1);
+  public Button coDriverB = new JoystickButton(coDriver, 2);
+  public Button coDriverX = new JoystickButton(coDriver, 3);
+  public Button coDriverY = new JoystickButton(coDriver, 4);
+  public Button coDriverLB = new JoystickButton(coDriver, 5);
+  public Button coDriverRB = new JoystickButton(coDriver, 6);
 
   public OI() {
-    joystickLB.whenPressed(new ShiftUp());
-    joystickRB.whenPressed(new ShiftDown());
+    driverJoyLB.whenPressed(new ShiftDown());
+    driverJoyRB.whenPressed(new ShiftUp());
     driverBack.whenPressed(new FieldMovement());
   }
 

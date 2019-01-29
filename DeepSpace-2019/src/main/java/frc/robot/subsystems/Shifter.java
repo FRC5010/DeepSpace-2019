@@ -8,6 +8,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 
 /**
@@ -17,6 +18,8 @@ public class Shifter extends Subsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
 
+  public static boolean isLowGear = false;
+
   @Override
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
@@ -25,15 +28,13 @@ public class Shifter extends Subsystem {
 
   public void shiftUp(){
     RobotMap.shiftSolenoid.set(false);
-    System.out.print("High Gear");
+    isLowGear = false;
+    SmartDashboard.putBoolean("Is Low gear", isLowGear);
   }
 
   public void shiftDown(){
     RobotMap.shiftSolenoid.set(true);
-    System.out.print("Low Gear");
-  }
-
-  public void stop(){
-    RobotMap.shiftSolenoid.set(false);
+    isLowGear = true;
+    SmartDashboard.putBoolean("Is Low gear", isLowGear);
   }
 }

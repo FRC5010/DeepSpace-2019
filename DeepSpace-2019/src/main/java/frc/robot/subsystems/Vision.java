@@ -40,6 +40,8 @@ public class Vision extends Subsystem {
   public static final double LIME_LIGHT_HEIGHT = 36;
   public static final double targetHeight = 24;
 
+  public static boolean lightOn = true;
+
   @Override
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
@@ -136,5 +138,23 @@ public class Vision extends Subsystem {
 
   public double getDistance() {
     return tDistanceS;
+  }
+
+  public void toggleLimelight() {
+    double getLightOn = table.getEntry("ledMode").getDouble(0);
+    if (getLightOn == 3) {
+      // Force Limelight off
+      lightOn = false;
+      table.getEntry("ledMode").setNumber(1);
+    } else if (getLightOn == 1) {
+      // Force Limelight on
+      lightOn = true;
+      table.getEntry("ledMode").setNumber(3);
+    }
+  }
+
+  public void toggleLimelight(boolean forceOn) {
+    lightOn = forceOn;
+    table.getEntry("ledMode").setNumber(forceOn ? 3 : 1);
   }
 }
