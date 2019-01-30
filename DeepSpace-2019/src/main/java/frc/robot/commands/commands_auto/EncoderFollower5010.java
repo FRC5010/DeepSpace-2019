@@ -1,5 +1,6 @@
 package frc.robot.commands.commands_auto;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 import frc.robot.subsystems.DirectionSensor;
 import jaci.pathfinder.Pathfinder;
@@ -131,6 +132,7 @@ public class EncoderFollower5010 {
             double last_heading_error = DirectionSensor.boundHalfDegrees(desired_heading - gyro_heading);
             double turn = 0.8 * (-1.0 / 80.0) * last_heading_error;
 
+
             if (isRight) {
                 calculated_value -= turn;
             } else {
@@ -170,10 +172,17 @@ public class EncoderFollower5010 {
      * @return whether we have finished tracking this trajectory or not.
      */
     public boolean isFinished() {
-        return (segment >= trajectory.length()) && 
+
+        SmartDashboard.putNumber("last_error", last_error);
+        SmartDashboard.putNumber("last_heading_error", last_heading_error);
+        SmartDashboard.putNumber("last_segment_count", last_segment_count);
+        SmartDashboard.putNumber("segment", segment);
+        SmartDashboard.putNumber("trajectory_length", trajectory.length());
+
+        return ((segment >= trajectory.length()) && 
         (Math.abs(last_error) < ket) && 
-        (Math.abs(last_heading_error) < kht &&
-        last_segment_max > last_segment_count);
+        (Math.abs(last_heading_error) < kht) ||
+        last_segment_max < last_segment_count);
     }
 
 }
