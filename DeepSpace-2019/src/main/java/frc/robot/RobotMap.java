@@ -102,9 +102,10 @@ public class RobotMap {
     direction.reset();
 
     elevator = new Elevator();
-      shifter = new Shifter();
+    shifter = new Shifter();
     driveTrain = new DriveTrain();
     vision = new Vision();
+    vision.changePipeline(-1);
     visionDrive = new VisionAssistedDrive();
   }
 }

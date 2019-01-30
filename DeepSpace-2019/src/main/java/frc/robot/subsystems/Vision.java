@@ -41,6 +41,7 @@ public class Vision extends Subsystem {
   public static final double targetHeight = 24;
 
   public static boolean lightOn = true;
+  public static int pipelineNumber = 1;
 
   @Override
   public void initDefaultCommand() {
@@ -146,20 +147,24 @@ public class Vision extends Subsystem {
   }
 
   public void toggleLimelight() {
-    double getLightOn = table.getEntry("ledMode").getDouble(0);
-    if (getLightOn == 3) {
-      // Force Limelight off
-      lightOn = false;
-      table.getEntry("ledMode").setNumber(1);
-    } else if (getLightOn == 1) {
-      // Force Limelight on
-      lightOn = true;
-      table.getEntry("ledMode").setNumber(3);
-    }
+    lightOn = !lightOn;
+    table.getEntry("ledMode").setNumber(lightOn ? 3 : 1);
   }
 
   public void toggleLimelight(boolean forceOn) {
     lightOn = forceOn;
     table.getEntry("ledMode").setNumber(forceOn ? 3 : 1);
   }
+
+  // if pipelineNumber = -1, switch to driver's camera
+  public void changePipeline(int ppipelineNumber) {
+  //   pipelineNumber = ppipelineNumber;
+  //   if (ppipelineNumber != -1) {
+  //     table.getEntry("camMode").setNumber(0);
+  //   } else {
+  //     table.getEntry("camMode").setNumber(1);
+  //     return;
+  //   }
+  //   table.getEntry("pipeline").setNumber(ppipelineNumber);
+   }
 }

@@ -45,17 +45,17 @@ public class TeleopDefault extends Command {
   protected void execute() {
     //System.out.println("Distance: " + Pose.getCurrentPose().limeLightDistance);
 
-    if (Robot.oi.driverRB.get() && Pose.getCurrentPose().limeLightValid) {
+    if ((Robot.oi.driverRB.get() || Robot.oi.driverLB.get()) && Pose.getCurrentPose().limeLightValid) {
+      RobotMap.vision.changePipeline(Robot.oi.driverRB.get() ? 0 : 1);
       steerAmt = RobotMap.visionDrive.turnTowardsTarget();
       moveAmt = RobotMap.visionDrive.moveTowardsTarget();
       //steerAmt = RobotMap.visionDrive.arcTowardsTarget();
       RobotMap.driveTrain.drive(steerAmt + moveAmt, -steerAmt + moveAmt);
     } else {
+      RobotMap.vision.changePipeline(-1);
       moveAmt = -scaleInputs(Robot.oi.driver.getRawAxis(1));
       steerAmt = scaleInputs(Robot.oi.driver.getRawAxis(4));
       RobotMap.driveTrain.drive(moveAmt + steerAmt, moveAmt - steerAmt);
-      SmartDashboard.putNumber("Left Encoder output TO", RobotMap.leftEncoder.getRaw());
-      SmartDashboard.putNumber("Right Encoder output TO", RobotMap.rightEncoder.getRaw());
     }
 
     if (Robot.oi.driverStart.get()) {

@@ -15,10 +15,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class VisionAssistedDrive extends Subsystem {
 
-  class GearVars {
+  class GearVariables {
     public final double steerKp, moveKp, moveMin;
 
-    public GearVars(double psteerKp, double pmoveKp, double pmoveMin) {
+    public GearVariables(double psteerKp, double pmoveKp, double pmoveMin) {
       steerKp = psteerKp;
       moveKp = pmoveKp;
       moveMin = pmoveMin;
@@ -26,8 +26,8 @@ public class VisionAssistedDrive extends Subsystem {
   }
 
   // two different sets of Kp values for different gears
-  GearVars lowGear = new GearVars(0.02, 0.015, 0.07);
-  GearVars highGear = new GearVars(0.02, 0.015, 0.07);
+  GearVariables lowGear = new GearVariables(0.02, 0.015, 0.07);
+  GearVariables highGear = new GearVariables(0.02, 0.015, 0.07);
 
   double desiredDistance = 40;
 
