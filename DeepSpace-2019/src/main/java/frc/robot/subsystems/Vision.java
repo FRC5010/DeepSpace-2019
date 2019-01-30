@@ -19,6 +19,8 @@ public class Vision extends Subsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
 
+  // TODO: Add all limeLight values
+  
   private static NetworkTable table;
 
   // current values
