@@ -18,15 +18,20 @@ public class FieldMovement extends CommandGroup {
    */
   public FieldMovement() {
     // Basic Test paths
+    //addSequential(new PathFollower5010(RobotMap_Paths.testL,RobotMap_Paths.testL, PathFollower5010.kReverse));
     //addSequential(new PathFollower5010(RobotMap_Paths.testL,RobotMap_Paths.testR, PathFollower5010.kForward));
-    //addSequential(new PathFollower5010(RobotMap_Paths.revL,RobotMap_Paths.revR, PathFollower5010.kReverse));
+    
+    addSequential(new PathFollower5010(RobotMap_Paths.drive1L,RobotMap_Paths.drive1R, PathFollower5010.kForward));
+    addSequential(new PathFollower5010(RobotMap_Paths.revL,RobotMap_Paths.revR, PathFollower5010.kReverse));
+    addSequential(new PathFollower5010(RobotMap_Paths.drive2L, RobotMap_Paths.drive2R, PathFollower5010.kForward));
+    
 
     // Basic test paths
     //addSequential(new PathForward(RobotMap_Paths.testL,RobotMap_Paths.testR));
     //addSequential(new PathReverse(RobotMap_Paths.testL,RobotMap_Paths.testR));
 
     // Actual routines
-   addSequential(new PathForward(RobotMap_Paths.drive1L,RobotMap_Paths.drive1R));
+   //addSequential(new PathForward(RobotMap_Paths.drive1L,RobotMap_Paths.drive1R));
 //     addSequential(new PathReverse(RobotMap_Paths.revL,RobotMap_Paths.revR));
 //    addSequential(new PathForward(RobotMap_Paths.drive2L,RobotMap_Paths.drive2R));
     //  addSequential(new PathReverse(RobotMap_Paths.drive3L,RobotMap_Paths.drive3R));

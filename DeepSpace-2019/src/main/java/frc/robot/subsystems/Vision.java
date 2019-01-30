@@ -38,7 +38,7 @@ public class Vision extends Subsystem {
   private static long lastValid = 0;
 
   public static final double LIME_LIGHT_HEIGHT = 36;
-  public static final double targetHeight = 24;
+  public static final double targetHeight = 39;
 
   public static boolean lightOn = true;
 

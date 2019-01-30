@@ -29,8 +29,13 @@ public class PathFollower5010 extends Command {
 		// Swapped because of Pathweaver issues for the time being.
 		// TODO: REVERSED WHEN FIXED!!!!!!!!!!!!
 		// The isRight parameter can be determined relative to the isFwd parameter
-		left = new EncoderFollower5010(rTraj, !isFwd, isFwd);
-		right = new EncoderFollower5010(lTraj, isFwd, isFwd);
+		if(isFwd) {
+			left = new EncoderFollower5010(rTraj, false, isFwd);
+			right = new EncoderFollower5010(lTraj, true, isFwd);
+		} else {
+			left = new EncoderFollower5010(lTraj, false, isFwd);
+			right = new EncoderFollower5010(rTraj, true, isFwd);
+		}
 	}
 
 	// Called just before this Command runs the first time
@@ -46,6 +51,7 @@ public class PathFollower5010 extends Command {
 		// in the chosen units
 		left.reset();
 		right.reset();
+		RobotMap.distance.reset();
 		left.configureEncoder(RobotMap.distance.getLeftRaw(), RobotMap.encoderPPR, RobotMap_Paths.wheel_diameter);
 		right.configureEncoder(RobotMap.distance.getRightRaw(), RobotMap.encoderPPR, RobotMap_Paths.wheel_diameter);
 
