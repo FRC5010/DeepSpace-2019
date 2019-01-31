@@ -95,14 +95,18 @@ public class Pose {
         double limeLightTa = RobotMap.vision.getA();
         boolean limeLightValid = RobotMap.vision.isTargetValid();
         double limeLightDistance = RobotMap.vision.getDistance();
+        double limeLightSkew = RobotMap.vision.getSkew();
+        double limeLightShort = RobotMap.vision.getShort();
+        double limeLightLong = RobotMap.vision.getLong();
+        double limeLightHorizontal = RobotMap.vision.getHor();
+        double limeLightVertical = RobotMap.vision.getVert();
         // TODO: Add all of the limeLight fields
         // TODO: Add heading, encoder output, etc...
         
-        //System.out.println("Valid: " + limeLightValid + ", Distance: " + limeLightDistance);
         currentPose = new Pose(limeLightTx, limeLightTy, limeLightTa, 
-                               limeLightValid, limeLightDistance, 0.0,
-                               0.0, 0.0, 0.0, 0.0, 0.0, 
-                               0.0, 0.0, 0.0, 0.0);
+                               limeLightValid, limeLightDistance, limeLightSkew,
+                               limeLightShort, limeLightLong, limeLightHorizontal, limeLightVertical,
+                               0.0, 0.0, 0.0, 0.0, 0.0);
         poseList.add(currentPose);
 
         if (poseList.size() > poseListLimit) {
