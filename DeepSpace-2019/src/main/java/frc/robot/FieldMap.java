@@ -42,9 +42,12 @@ public class FieldMap {
 
     // TODO: Add an enum for each field target
     public static enum Target {
+        // These need to be the same as the labels in the CSV file
         OUR_LEFT_ROCKET_NEAR_HATCH, OUR_LEFT_ROCKET_CARGO, OUR_LEFT_ROCKET_FAR_HATCH,
 
         OUR_LEFT_SHIP_BAY_1, OUR_LEFT_SHIP_BAY_2,
+
+        OUR_LEFT_LOADING_STATION,
 
         THEIR_LEFT_ROCKET_NEAR_HATCH, THEIR_LEFT_ROCKET_CARGO, THEIR_LEFT_ROCKET_FAR_HATCH,
 
@@ -59,13 +62,20 @@ public class FieldMap {
         public Position(MatOfPoint3f allPoints) {
             this.allPoints = allPoints;
         }
+
         public Position setPoints(List<Point3> points) {
             allPoints.fromList(points);
             return this;
         }
+
         public double distanceFromPosition(Position pos2) {
             // TODO: Calculate the distance between this position and pos2
             return 0.0;
+        }
+
+        public Point3 findCenterPoint() {
+            // TODO: Calculate center point
+            return new Point3();
         }
     }
 
@@ -73,28 +83,36 @@ public class FieldMap {
 
     static {
         File fieldMapFile = new File(Filesystem.getDeployDirectory().toPath() + "/fieldMap.csv");
+        String data;
+        String[] targetData;
+        Target target;
+        double lowX, lowY, lowZ, highX, highY, highZ;
+        List<Point3> points;
         try {
             BufferedReader reader = new BufferedReader(new FileReader(fieldMapFile));
-            // TODO: Need to write code to parse string into "TARGET_NAME, x0, y0, z0, x1..." coordinates for an entire file
-            String data = reader.readLine();
-            String[] targetData = data.split(",");
-            Target target = Target.valueOf(targetData[0]);
-            double x = Double.valueOf(targetData[1]);
-            double y = Double.valueOf(targetData[2]);
-            double z = Double.valueOf(targetData[3]);
-            fieldMap = new HashMap<>();
-            List<Point3> points = new ArrayList<Point3>();
-            // TODO: Need to add position data
-            points.add(new Point3(x, y, z)); // Top left
-            points.add(new Point3(0, 0, 0)); // Top right
-            points.add(new Point3(0, 0, 0)); // Bottom right
-            points.add(new Point3(0, 0, 0)); // Bottom left
-            fieldMap.put(target, new Position(new MatOfPoint3f()).setPoints(points));
-            points.clear();
-    } catch (FileNotFoundException e) {
-    } catch (IOException e) {
+            while (reader.ready()) {
+                data = reader.readLine();
+                targetData = data.split(",");
+                target = Target.valueOf(targetData[0]);
+                lowX = Double.valueOf(targetData[1]);
+                highX = Double.valueOf(targetData[2]);
+                lowY = Double.valueOf(targetData[3]);
+                highY = Double.valueOf(targetData[4]);
+                lowZ = Double.valueOf(targetData[5]);
+                highZ = Double.valueOf(targetData[6]);
+                fieldMap = new HashMap<>();
+                points = new ArrayList<Point3>();
+                points.add(new Point3(lowX, lowY, highZ)); // Top left
+                points.add(new Point3(highX, highY, highZ)); // Top right
+                points.add(new Point3(highX, highY, lowZ)); // Bottom right
+                points.add(new Point3(lowX, lowY, lowZ)); // Bottom left
+                fieldMap.put(target, new Position(new MatOfPoint3f()).setPoints(points));
+                points.clear();
+            }
+        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
+        }
     }
-}
 
     public static Position getPosition(Target trg) {
         return fieldMap.get(trg);
