@@ -42,7 +42,7 @@ public class RaiseElevator extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    moveUp = scaleInputs(Robot.oi.driver.getRawAxis(1));
+    moveUp = scaleInputs(Robot.oi.driver.getRawAxis(3));
     RobotMap.elevator.raiseElevator(moveUp);
   }
 
