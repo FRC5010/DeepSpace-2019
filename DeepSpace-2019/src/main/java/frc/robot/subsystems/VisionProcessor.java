@@ -60,18 +60,18 @@ public class VisionProcessor {
 
         // TODO: Write this PointFinder class which figures out where the points are
         // Uncomment the rest when written
-        // PointFinder pointFinder = new PointFinder(cornX, cornY);
+        PointFinder pointFinder = new PointFinder(cornX, cornY);
 
-        // MatOfPoint2f imagePoints = new MatOfPoint2f(
-        //         pointFinder.getBottomRight(), 
-        //         pointFinder.getBottomLeft(),
-        //         pointFinder.getTopLeft(), 
-        //         pointFinder.getTopRight()
-        //  );
+        MatOfPoint2f imagePoints = new MatOfPoint2f(
+                 pointFinder.getBottomRight(), 
+                 pointFinder.getBottomLeft(),
+                 pointFinder.getTopLeft(), 
+                 pointFinder.getTopRight()
+        );
 
         Mat rotationVector = new Mat();
         Mat translationVector = new Mat();
-        // Calib3d.solvePnP(mObjectPoints, imagePoints, mCameraMatrix, mDistortionCoefficients, rotationVector, translationVector);
+        Calib3d.solvePnP(mObjectPoints, imagePoints, mCameraMatrix, mDistortionCoefficients, rotationVector, translationVector);
 
         System.out.println("rotationVector: " + rotationVector.dump());
         System.out.println("translationVector: " + translationVector.dump());
