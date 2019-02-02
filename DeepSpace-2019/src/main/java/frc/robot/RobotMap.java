@@ -33,11 +33,11 @@ import frc.robot.subsystems.VisionAssistedDrive;
 public class RobotMap {
   public static TalonSRX rightMotor1;
   public static TalonSRX rightMotor2;
-  public static TalonSRX rightMotor3;
+  public static TalonSRX elevatorMotor;
 
   public static TalonSRX leftMotor1;
   public static TalonSRX leftMotor2;
-  public static TalonSRX leftMotor3;
+  //public static TalonSRX leftMotor3;
 
   public static Solenoid shiftSolenoid;
   
@@ -69,12 +69,12 @@ public class RobotMap {
     RobotMap_Paths.init();
     rightMotor1 = new TalonSRX(4);
     rightMotor2 = new TalonSRX(5);
-    rightMotor3 = new TalonSRX(6);
+    
 
     leftMotor1 = new TalonSRX(1);
     leftMotor2 = new TalonSRX(2);
-    leftMotor3 = new TalonSRX(3);
-
+    
+    elevatorMotor = new TalonSRX(3);
     //Inverted for motion profiling purposes.
     /*leftMotor1.setInverted(true);
     leftMotor2.setInverted(true);
@@ -82,13 +82,13 @@ public class RobotMap {
 
     rightMotor1.setInverted(true);
     rightMotor2.setInverted(true);
-    rightMotor3.setInverted(true);
+    //rightMotor3.setInverted(true);
 
     rightMotor2.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 4);
-		rightMotor3.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 4);
+		//rightMotor3.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 4);
 
 		leftMotor2.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 1);
-    leftMotor3.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 1);
+    //leftMotor3.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 1);
     
     shiftSolenoid = new Solenoid(1);
 

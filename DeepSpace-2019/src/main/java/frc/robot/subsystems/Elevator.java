@@ -7,27 +7,31 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.Victor;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+
 import edu.wpi.first.wpilibj.command.Subsystem;
+import frc.robot.RobotMap;
+import frc.robot.commands.RaiseElevator;
 
 /**
  * Add your docs here.
  */
 public class Elevator extends Subsystem {
+
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
-  Victor elevMotor = new Victor(8);
+  TalonSRX elevMotor = RobotMap.elevatorMotor;
 
   @Override
   public void initDefaultCommand() {
-    
+    setDefaultCommand(new RaiseElevator());
     // Set the default command for a subsystem here.
     // setDefaultCommand(new MySpecialCommand());
   }
   public void raiseElevator(double power) {
-    elevMotor.set(power);
+    elevMotor.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, power);
   }
   public void lowerElevator(double power){
-    elevMotor.set(-power);
+    elevMotor.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, -power);
   }
 }
