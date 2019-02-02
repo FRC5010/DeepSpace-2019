@@ -8,6 +8,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.subsystems.Elevator;
@@ -42,8 +43,12 @@ public class RaiseElevator extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    moveUp = scaleInputs(Robot.oi.driver.getRawAxis(3));
+    moveUp = scaleInputs(Robot.oi.coDriver.getRawAxis(1));
+    if(moveUp <= 0){
+      moveUp = 0;
+    }
     RobotMap.elevator.raiseElevator(moveUp);
+    SmartDashboard.putNumber("Elevator power", moveUp);
   }
 
   // Make this return true when this Command no longer needs to run execute()
