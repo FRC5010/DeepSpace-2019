@@ -17,10 +17,18 @@ public class PointFinder {
     private final Point bottomLeft, bottomRight, topLeft, topRight;
 
     public PointFinder(double[] cornX, double[] cornY) {
-        topLeft = new Point(cornX[0], cornY[0]);
-        topRight = new Point(cornX[1], cornY[1]);
-        bottomLeft = new Point(cornX[2], cornY[2]);
-        bottomRight = new Point(cornX[3], cornY[3]);
+        if (cornX.length != 4 || cornY.length != 4) {
+            System.out.println("[ERROR] Could not find 4 points from image");
+            topLeft = new Point(0, 0);
+            topRight = new Point(0, 0);
+            bottomLeft = new Point(0, 0);
+            bottomRight = new Point(0, 0);
+        } else {
+            bottomRight = new Point(cornX[0], cornY[0]);
+            bottomLeft = new Point(cornX[1], cornY[1]);
+            topLeft = new Point(cornX[2], cornY[2]);
+            topRight = new Point(cornX[3], cornY[3]);
+        }
     }
 
     public Point getBottomRight() {
@@ -37,5 +45,9 @@ public class PointFinder {
 
     public Point getTopLeft() {
         return topLeft;
+    }
+
+    public String toString() {
+        return "TL" + topLeft.toString() + " TR" + topRight + "\n" + "BL" + bottomLeft.toString() + " BR" + bottomRight;
     }
 }

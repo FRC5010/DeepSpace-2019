@@ -28,8 +28,7 @@ public class VisionProcessor {
 
     public VisionProcessor() {
         // Define bottom right corner of left vision target as origin
-        mObjectPoints = new MatOfPoint3f(
-                new Point3(0.0, 0.0, 0.0), // bottom right
+        mObjectPoints = new MatOfPoint3f(new Point3(0.0, 0.0, 0.0), // bottom right
                 new Point3(-1.9363, 0.5008, 0.0), // bottom left
                 new Point3(-0.5593, 5.8258, 0.0), // top-left
                 new Point3(1.377, 5.325, 0.0) // top-right
@@ -41,7 +40,8 @@ public class VisionProcessor {
         mCameraMatrix.put(1, 1, 2.5635071715912881e+02);
         mCameraMatrix.put(1, 2, 1.1971433393615548e+02);
 
-        mDistortionCoefficients = new MatOfDouble(2.9684613693070039e-01, -1.4380252254747885e+00, -2.2098421479494509e-03, -3.3894563533907176e-03, 2.5344430354806740e+00);
+        mDistortionCoefficients = new MatOfDouble(2.9684613693070039e-01, -1.4380252254747885e+00,
+                -2.2098421479494509e-03, -3.3894563533907176e-03, 2.5344430354806740e+00);
 
         mLimelightTable = NetworkTableInstance.getDefault().getTable("limelight");
         mLimelightTable.getEntry("pipeline").setNumber(0);
@@ -62,16 +62,13 @@ public class VisionProcessor {
         // Uncomment the rest when written
         PointFinder pointFinder = new PointFinder(cornX, cornY);
 
-        MatOfPoint2f imagePoints = new MatOfPoint2f(
-                 pointFinder.getBottomRight(), 
-                 pointFinder.getBottomLeft(),
-                 pointFinder.getTopLeft(), 
-                 pointFinder.getTopRight()
-        );
+        MatOfPoint2f imagePoints = new MatOfPoint2f(pointFinder.getBottomRight(), pointFinder.getBottomLeft(),
+                pointFinder.getTopLeft(), pointFinder.getTopRight());
 
         Mat rotationVector = new Mat();
         Mat translationVector = new Mat();
-        Calib3d.solvePnP(mObjectPoints, imagePoints, mCameraMatrix, mDistortionCoefficients, rotationVector, translationVector);
+        Calib3d.solvePnP(mObjectPoints, imagePoints, mCameraMatrix, mDistortionCoefficients, rotationVector,
+                translationVector);
 
         System.out.println("rotationVector: " + rotationVector.dump());
         System.out.println("translationVector: " + translationVector.dump());

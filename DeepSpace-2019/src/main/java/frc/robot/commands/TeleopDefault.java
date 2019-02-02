@@ -8,7 +8,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard; 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.subsystems.Pose;
@@ -17,22 +17,22 @@ public class TeleopDefault extends Command {
 
   private double moveAmt;
   private double steerAmt;
-  private double deadZone = 0.15;  
+  private double deadZone = 0.15;
 
-  public TeleopDefault(){
+  public TeleopDefault() {
     requires(RobotMap.driveTrain);
   }
 
-  public double scaleInputs(double input){
+  public double scaleInputs(double input) {
     if (Math.abs(input) < deadZone) {
-			input = 0;
-		} else if (input > 0) {
-			input = (input - deadZone) * 1 / (1 - deadZone);
-		} else if (input < 0) {
-			input = (input + deadZone) * 1 / (1 - deadZone);
-		}
+      input = 0;
+    } else if (input > 0) {
+      input = (input - deadZone) * 1 / (1 - deadZone);
+    } else if (input < 0) {
+      input = (input + deadZone) * 1 / (1 - deadZone);
+    }
 
-		return Math.pow(input, 3);
+    return Math.pow(input, 3);
   }
 
   // Called just before this Command runs the first time
@@ -43,16 +43,16 @@ public class TeleopDefault extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    //System.out.println("Distance: " + Pose.getCurrentPose().limeLightDistance);
+    // System.out.println("Distance: " + Pose.getCurrentPose().limeLightDistance);
 
     if ((Robot.oi.driverRB.get() || Robot.oi.driverLB.get()) && Pose.getCurrentPose().limeLightValid) {
       RobotMap.vision.changePipeline(Robot.oi.driverRB.get() ? 0 : 1);
       steerAmt = RobotMap.visionDrive.turnTowardsTarget();
       moveAmt = RobotMap.visionDrive.moveTowardsTarget();
-      //steerAmt = RobotMap.visionDrive.arcTowardsTarget();
+      // steerAmt = RobotMap.visionDrive.arcTowardsTarget();
       RobotMap.driveTrain.drive(steerAmt + moveAmt, -steerAmt + moveAmt);
     } else {
-      RobotMap.vision.changePipeline(-1);
+      RobotMap.vision.changePipeline(0);
       moveAmt = -scaleInputs(Robot.oi.driver.getRawAxis(1));
       steerAmt = scaleInputs(Robot.oi.driver.getRawAxis(4));
       RobotMap.driveTrain.drive(moveAmt + steerAmt, moveAmt - steerAmt);

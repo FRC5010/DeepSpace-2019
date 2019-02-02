@@ -42,10 +42,8 @@ public class Pose {
     private static Pose currentPose = new Pose();
     private static long poseListLimit = 200;
 
-    public Pose(double tx, double ty, double ta, boolean tv, double distance,
-                double tSkew, double tShort, double tLong, double tHorizontal,
-                double tVertical, double tLatency, 
-                double el, double er, double h, double ee) {
+    public Pose(double tx, double ty, double ta, boolean tv, double distance, double tSkew, double tShort, double tLong,
+            double tHorizontal, double tVertical, double tLatency, double el, double er, double h, double ee) {
         timestamp = System.currentTimeMillis() / 10; // round down to minimum resolution
         limeLightTx = tx;
         limeLightTy = ty;
@@ -82,7 +80,7 @@ public class Pose {
         heading = 0.0;
         elevatorEncoder = 0.0;
     }
-    
+
     public static Pose getCurrentPose() {
         return currentPose;
     }
@@ -100,13 +98,14 @@ public class Pose {
         double limeLightLong = RobotMap.vision.getLong();
         double limeLightHorizontal = RobotMap.vision.getHor();
         double limeLightVertical = RobotMap.vision.getVert();
-        // TODO: Add all of the limeLight fields
-        // TODO: Add heading, encoder output, etc...
-        
-        currentPose = new Pose(limeLightTx, limeLightTy, limeLightTa, 
-                               limeLightValid, limeLightDistance, limeLightSkew,
-                               limeLightShort, limeLightLong, limeLightHorizontal, limeLightVertical,
-                               0.0, 0.0, 0.0, 0.0, 0.0);
+        double limeLightLatency = RobotMap.vision.getLatency();
+        double heading = RobotMap.direction.angle();
+        double leftEncoder = RobotMap.leftEncoder.getRaw();
+        double rightEncoder = RobotMap.rightEncoder.getRaw();
+
+        currentPose = new Pose(limeLightTx, limeLightTy, limeLightTa, limeLightValid, limeLightDistance, limeLightSkew,
+                limeLightShort, limeLightLong, limeLightHorizontal, limeLightVertical, limeLightLatency, leftEncoder,
+                rightEncoder, heading, 0.0);
         poseList.add(currentPose);
 
         if (poseList.size() > poseListLimit) {

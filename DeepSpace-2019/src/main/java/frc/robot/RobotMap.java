@@ -105,7 +105,7 @@ public class RobotMap {
     shifter = new Shifter();
     driveTrain = new DriveTrain();
     vision = new Vision();
-    vision.changePipeline(-1);
+    vision.changePipeline(0);
     visionDrive = new VisionAssistedDrive();
   }
 }
