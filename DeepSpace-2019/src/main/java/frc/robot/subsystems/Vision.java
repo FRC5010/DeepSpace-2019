@@ -19,6 +19,7 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.SmartDashboardManager;
 
 /**
  * Add your docs here.
@@ -206,7 +207,7 @@ public class Vision extends Subsystem {
       tLongS = (previousPose.limeLightLong + tLongC) / 2.0;
       tHorS = (previousPose.limeLightHorizontal + tHorC) / 2.0;
       tVertS = (previousPose.limeLightVertical + tVertC) / 2.0;
-      latencyS = Math.floor(latencyC);
+      latencyS = SmartDashboardManager.roundDouble(latencyC, 1);
       cornXs = cornXc;
       cornYs = cornYc;
     }
