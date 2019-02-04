@@ -207,7 +207,7 @@ public class Vision extends Subsystem {
       tLongS = (previousPose.limeLightLong + tLongC) / 2.0;
       tHorS = (previousPose.limeLightHorizontal + tHorC) / 2.0;
       tVertS = (previousPose.limeLightVertical + tVertC) / 2.0;
-      latencyS = SmartDashboardManager.roundDouble(latencyC, 1);
+      latencyS = SmartDashboardManager.roundDouble(latencyC, 2);
       cornXs = cornXc;
       cornYs = cornYc;
     }

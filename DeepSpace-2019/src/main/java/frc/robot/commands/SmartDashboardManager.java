@@ -12,10 +12,11 @@ package frc.robot.commands;
  */
 public class SmartDashboardManager {
 
-    static public double roundDouble(double number, double place){
-        number = number * 10 * place;
+    static public double roundDouble(double number, double places){
+         //The first number is the number that you want rounded, the second number is the number of digits you want to survive
+        number = number * places;
         number = Math.floor(number);
-        number = number / (10 * place);
+        number = number / places;
         return number;  
     }
 
