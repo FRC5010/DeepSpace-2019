@@ -7,7 +7,6 @@
 
 package frc.robot.subsystems;
 
-import org.opencv.core.MatOfPoint2f;
 import org.opencv.core.Point;
 
 /**
@@ -15,6 +14,7 @@ import org.opencv.core.Point;
  */
 public class PointFinder {
     private final Point bottomLeft, bottomRight, topLeft, topRight;
+    private final double leftLength, rightLength;
 
     public PointFinder(double[] cornX, double[] cornY) {
         if (cornX.length != 4 || cornY.length != 4) {
@@ -23,11 +23,17 @@ public class PointFinder {
             topRight = new Point(0, 0);
             bottomLeft = new Point(0, 0);
             bottomRight = new Point(0, 0);
+            leftLength = 0;
+            rightLength = 0;
         } else {
             bottomRight = new Point(cornX[0], cornY[0]);
             bottomLeft = new Point(cornX[1], cornY[1]);
             topLeft = new Point(cornX[2], cornY[2]);
             topRight = new Point(cornX[3], cornY[3]);
+            leftLength = Math.sqrt(
+                    Math.pow(Math.abs(topLeft.x - bottomLeft.x), 2) + Math.pow(Math.abs(topLeft.y - bottomLeft.y), 2));
+            rightLength = Math.sqrt(Math.pow(Math.abs(topRight.x - bottomRight.x), 2)
+                    + Math.pow(Math.abs(topRight.y - bottomRight.y), 2));
         }
     }
 
@@ -45,6 +51,14 @@ public class PointFinder {
 
     public Point getTopLeft() {
         return topLeft;
+    }
+
+    public double getLeftLength() {
+        return leftLength;
+    }
+
+    public double getRightLength() {
+        return rightLength;
     }
 
     public String toString() {

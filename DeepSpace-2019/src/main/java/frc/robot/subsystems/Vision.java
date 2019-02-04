@@ -35,15 +35,17 @@ public class Vision extends Subsystem {
   private static double tvXc = 0.0;
   private static double tvYc = 0.0;
   private static double tvZc = 0.0;
-  private static double tvDistanceC = 0.0;
-  private static double rotAngleC = 0.0;
-  private static double shiftAngleC = 0.0;
+  private static double matrixDistanceC = 0.0;
+  private static double matrixRotationAngleC = 0.0;
+  private static double matrixApproachAngleC = 0.0;
   private static double tDistanceC = 0.0;
+  private static double leftRightRatioC = 0.0;
   private static double tSkewC = 0.0;
   private static double tShortC = 0.0;
   private static double tLongC = 0.0;
   private static double tHorC = 0.0;
   private static double tVertC = 0.0;
+  private static double aspectApproachAngleC = 0.0; // angle determined by hor/vert
   private static double latencyC = 0.0;
   private static double[] cornXc;
   private static double[] cornYc;
@@ -52,15 +54,17 @@ public class Vision extends Subsystem {
   private static double tXs = 0.0;
   private static double tYs = 0.0;
   private static double tAs = 0.0;
-  private static double tvDistanceS = 0.0; // Distance from tVec
-  private static double rotAngleS = 0.0;
-  private static double shiftAngleS = 0.0;
+  private static double matrixDistanceS = 0.0; // Distance from tVec
+  private static double matrixRotaionAngleS = 0.0;
+  private static double matrixApproachAngleS = 0.0;
   private static double tDistanceS = 0.0; // Distance from tY
+  private static double leftRightRatioS = 0.0;
   private static double tSkewS = 0.0;
   private static double tShortS = 0.0;
   private static double tLongS = 0.0;
   private static double tHorS = 0.0;
   private static double tVertS = 0.0;
+  private static double aspectApproachAngleS = 0.0;
   private static double latencyS = 0.0;
   private static double[] cornXs;
   private static double[] cornYs;
@@ -71,6 +75,7 @@ public class Vision extends Subsystem {
 
   public static final double LIME_LIGHT_HEIGHT = 36;
   public static final double targetHeight = 24;
+  private double originalRatio = 77.0 / 35.0;  // the largest possible ratio from the front
   private MatOfPoint3f mObjectPoints;
   private Mat mCameraMatrix;
   private MatOfDouble mDistortionCoefficients;
@@ -139,9 +144,11 @@ public class Vision extends Subsystem {
         latencyS = latencyC;
         cornXs = cornXc;
         cornYs = cornYc;
-        rotAngleS = rotAngleC;
-        shiftAngleS = shiftAngleC;
-        tvDistanceS = tvDistanceC;
+        matrixRotaionAngleS = matrixRotationAngleC;
+        matrixApproachAngleS = matrixApproachAngleC;
+        matrixDistanceS = matrixDistanceC;
+        aspectApproachAngleS = aspectApproachAngleC;
+        leftRightRatioS = leftRightRatioC;
         // Anytime the current frame is valid, the saved valid becomes true
         tValids = true;
       }
@@ -153,8 +160,8 @@ public class Vision extends Subsystem {
         tValids = false;
         // If the target has been invalid too long, set to NaN
         tAs = tYs = tXs = tDistanceS = tSkewS = tShortS = Double.NaN;
-        tLongS = tHorS = tVertS = latencyS = Double.NaN;
-        rotAngleS = shiftAngleS = tvDistanceS = Double.NaN;
+        tLongS = tHorS = tVertS = latencyS = leftRightRatioS = Double.NaN;
+        matrixRotaionAngleS = matrixApproachAngleS = matrixDistanceS = aspectApproachAngleS = Double.NaN;
       }
     }
 
@@ -181,9 +188,11 @@ public class Vision extends Subsystem {
     SmartDashboard.putNumber("Target Long raw", Double.isNaN(tLongC) ? 0.0 : tLongC);
     SmartDashboard.putNumber("Target Horizontal raw", Double.isNaN(tHorC) ? 0.0 : tHorC);
     SmartDashboard.putNumber("Target Vertical raw", Double.isNaN(tVertC) ? 0.0 : tVertC);
-    SmartDashboard.putNumber("Target Rotation Angle raw", Double.isNaN(rotAngleC) ? 0.0 : rotAngleC);
-    SmartDashboard.putNumber("Target Shift Angle raw ", Double.isNaN(shiftAngleC) ? 0.0 : shiftAngleC);
-    SmartDashboard.putNumber("Target Trans Distance raw", Double.isNaN(tvDistanceC) ? 0.0 : tvDistanceC);
+    SmartDashboard.putNumber("Target Matrix Rotation Angle raw", Double.isNaN(matrixRotationAngleC) ? 0.0 : matrixRotationAngleC);
+    SmartDashboard.putNumber("Target Matrix Approach Angle raw ", Double.isNaN(matrixApproachAngleC) ? 0.0 : matrixApproachAngleC);
+    SmartDashboard.putNumber("Target Matrix Distance raw", Double.isNaN(matrixDistanceC) ? 0.0 : matrixDistanceC);
+    SmartDashboard.putNumber("Target Left/Right Ratio raw", Double.isNaN(leftRightRatioC) ? 0.0 : leftRightRatioC);
+    SmartDashboard.putNumber("Target Aspect Approach Angle raw", Double.isNaN(aspectApproachAngleC) ? 0.0 : aspectApproachAngleC);
     SmartDashboard.putNumber("Limelight Latency raw", Double.isNaN(latencyC) ? 0.0 : latencyC);
     // outputing all smoothed values
     SmartDashboard.putNumber("Target X smoothed", Double.isNaN(tXs) ? 0.0 : tXs);
@@ -195,15 +204,26 @@ public class Vision extends Subsystem {
     SmartDashboard.putNumber("Target Long smoothed", Double.isNaN(tLongS) ? 0.0 : tLongS);
     SmartDashboard.putNumber("Target Horizontal smoothed", Double.isNaN(tHorS) ? 0.0 : tHorS);
     SmartDashboard.putNumber("Target Vertical smoothed", Double.isNaN(tVertS) ? 0.0 : tVertS);
-    SmartDashboard.putNumber("Target Rotation Angle smoothed", Double.isNaN(rotAngleS) ? 0.0 : rotAngleS);
-    SmartDashboard.putNumber("Target Shift Angle smoothed ", Double.isNaN(shiftAngleS) ? 0.0 : shiftAngleS);
-    SmartDashboard.putNumber("Target Trans Distance smoothed", Double.isNaN(tvDistanceS) ? 0.0 : tvDistanceS);
+    SmartDashboard.putNumber("Target Matrix Rotation Angle smoothed", Double.isNaN(matrixRotaionAngleS) ? 0.0 : matrixRotaionAngleS);
+    SmartDashboard.putNumber("Target Matrix Approach Angle smoothed ", Double.isNaN(matrixApproachAngleS) ? 0.0 : matrixApproachAngleS);
+    SmartDashboard.putNumber("Target Matrix Distance smoothed", Double.isNaN(matrixDistanceS) ? 0.0 : matrixDistanceS);
+    SmartDashboard.putNumber("Target Left/Right Ratio smoothed", Double.isNaN(leftRightRatioS) ? 0.0 : leftRightRatioS);
+    SmartDashboard.putNumber("Target Aspect Approach Angle smoothed", Double.isNaN(aspectApproachAngleS) ? 0.0 : aspectApproachAngleS);
     SmartDashboard.putNumber("Limelight Latency smoothed", Double.isNaN(latencyS) ? 0.0 : latencyS);
   }
 
   private void matrixMathOnCorners() {
     PointFinder pointFinder = new PointFinder(cornXs, cornYs);
     // System.out.println(pointFinder);
+
+    leftRightRatioC = pointFinder.getLeftLength() / pointFinder.getRightLength();
+    double leftRightSignum = leftRightRatioC > 1 ? -1 : 1;
+
+    // Attempt to find angle-2 from horizontal vs vertical
+    double currentRatio = tHorC / tVertC;
+    double ratio = Math.min(1, currentRatio/originalRatio); // finding acos of a value > 1 will give NaN 
+    aspectApproachAngleC = Math.toDegrees(Math.acos(ratio)) * leftRightSignum;
+    
     MatOfPoint2f imagePoints = new MatOfPoint2f(pointFinder.getBottomRight(), pointFinder.getBottomLeft(),
         pointFinder.getTopLeft(), pointFinder.getTopRight());
 
@@ -233,9 +253,9 @@ public class Vision extends Subsystem {
     double pZeroWorld0 = pZeroWorld.get(0, 0)[0];
     double pZeroWorld2 = pZeroWorld.get(2, 0)[0];
 
-    rotAngleC = Math.atan2(tvXc, tvZc);
-    tvDistanceC = Math.sqrt(Math.pow(tvXc, 2) + Math.pow(tvZc, 2));
-    shiftAngleC = Math.atan2(pZeroWorld0, pZeroWorld2);
+    matrixRotationAngleC = Math.atan2(tvXc, tvZc);
+    matrixDistanceC = Math.sqrt(Math.pow(tvXc, 2) + Math.pow(tvZc, 2));
+    matrixApproachAngleC = Math.atan2(pZeroWorld0, pZeroWorld2);
   }
 
   private void smoothValues() {
@@ -250,9 +270,11 @@ public class Vision extends Subsystem {
       tLongS = (previousPose.limeLightLong + tLongC) / 2.0;
       tHorS = (previousPose.limeLightHorizontal + tHorC) / 2.0;
       tVertS = (previousPose.limeLightVertical + tVertC) / 2.0;
-      rotAngleS = (previousPose.rotationAngle + rotAngleC) / 2.0;
-      shiftAngleS = (previousPose.shiftAngle + shiftAngleC) / 2.0;
-      tvDistanceS = (previousPose.transVecDistance + tvDistanceC) / 2.0;
+      matrixRotaionAngleS = (previousPose.matrixRotationAngle + matrixRotationAngleC) / 2.0;
+      matrixApproachAngleS = (previousPose.matrixApproachAngle + matrixApproachAngleC) / 2.0;
+      matrixDistanceS = (previousPose.matrixDistance + matrixDistanceC) / 2.0;
+      leftRightRatioS = (previousPose.leftRightRatio + leftRightRatioC) / 2.0;
+      aspectApproachAngleS = (previousPose.aspectApproachAngle + aspectApproachAngleC) / 2.0;
       latencyS = Math.floor(latencyC);
       cornXs = cornXc;
       cornYs = cornYc;
@@ -322,16 +344,24 @@ public class Vision extends Subsystem {
     return cornYs;
   }
 
-  public double getRotAngle() {
-    return rotAngleS;
+  public double getMatrixRotationAngle() {
+    return matrixRotaionAngleS;
   }
 
-  public double getShiftAngle() {
-    return shiftAngleS;
+  public double getMatrixApproachAngle() {
+    return matrixApproachAngleS;
   }
 
-  public double getTVDistance() {
-    return tvDistanceS;
+  public double getMatrixDistance() {
+    return matrixDistanceS;
+  }
+
+  public double getLeftRightRatio() {
+    return leftRightRatioS;
+  }
+
+  public double getAspectApproachAngle() {
+    return aspectApproachAngleS;
   }
 
   public void toggleLimelight() {

@@ -31,9 +31,11 @@ public class Pose {
     public final double limeLightHorizontal;
     public final double limeLightVertical;
     public final double limeLightLatency;
-    public final double rotationAngle;
-    public final double shiftAngle;
-    public final double transVecDistance;
+    public final double matrixRotationAngle;
+    public final double matrixApproachAngle;
+    public final double matrixDistance;
+    public final double leftRightRatio;
+    public final double aspectApproachAngle;
 
     public final long driveTrainEncoderLeft;
     public final long driveTrainEncoderRight;
@@ -58,9 +60,11 @@ public class Pose {
         limeLightHorizontal = RobotMap.vision.getHor();
         limeLightVertical = RobotMap.vision.getVert();
         limeLightLatency = RobotMap.vision.getLatency();
-        rotationAngle = RobotMap.vision.getRotAngle();
-        shiftAngle = RobotMap.vision.getShiftAngle();
-        transVecDistance = RobotMap.vision.getTVDistance();
+        matrixRotationAngle = RobotMap.vision.getMatrixRotationAngle();
+        matrixApproachAngle = RobotMap.vision.getMatrixApproachAngle();
+        matrixDistance = RobotMap.vision.getMatrixDistance();
+        leftRightRatio = RobotMap.vision.getLeftRightRatio();
+        aspectApproachAngle = RobotMap.vision.getAspectApproachAngle();
         heading = RobotMap.direction.angle();
         driveTrainEncoderLeft = RobotMap.leftEncoder.getRaw();
         driveTrainEncoderRight = RobotMap.rightEncoder.getRaw();
@@ -80,9 +84,12 @@ public class Pose {
         limeLightHorizontal = 0.0;
         limeLightVertical = 0.0;
         limeLightLatency = 0.0;
-        rotationAngle = 0.0;
-        transVecDistance = 0.0;
-        shiftAngle = 0.0;
+        matrixRotationAngle = 0.0;
+        matrixDistance = 0.0;
+        matrixApproachAngle = 0.0;
+        leftRightRatio = 0.0;
+        aspectApproachAngle = 0.0;
+
         driveTrainEncoderLeft = 0;
         driveTrainEncoderRight = 0;
         heading = 0.0;
