@@ -31,35 +31,40 @@ public class Pose {
     public final double limeLightHorizontal;
     public final double limeLightVertical;
     public final double limeLightLatency;
+    public final double rotationAngle;
+    public final double shiftAngle;
+    public final double transVecDistance;
 
-    public final double driveTrainEncoderLeft;
-    public final double driveTrainEncoderRight;
+    public final long driveTrainEncoderLeft;
+    public final long driveTrainEncoderRight;
     public final double heading;
-    public final double elevatorEncoder;
+    public final long elevatorEncoder;
 
     // public static final Map<Long, Pose> poseMap = new HashMap<Long, Pose>();
     public static final List<Pose> poseList = new ArrayList<Pose>();
     private static Pose currentPose = new Pose();
     private static long poseListLimit = 200;
 
-    public Pose(double tx, double ty, double ta, boolean tv, double distance, double tSkew, double tShort, double tLong,
-            double tHorizontal, double tVertical, double tLatency, double el, double er, double h, double ee) {
-        timestamp = System.currentTimeMillis() / 10; // round down to minimum resolution
-        limeLightTx = tx;
-        limeLightTy = ty;
-        limeLightTa = ta;
-        limeLightDistance = distance;
-        limeLightValid = tv;
-        limeLightSkew = tSkew;
-        limeLightShort = tShort;
-        limeLightLong = tLong;
-        limeLightHorizontal = tHorizontal;
-        limeLightVertical = tVertical;
-        limeLightLatency = tLatency;
-        driveTrainEncoderLeft = el;
-        driveTrainEncoderRight = er;
-        heading = h;
-        elevatorEncoder = ee;
+    public Pose(long timestamp) {
+        this.timestamp = timestamp;
+        limeLightTx = RobotMap.vision.getX();
+        limeLightTy = RobotMap.vision.getY();
+        limeLightTa = RobotMap.vision.getA();
+        limeLightValid = RobotMap.vision.isTargetValid();
+        limeLightDistance = RobotMap.vision.getDistance();
+        limeLightSkew = RobotMap.vision.getSkew();
+        limeLightShort = RobotMap.vision.getShort();
+        limeLightLong = RobotMap.vision.getLong();
+        limeLightHorizontal = RobotMap.vision.getHor();
+        limeLightVertical = RobotMap.vision.getVert();
+        limeLightLatency = RobotMap.vision.getLatency();
+        rotationAngle = RobotMap.vision.getRotAngle();
+        shiftAngle = RobotMap.vision.getShiftAngle();
+        transVecDistance = RobotMap.vision.getTVDistance();
+        heading = RobotMap.direction.angle();
+        driveTrainEncoderLeft = RobotMap.leftEncoder.getRaw();
+        driveTrainEncoderRight = RobotMap.rightEncoder.getRaw();
+        elevatorEncoder = 0; // Needs to be updated
     }
 
     private Pose() {
@@ -75,10 +80,13 @@ public class Pose {
         limeLightHorizontal = 0.0;
         limeLightVertical = 0.0;
         limeLightLatency = 0.0;
-        driveTrainEncoderLeft = 0.0;
-        driveTrainEncoderRight = 0.0;
+        rotationAngle = 0.0;
+        transVecDistance = 0.0;
+        shiftAngle = 0.0;
+        driveTrainEncoderLeft = 0;
+        driveTrainEncoderRight = 0;
         heading = 0.0;
-        elevatorEncoder = 0.0;
+        elevatorEncoder = 0;
     }
 
     public static Pose getCurrentPose() {
@@ -88,24 +96,7 @@ public class Pose {
     public static Pose update() {
         RobotMap.vision.update();
 
-        double limeLightTx = RobotMap.vision.getX();
-        double limeLightTy = RobotMap.vision.getY();
-        double limeLightTa = RobotMap.vision.getA();
-        boolean limeLightValid = RobotMap.vision.isTargetValid();
-        double limeLightDistance = RobotMap.vision.getDistance();
-        double limeLightSkew = RobotMap.vision.getSkew();
-        double limeLightShort = RobotMap.vision.getShort();
-        double limeLightLong = RobotMap.vision.getLong();
-        double limeLightHorizontal = RobotMap.vision.getHor();
-        double limeLightVertical = RobotMap.vision.getVert();
-        double limeLightLatency = RobotMap.vision.getLatency();
-        double heading = RobotMap.direction.angle();
-        double leftEncoder = RobotMap.leftEncoder.getRaw();
-        double rightEncoder = RobotMap.rightEncoder.getRaw();
-
-        currentPose = new Pose(limeLightTx, limeLightTy, limeLightTa, limeLightValid, limeLightDistance, limeLightSkew,
-                limeLightShort, limeLightLong, limeLightHorizontal, limeLightVertical, limeLightLatency, leftEncoder,
-                rightEncoder, heading, 0.0);
+        currentPose = new Pose(System.currentTimeMillis() / 10); // round down to minimum resolution);
         poseList.add(currentPose);
 
         if (poseList.size() > poseListLimit) {

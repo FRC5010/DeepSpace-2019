@@ -73,16 +73,17 @@ public class VisionAssistedDrive extends Subsystem {
   }
 
   public double arcTowardsTarget() {
-    if (Pose.getCurrentPose().limeLightValid) {
-      double distance = Pose.getCurrentPose().limeLightDistance;
+    Pose currentPose = Pose.getCurrentPose();
+    if (currentPose.limeLightValid) {
+      double distance = currentPose.limeLightDistance;
       System.out.println("-------");
-      double angle = Pose.getCurrentPose().limeLightTx;
+      double angle = currentPose.limeLightTx;
       System.out.println("Angle: " + angle);
       double errorDistance = distance - desiredDistance;
       System.out.println("ErrorDistance: " + errorDistance);
-      double desiredAngle = (errorDistance > 0) ? errorDistance / 3.0 : 0.0;
+      double desiredAngle = Math.signum(currentPose.shiftAngle) * (errorDistance > 0 ? errorDistance / 3.0 : 0.0);
       System.out.println("DesAngle: " + desiredAngle);
-      double error = (Math.signum(angle) * desiredAngle) - angle;
+      double error = desiredAngle - angle;
       System.out.println("Error: " + error);
       double steerAmt = (Shifter.isLowGear ? lowGear.steerKp : highGear.steerKp) * error;
       System.out.println("SteerAmt: " + steerAmt);

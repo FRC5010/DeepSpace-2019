@@ -8,6 +8,7 @@
 package frc.robot.subsystems;
 
 import org.opencv.calib3d.Calib3d;
+import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfDouble;
@@ -31,6 +32,12 @@ public class Vision extends Subsystem {
   private static double tXc = 0.0;
   private static double tYc = 0.0;
   private static double tAc = 0.0;
+  private static double tvXc = 0.0;
+  private static double tvYc = 0.0;
+  private static double tvZc = 0.0;
+  private static double tvDistanceC = 0.0;
+  private static double rotAngleC = 0.0;
+  private static double shiftAngleC = 0.0;
   private static double tDistanceC = 0.0;
   private static double tSkewC = 0.0;
   private static double tShortC = 0.0;
@@ -45,7 +52,10 @@ public class Vision extends Subsystem {
   private static double tXs = 0.0;
   private static double tYs = 0.0;
   private static double tAs = 0.0;
-  private static double tDistanceS = 0.0;
+  private static double tvDistanceS = 0.0; // Distance from tVec
+  private static double rotAngleS = 0.0;
+  private static double shiftAngleS = 0.0;
+  private static double tDistanceS = 0.0; // Distance from tY
   private static double tSkewS = 0.0;
   private static double tShortS = 0.0;
   private static double tLongS = 0.0;
@@ -112,6 +122,8 @@ public class Vision extends Subsystem {
       cornXc = table.getEntry("tcornx").getDoubleArray(new double[0]);
       cornYc = table.getEntry("tcorny").getDoubleArray(new double[0]);
 
+      matrixMathOnCorners();
+
       if (!tValids) {
         // If tValids was false, our previous saved position data is also bad (we set to
         // NaN), reset to our first raw values.
@@ -127,6 +139,9 @@ public class Vision extends Subsystem {
         latencyS = latencyC;
         cornXs = cornXc;
         cornYs = cornYc;
+        rotAngleS = rotAngleC;
+        shiftAngleS = shiftAngleC;
+        tvDistanceS = tvDistanceC;
         // Anytime the current frame is valid, the saved valid becomes true
         tValids = true;
       }
@@ -137,28 +152,14 @@ public class Vision extends Subsystem {
         // Don't need to run this code if tValids is already false
         tValids = false;
         // If the target has been invalid too long, set to NaN
-        tAs = tYs = tXs = tDistanceS = tSkewS = tShortS = tLongS = tHorS = tVertS = latencyS = Double.NaN;
+        tAs = tYs = tXs = tDistanceS = tSkewS = tShortS = Double.NaN;
+        tLongS = tHorS = tVertS = latencyS = Double.NaN;
+        rotAngleS = shiftAngleS = tvDistanceS = Double.NaN;
       }
     }
 
     if (tValidc) {
       smoothValues();
-      PointFinder pointFinder = new PointFinder(cornXs, cornYs);
-      // System.out.println(pointFinder);
-      MatOfPoint2f imagePoints = new MatOfPoint2f(pointFinder.getBottomRight(), pointFinder.getBottomLeft(),
-          pointFinder.getTopLeft(), pointFinder.getTopRight());
-
-      Mat rotationVector = new Mat();
-      Mat translationVector = new Mat();
-      Calib3d.solvePnP(mObjectPoints, imagePoints, mCameraMatrix, mDistortionCoefficients, rotationVector,
-          translationVector);
-
-      SmartDashboard.putNumber("rotVec0", rotationVector.get(0, 0)[0]);
-      SmartDashboard.putNumber("rotVec1", rotationVector.get(1, 0)[0]);
-      SmartDashboard.putNumber("rotVec2", rotationVector.get(2, 0)[0]);
-      SmartDashboard.putNumber("tranVec0", translationVector.get(0, 0)[0]);
-      SmartDashboard.putNumber("tranVec1", translationVector.get(1, 0)[0]);
-      SmartDashboard.putNumber("tranVec2", translationVector.get(2, 0)[0]);
     } else if (tValids) {
       // We don't currently have valid data, but
       // we can use a projection algorithm
@@ -180,6 +181,9 @@ public class Vision extends Subsystem {
     SmartDashboard.putNumber("Target Long raw", Double.isNaN(tLongC) ? 0.0 : tLongC);
     SmartDashboard.putNumber("Target Horizontal raw", Double.isNaN(tHorC) ? 0.0 : tHorC);
     SmartDashboard.putNumber("Target Vertical raw", Double.isNaN(tVertC) ? 0.0 : tVertC);
+    SmartDashboard.putNumber("Target Rotation Angle raw", Double.isNaN(rotAngleC) ? 0.0 : rotAngleC);
+    SmartDashboard.putNumber("Target Shift Angle raw ", Double.isNaN(shiftAngleC) ? 0.0 : shiftAngleC);
+    SmartDashboard.putNumber("Target Trans Distance raw", Double.isNaN(tvDistanceC) ? 0.0 : tvDistanceC);
     SmartDashboard.putNumber("Limelight Latency raw", Double.isNaN(latencyC) ? 0.0 : latencyC);
     // outputing all smoothed values
     SmartDashboard.putNumber("Target X smoothed", Double.isNaN(tXs) ? 0.0 : tXs);
@@ -191,7 +195,47 @@ public class Vision extends Subsystem {
     SmartDashboard.putNumber("Target Long smoothed", Double.isNaN(tLongS) ? 0.0 : tLongS);
     SmartDashboard.putNumber("Target Horizontal smoothed", Double.isNaN(tHorS) ? 0.0 : tHorS);
     SmartDashboard.putNumber("Target Vertical smoothed", Double.isNaN(tVertS) ? 0.0 : tVertS);
+    SmartDashboard.putNumber("Target Rotation Angle smoothed", Double.isNaN(rotAngleS) ? 0.0 : rotAngleS);
+    SmartDashboard.putNumber("Target Shift Angle smoothed ", Double.isNaN(shiftAngleS) ? 0.0 : shiftAngleS);
+    SmartDashboard.putNumber("Target Trans Distance smoothed", Double.isNaN(tvDistanceS) ? 0.0 : tvDistanceS);
     SmartDashboard.putNumber("Limelight Latency smoothed", Double.isNaN(latencyS) ? 0.0 : latencyS);
+  }
+
+  private void matrixMathOnCorners() {
+    PointFinder pointFinder = new PointFinder(cornXs, cornYs);
+    // System.out.println(pointFinder);
+    MatOfPoint2f imagePoints = new MatOfPoint2f(pointFinder.getBottomRight(), pointFinder.getBottomLeft(),
+        pointFinder.getTopLeft(), pointFinder.getTopRight());
+
+    Mat rotationVector = new Mat();
+    Mat translationVector = new Mat();
+    Calib3d.solvePnP(mObjectPoints, imagePoints, mCameraMatrix, mDistortionCoefficients, rotationVector,
+        translationVector);
+    SmartDashboard.putNumber("rotVec0", rotationVector.get(0, 0)[0]);
+    SmartDashboard.putNumber("rotVec1", rotationVector.get(1, 0)[0]);
+    SmartDashboard.putNumber("rotVec2", rotationVector.get(2, 0)[0]);
+    tvXc = translationVector.get(0, 0)[0];
+    tvYc = translationVector.get(1, 0)[0];
+    tvZc = translationVector.get(2, 0)[0];
+    SmartDashboard.putNumber("tranVec X", tvXc);
+    SmartDashboard.putNumber("tranVec Y", tvYc);
+    SmartDashboard.putNumber("tranVec Z", tvZc);
+
+    Mat rotation = new Mat();
+    Calib3d.Rodrigues(rotationVector, rotation);
+    Mat rotation_inverted = new Mat();
+    Core.transpose(rotation, rotation_inverted);
+    Mat negTransVect = new Mat();
+    negTransVect.put(0, 0, -tvXc);
+    negTransVect.put(1, 0, -tvYc);
+    negTransVect.put(2, 0, -tvZc);
+    Mat pZeroWorld = rotation_inverted.mul(negTransVect);
+    double pZeroWorld0 = pZeroWorld.get(0, 0)[0];
+    double pZeroWorld2 = pZeroWorld.get(2, 0)[0];
+
+    rotAngleC = Math.atan2(tvXc, tvZc);
+    tvDistanceC = Math.sqrt(Math.pow(tvXc, 2) + Math.pow(tvZc, 2));
+    shiftAngleC = Math.atan2(pZeroWorld0, pZeroWorld2);
   }
 
   private void smoothValues() {
@@ -206,6 +250,9 @@ public class Vision extends Subsystem {
       tLongS = (previousPose.limeLightLong + tLongC) / 2.0;
       tHorS = (previousPose.limeLightHorizontal + tHorC) / 2.0;
       tVertS = (previousPose.limeLightVertical + tVertC) / 2.0;
+      rotAngleS = (previousPose.rotationAngle + rotAngleC) / 2.0;
+      shiftAngleS = (previousPose.shiftAngle + shiftAngleC) / 2.0;
+      tvDistanceS = (previousPose.transVecDistance + tvDistanceC) / 2.0;
       latencyS = Math.floor(latencyC);
       cornXs = cornXc;
       cornYs = cornYc;
@@ -273,6 +320,18 @@ public class Vision extends Subsystem {
 
   public double[] getCornY() {
     return cornYs;
+  }
+
+  public double getRotAngle() {
+    return rotAngleS;
+  }
+
+  public double getShiftAngle() {
+    return shiftAngleS;
+  }
+
+  public double getTVDistance() {
+    return tvDistanceS;
   }
 
   public void toggleLimelight() {
