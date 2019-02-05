@@ -67,8 +67,6 @@ public class Vision extends Subsystem {
   private static double tVertS = 0.0;
   private static double aspectApproachAngleS = 0.0;
   private static double latencyS = 0.0;
-  private static double[] cornXs;
-  private static double[] cornYs;
 
   private static boolean tValidc = false;
   private static boolean tValids = false;
@@ -143,8 +141,6 @@ public class Vision extends Subsystem {
         tHorS = tHorC;
         tVertS = tVertC;
         latencyS = latencyC;
-        cornXs = cornXc;
-        cornYs = cornYc;
         matrixRotaionAngleS = matrixRotationAngleC;
         matrixApproachAngleS = matrixApproachAngleC;
         matrixDistanceS = matrixDistanceC;
@@ -214,11 +210,11 @@ public class Vision extends Subsystem {
   }
 
   private void matrixMathOnCorners() {
-    PointFinder pointFinder = new PointFinder(cornXs, cornYs);
+    PointFinder pointFinder = new PointFinder(cornXc, cornYc);
     // System.out.println(pointFinder);
 
     leftRightRatioC = pointFinder.getLeftLength() / pointFinder.getRightLength();
-    double leftRightSignum = leftRightRatioC > 1 ? -1 : 1;
+    double leftRightSignum = leftRightRatioC > 1 ? 1 : -1;
 
     // Attempt to find angle-2 from horizontal vs vertical
     double currentRatio = tHorC / tVertC;
@@ -242,21 +238,30 @@ public class Vision extends Subsystem {
     SmartDashboard.putNumber("tranVec Y", tvYc);
     SmartDashboard.putNumber("tranVec Z", tvZc);
 
-    Mat rotation = new Mat();
-    Calib3d.Rodrigues(rotationVector, rotation);
-    Mat rotation_inverted = new Mat();
-    Core.transpose(rotation, rotation_inverted);
-    Mat negTransVect = new Mat();
-    negTransVect.put(0, 0, -tvXc);
-    negTransVect.put(1, 0, -tvYc);
-    negTransVect.put(2, 0, -tvZc);
-    Mat pZeroWorld = rotation_inverted.mul(negTransVect);
-    double pZeroWorld0 = pZeroWorld.get(0, 0)[0];
-    double pZeroWorld2 = pZeroWorld.get(2, 0)[0];
-
+    Mat rotationMatrix = new Mat();
+    Calib3d.Rodrigues(rotationVector, rotationMatrix);
+    Mat projectionMatrix = new Mat(3, 4, CvType.CV_64F);
+    projectionMatrix.put(0, 0,
+            rotationMatrix.get(0, 0)[0], rotationMatrix.get(0, 1)[0], rotationMatrix.get(0, 2)[0], translationVector.get(0, 0)[0],
+            rotationMatrix.get(1, 0)[0], rotationMatrix.get(1, 1)[0], rotationMatrix.get(1, 2)[0], translationVector.get(1, 0)[0],
+            rotationMatrix.get(2, 0)[0], rotationMatrix.get(2, 1)[0], rotationMatrix.get(2, 2)[0], translationVector.get(2, 0)[0]
+    );
+    
+    Mat cameraMatrix = new Mat();
+    Mat rotMatrix = new Mat();
+    Mat transVect = new Mat();
+    Mat rotMatrixX = new Mat();
+    Mat rotMatrixY = new Mat();
+    Mat rotMatrixZ = new Mat(); 
+    Mat eulerAngles = new Mat();
+    Calib3d.decomposeProjectionMatrix(projectionMatrix, cameraMatrix, rotMatrix, transVect, rotMatrixX, rotMatrixY, rotMatrixZ, eulerAngles);
+    
+    double rollInDegrees = eulerAngles.get(2, 0)[0];
+    double pitchInDegrees = eulerAngles.get(0, 0)[0];
+    double yawInDegrees = eulerAngles.get(1, 0)[0];   
     matrixRotationAngleC = Math.atan2(tvXc, tvZc);
     matrixDistanceC = Math.sqrt(Math.pow(tvXc, 2) + Math.pow(tvZc, 2));
-    matrixApproachAngleC = Math.atan2(pZeroWorld0, pZeroWorld2);
+    matrixApproachAngleC = yawInDegrees;
   }
 
   private void smoothValues() {
@@ -277,8 +282,6 @@ public class Vision extends Subsystem {
       leftRightRatioS = (previousPose.leftRightRatio + leftRightRatioC) / 2.0;
       aspectApproachAngleS = (previousPose.aspectApproachAngle + aspectApproachAngleC) / 2.0;
       latencyS = Math.floor(latencyC);
-      cornXs = cornXc;
-      cornYs = cornYc;
     }
   }
 
@@ -338,11 +341,11 @@ public class Vision extends Subsystem {
   }
 
   public double[] getCornX() {
-    return cornXs;
+    return cornXc;
   }
 
   public double[] getCornY() {
-    return cornYs;
+    return cornYc;
   }
 
   public double getMatrixRotationAngle() {

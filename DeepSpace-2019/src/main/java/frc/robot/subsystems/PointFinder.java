@@ -17,8 +17,7 @@ public class PointFinder {
     private final double leftLength, rightLength;
 
     public PointFinder(double[] cornX, double[] cornY) {
-        if (cornX.length != 4 || cornY.length != 4) {
-            System.out.println("[ERROR] Could not find 4 points from image");
+        if (null == cornX || null == cornY || cornX.length != 4 || cornY.length != 4) {
             topLeft = new Point(0, 0);
             topRight = new Point(0, 0);
             bottomLeft = new Point(0, 0);
