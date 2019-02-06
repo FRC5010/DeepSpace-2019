@@ -9,6 +9,7 @@ package frc.robot;
 
 
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.BuiltInAccelerometer;
@@ -34,6 +35,7 @@ public class RobotMap {
   public static TalonSRX rightMotor1;
   public static TalonSRX rightMotor2;
   public static TalonSRX elevatorMotor;
+  public static VictorSPX elevatorMotor2;
 
   public static TalonSRX leftMotor1;
   public static TalonSRX leftMotor2;
@@ -64,17 +66,17 @@ public class RobotMap {
   // number and the module. For example you with a rangefinder:
   // public static int rangefinderPort = 1;
   // public static int rangefinderModule = 1;
-
-  public static void init() {
+  public static void initComp() {
     RobotMap_Paths.init();
-    rightMotor1 = new TalonSRX(4);
-    rightMotor2 = new TalonSRX(5);
+    rightMotor1 = new TalonSRX(5);
+    rightMotor2 = new TalonSRX(6);
     
 
     leftMotor1 = new TalonSRX(1);
     leftMotor2 = new TalonSRX(2);
     
     elevatorMotor = new TalonSRX(3);
+    elevatorMotor2 = new VictorSPX(0);
     //Inverted for motion profiling purposes.
     /*leftMotor1.setInverted(true);
     leftMotor2.setInverted(true);
@@ -89,8 +91,45 @@ public class RobotMap {
 
 		leftMotor2.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 1);
     //leftMotor3.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 1);
+    elevatorMotor2.follow(elevatorMotor);
+    shiftSolenoid = new Solenoid(1);
+    
+  }
+
+  public static void initPractice(){
+    RobotMap_Paths.init();
+    rightMotor1 = new TalonSRX(4);
+    rightMotor2 = new TalonSRX(5);
+
+    leftMotor1 = new TalonSRX(1);
+    leftMotor2 = new TalonSRX(2);
+    
+    elevatorMotor = new TalonSRX(3);
+    
+
+    //Inverted for motion profiling purposes.
+    /*leftMotor1.setInverted(true);
+    leftMotor2.setInverted(true);
+    leftMotor3.setInverted(true);*/
+
+    rightMotor1.setInverted(true);
+    rightMotor2.setInverted(true);
+    //rightMotor3.setInverted(true);
+
+    rightMotor2.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 4);
+		//rightMotor3.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 4);
+
+		leftMotor2.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 1);
+    //leftMotor3.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 1);
+
+    //elevatorMotor2.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 3);
     
     shiftSolenoid = new Solenoid(1);
+  }
+
+  public static void init() {
+    //The init function for different robots.  Change based on functions above.
+    initComp();
 
     builtInAccelerometer = new BuiltInAccelerometer(Accelerometer.Range.k4G);
     rightEncoder = new Encoder(0,1);

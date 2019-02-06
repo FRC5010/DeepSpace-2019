@@ -44,9 +44,7 @@ public class RaiseElevator extends Command {
   @Override
   protected void execute() {
     moveUp = scaleInputs(Robot.oi.coDriver.getRawAxis(1));
-    if(moveUp <= 0){
-      moveUp = 0;
-    }
+   
     RobotMap.elevator.raiseElevator(moveUp);
     SmartDashboard.putNumber("Elevator power", moveUp);
   }
