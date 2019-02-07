@@ -24,6 +24,7 @@ import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.VisionAssistedDrive;
+import frc.robot.subsystems.BallIntake;
 
 /**
  * The RobotMap is a mapping from the ports sensors and actuators are wired into
@@ -36,6 +37,7 @@ public class RobotMap {
   public static TalonSRX rightMotor2;
   public static TalonSRX elevatorMotor;
   public static VictorSPX elevatorMotor2;
+  public static VictorSPX intakeMotor;
 
   public static TalonSRX leftMotor1;
   public static TalonSRX leftMotor2;
@@ -57,6 +59,7 @@ public class RobotMap {
   public static DirectionSensor direction;
   public static Elevator elevator;
   public static double moveMin = 0.2;
+  public static BallIntake ballIntake;
   // For example to map the left and right motors, you could define the
   // following variables to use with your drivetrain subsystem.
   // public static int leftMotor = 1;
@@ -77,6 +80,9 @@ public class RobotMap {
     
     elevatorMotor = new TalonSRX(3);
     elevatorMotor2 = new VictorSPX(0);
+
+    intakeMotor = new VictorSPX(1);
+
     //Inverted for motion profiling purposes.
     /*leftMotor1.setInverted(true);
     leftMotor2.setInverted(true);
@@ -105,8 +111,9 @@ public class RobotMap {
     leftMotor2 = new TalonSRX(2);
     
     elevatorMotor = new TalonSRX(3);
-    
 
+    intakeMotor = new VictorSPX(0);
+    
     //Inverted for motion profiling purposes.
     /*leftMotor1.setInverted(true);
     leftMotor2.setInverted(true);
@@ -129,7 +136,7 @@ public class RobotMap {
 
   public static void init() {
     //The init function for different robots.  Change based on functions above.
-    initComp();
+    initPractice();
 
     builtInAccelerometer = new BuiltInAccelerometer(Accelerometer.Range.k4G);
     rightEncoder = new Encoder(0,1);
@@ -146,5 +153,6 @@ public class RobotMap {
     vision = new Vision();
     vision.changePipeline(0);
     visionDrive = new VisionAssistedDrive();
+    ballIntake = new BallIntake();
   }
 }

@@ -74,7 +74,11 @@ public class Vision extends Subsystem {
 
   public static final double LIME_LIGHT_HEIGHT = 36;
   public static final double targetHeight = 24;
-  private double originalRatio = 77.0 / 35.0;  // the largest possible ratio from the front
+
+  // The largest possible ratio from the front
+  private double originalRatio = 77.0 / 35.0;
+
+  // Matrix stuff
   private MatOfPoint3f mObjectPoints;
   private Mat mCameraMatrix;
   private MatOfDouble mDistortionCoefficients;
@@ -126,7 +130,7 @@ public class Vision extends Subsystem {
       cornXc = table.getEntry("tcornx").getDoubleArray(new double[0]);
       cornYc = table.getEntry("tcorny").getDoubleArray(new double[0]);
 
-      matrixMathOnCorners();
+      calculateAspectRatio();
 
       if (!tValids) {
         // If tValids was false, our previous saved position data is also bad (we set to
@@ -141,11 +145,11 @@ public class Vision extends Subsystem {
         tHorS = tHorC;
         tVertS = tVertC;
         latencyS = latencyC;
+        aspectApproachAngleS = aspectApproachAngleC;
+        leftRightRatioS = leftRightRatioC;
         matrixRotaionAngleS = matrixRotationAngleC;
         matrixApproachAngleS = matrixApproachAngleC;
         matrixDistanceS = matrixDistanceC;
-        aspectApproachAngleS = aspectApproachAngleC;
-        leftRightRatioS = leftRightRatioC;
         // Anytime the current frame is valid, the saved valid becomes true
         tValids = true;
       }
@@ -212,14 +216,6 @@ public class Vision extends Subsystem {
   private void matrixMathOnCorners() {
     PointFinder pointFinder = new PointFinder(cornXc, cornYc);
     // System.out.println(pointFinder);
-
-    leftRightRatioC = pointFinder.getLeftLength() / pointFinder.getRightLength();
-    double leftRightSignum = leftRightRatioC > 1 ? 1 : -1;
-
-    // Attempt to find angle-2 from horizontal vs vertical
-    double currentRatio = tHorC / tVertC;
-    double ratio = Math.min(1, currentRatio/originalRatio); // finding acos of a value > 1 will give NaN 
-    aspectApproachAngleC = Math.toDegrees(Math.acos(ratio)) * leftRightSignum;
     
     MatOfPoint2f imagePoints = new MatOfPoint2f(pointFinder.getBottomRight(), pointFinder.getBottomLeft(),
         pointFinder.getTopLeft(), pointFinder.getTopRight());
@@ -262,6 +258,18 @@ public class Vision extends Subsystem {
     matrixRotationAngleC = Math.atan2(tvXc, tvZc);
     matrixDistanceC = Math.sqrt(Math.pow(tvXc, 2) + Math.pow(tvZc, 2));
     matrixApproachAngleC = yawInDegrees;
+  }
+
+  private void calculateAspectRatio() {
+    PointFinder pointFinder = new PointFinder(cornXc, cornYc);
+
+    leftRightRatioC = pointFinder.getLeftLength() / pointFinder.getRightLength();
+    double leftRightSignum = leftRightRatioC > 1 ? 1 : -1;
+
+    // Attempt to find angle-2 from horizontal vs vertical
+    double currentRatio = tHorC / tVertC;
+    double ratio = Math.min(1, currentRatio/originalRatio); // finding acos of a value > 1 will give NaN 
+    aspectApproachAngleC = Math.toDegrees(Math.acos(ratio)) * leftRightSignum;
   }
 
   private void smoothValues() {
