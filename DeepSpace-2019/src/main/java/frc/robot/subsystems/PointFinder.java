@@ -14,7 +14,7 @@ import org.opencv.core.Point;
  */
 public class PointFinder {
     private final Point bottomLeft, bottomRight, topLeft, topRight;
-    private final double leftLength, rightLength;
+    private final double leftLength, rightLength, topLength, bottomLength;
 
     public PointFinder(double[] cornX, double[] cornY) {
         if (null == cornX || null == cornY || cornX.length != 4 || cornY.length != 4) {
@@ -22,17 +22,16 @@ public class PointFinder {
             topRight = new Point(0, 0);
             bottomLeft = new Point(0, 0);
             bottomRight = new Point(0, 0);
-            leftLength = 0;
-            rightLength = 0;
+            leftLength = rightLength = topLength = bottomLength = 0;
         } else {
             bottomRight = new Point(cornX[0], cornY[0]);
             bottomLeft = new Point(cornX[1], cornY[1]);
             topLeft = new Point(cornX[2], cornY[2]);
             topRight = new Point(cornX[3], cornY[3]);
-            leftLength = Math.sqrt(
-                    Math.pow(Math.abs(topLeft.x - bottomLeft.x), 2) + Math.pow(Math.abs(topLeft.y - bottomLeft.y), 2));
-            rightLength = Math.sqrt(Math.pow(Math.abs(topRight.x - bottomRight.x), 2)
-                    + Math.pow(Math.abs(topRight.y - bottomRight.y), 2));
+            leftLength = Math.sqrt(Math.pow(topLeft.x - bottomLeft.x, 2) + Math.pow(topLeft.y - bottomLeft.y, 2));
+            rightLength = Math.sqrt(Math.pow(topRight.x - bottomRight.x, 2) + Math.pow(topRight.y - bottomRight.y, 2));
+            topLength = Math.sqrt(Math.pow(topLeft.x - topRight.x, 2) + Math.pow(topLeft.y - topRight.y, 2));
+            bottomLength = Math.sqrt(Math.pow(bottomLeft.x - bottomRight.x, 2) + Math.pow(bottomLeft.y - bottomRight.y, 2));
         }
     }
 
@@ -58,6 +57,14 @@ public class PointFinder {
 
     public double getRightLength() {
         return rightLength;
+    }
+
+    public double getTopLength() {
+        return topLength;
+    }
+
+    public double getBottomLength() {
+        return bottomLength;
     }
 
     public String toString() {
