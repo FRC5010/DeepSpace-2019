@@ -211,6 +211,16 @@ public class Vision extends Subsystem {
     SmartDashboard.putNumber("Target Left/Right Ratio smoothed", Double.isNaN(leftRightRatioS) ? 0.0 : leftRightRatioS);
     SmartDashboard.putNumber("Target Aspect Approach Angle smoothed", Double.isNaN(aspectApproachAngleS) ? 0.0 : aspectApproachAngleS);
     SmartDashboard.putNumber("Limelight Latency smoothed", Double.isNaN(latencyS) ? 0.0 : latencyS);
+    //corner stuff
+    SmartDashboard.putNumber("Corner[] length", cornXc.length);
+    SmartDashboard.putNumber("Corner X [0]", cornXc[0]);
+    SmartDashboard.putNumber("Corner X [1]", cornXc[1]);
+    SmartDashboard.putNumber("Corner X [2]", cornXc[2]);
+    SmartDashboard.putNumber("Corner X [3]", cornXc[3]);
+    SmartDashboard.putNumber("Corner Y [0]", cornYc[0]);
+    SmartDashboard.putNumber("Corner Y [1]", cornYc[1]);
+    SmartDashboard.putNumber("Corner Y [2]", cornYc[2]);
+    SmartDashboard.putNumber("Corner Y [3]", cornYc[3]);
   }
 
   private void matrixMathOnCorners() {
