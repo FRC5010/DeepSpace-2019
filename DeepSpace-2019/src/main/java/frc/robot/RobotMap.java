@@ -110,8 +110,9 @@ public class RobotMap {
     leftMotor2 = new TalonSRX(2);
     
     elevatorMotor = new TalonSRX(3);
+    elevatorMotor2 = new VictorSPX(0);
 
-    intakeMotor = new VictorSPX(0);
+    intakeMotor = new VictorSPX(1);
     
     //Inverted for motion profiling purposes.
     /*leftMotor1.setInverted(true);
@@ -128,7 +129,7 @@ public class RobotMap {
 		leftMotor2.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 1);
     //leftMotor3.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 1);
 
-    //elevatorMotor2.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 3);
+    elevatorMotor2.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 3);
     
     shiftSolenoid = new Solenoid(1);
   }
