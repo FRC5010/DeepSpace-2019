@@ -227,13 +227,11 @@ public class Vision extends Subsystem {
     PointFinder pointFinder = new PointFinder(cornXc, cornYc);
     // System.out.println(pointFinder);
     
-    MatOfPoint2f imagePoints = new MatOfPoint2f(pointFinder.getBottomRight(), pointFinder.getBottomLeft(),
-        pointFinder.getTopLeft(), pointFinder.getTopRight());
+    MatOfPoint2f imagePoints = new MatOfPoint2f(pointFinder.getBottomRight(), pointFinder.getBottomLeft(), pointFinder.getTopLeft(), pointFinder.getTopRight());
 
     Mat rotationVector = new Mat();
     Mat translationVector = new Mat();
-    Calib3d.solvePnP(mObjectPoints, imagePoints, mCameraMatrix, mDistortionCoefficients, rotationVector,
-        translationVector);
+    Calib3d.solvePnP(mObjectPoints, imagePoints, mCameraMatrix, mDistortionCoefficients, rotationVector, translationVector);
     SmartDashboard.putNumber("rotVec0", rotationVector.get(0, 0)[0]);
     SmartDashboard.putNumber("rotVec1", rotationVector.get(1, 0)[0]);
     SmartDashboard.putNumber("rotVec2", rotationVector.get(2, 0)[0]);
