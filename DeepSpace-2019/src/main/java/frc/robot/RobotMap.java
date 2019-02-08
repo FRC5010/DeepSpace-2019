@@ -71,9 +71,8 @@ public class RobotMap {
   // public static int rangefinderModule = 1;
   public static void initComp() {
     RobotMap_Paths.init();
-    rightMotor1 = new TalonSRX(5);
-    rightMotor2 = new TalonSRX(6);
-    
+    rightMotor1 = new TalonSRX(4);
+    rightMotor2 = new TalonSRX(5);
 
     leftMotor1 = new TalonSRX(1);
     leftMotor2 = new TalonSRX(2);
@@ -136,7 +135,7 @@ public class RobotMap {
 
   public static void init() {
     //The init function for different robots.  Change based on functions above.
-    initPractice();
+    initComp();
 
     builtInAccelerometer = new BuiltInAccelerometer(Accelerometer.Range.k4G);
     rightEncoder = new Encoder(0,1);
