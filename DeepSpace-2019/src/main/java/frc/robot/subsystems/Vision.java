@@ -76,7 +76,7 @@ public class Vision extends Subsystem {
   public static final double targetHeight = 24;
 
   // The largest possible ratio from the front
-  private double originalRatio = 77.0 / 35.0;
+  private double originalRatio = 77.0 / 35.0; // TODO: figure out the correct ratio when facing directly in front
 
   // Matrix stuff
   private MatOfPoint3f mObjectPoints;
@@ -90,9 +90,12 @@ public class Vision extends Subsystem {
   public Vision() {
     table = NetworkTableInstance.getDefault().getTable("limelight");
     mObjectPoints = new MatOfPoint3f(new Point3(0.0, 0.0, 0.0), // bottom right
-        new Point3(-1.9363, 0.5008, 0.0), // bottom left
-        new Point3(-0.5593, 5.8258, 0.0), // top-left
-        new Point3(1.377, 5.325, 0.0) // top-right
+        // new Point3(-1.9363, 0.5008, 0.0), // bottom left
+        // new Point3(-0.5593, 5.8258, 0.0), // top-left
+        // new Point3(1.377, 5.325, 0.0) // top-right
+        new Point3(-15, 0, 0),
+        new Point3(-15, -5.75, 0),
+        new Point3(0, -5.75, 0)
     );
 
     mCameraMatrix = Mat.eye(3, 3, CvType.CV_64F);
@@ -131,6 +134,7 @@ public class Vision extends Subsystem {
       cornYc = table.getEntry("tcorny").getDoubleArray(new double[0]);
 
       calculateAspectRatio();
+      matrixMathOnCorners();
 
       if (!tValids) {
         // If tValids was false, our previous saved position data is also bad (we set to
@@ -176,6 +180,10 @@ public class Vision extends Subsystem {
       // data to predict current updated values.
     }
 
+    //printValues();
+  }
+
+  void printValues() {
     SmartDashboard.putBoolean("Valid Target c", tValidc);
     SmartDashboard.putBoolean("Valid Target s", tValids);
 
@@ -212,15 +220,18 @@ public class Vision extends Subsystem {
     SmartDashboard.putNumber("Target Aspect Approach Angle smoothed", Double.isNaN(aspectApproachAngleS) ? 0.0 : aspectApproachAngleS);
     SmartDashboard.putNumber("Limelight Latency smoothed", Double.isNaN(latencyS) ? 0.0 : latencyS);
     //corner stuff
-    SmartDashboard.putNumber("Corner[] length", cornXc.length);
-    SmartDashboard.putNumber("Corner X [0]", cornXc[0]);
-    SmartDashboard.putNumber("Corner X [1]", cornXc[1]);
-    SmartDashboard.putNumber("Corner X [2]", cornXc[2]);
-    SmartDashboard.putNumber("Corner X [3]", cornXc[3]);
-    SmartDashboard.putNumber("Corner Y [0]", cornYc[0]);
-    SmartDashboard.putNumber("Corner Y [1]", cornYc[1]);
-    SmartDashboard.putNumber("Corner Y [2]", cornYc[2]);
-    SmartDashboard.putNumber("Corner Y [3]", cornYc[3]);
+    SmartDashboard.putNumber("CornerX[] length", cornXc.length);
+    SmartDashboard.putNumber("CornerY[] length", cornYc.length);
+    if (cornXc.length == 4) {
+      SmartDashboard.putNumber("Corner X [0]", cornXc[0]);
+      SmartDashboard.putNumber("Corner X [1]", cornXc[1]);
+      SmartDashboard.putNumber("Corner X [2]", cornXc[2]);
+      SmartDashboard.putNumber("Corner X [3]", cornXc[3]);
+      SmartDashboard.putNumber("Corner Y [0]", cornYc[0]);
+      SmartDashboard.putNumber("Corner Y [1]", cornYc[1]);
+      SmartDashboard.putNumber("Corner Y [2]", cornYc[2]);
+      SmartDashboard.putNumber("Corner Y [3]", cornYc[3]);
+    }
   }
 
   private void matrixMathOnCorners() {
@@ -274,7 +285,8 @@ public class Vision extends Subsystem {
     leftRightRatioC = pointFinder.getLeftLength() / pointFinder.getRightLength();
     double leftRightSignum = leftRightRatioC > 1 ? 1 : -1;
 
-    // Attempt to find angle-2 from horizontal vs vertical
+    // Attempt to find angle between target perpendicular and camera
+    // using a horizontal vs vertical ratio
     double currentRatio = tHorC / tVertC;
     double ratio = Math.min(1, currentRatio/originalRatio); // finding acos of a value > 1 will give NaN 
     aspectApproachAngleC = Math.toDegrees(Math.acos(ratio)) * leftRightSignum;

@@ -36,7 +36,7 @@ public class RobotMap {
   public static TalonSRX rightMotor1;
   public static TalonSRX rightMotor2;
   public static TalonSRX elevatorMotor;
-  public static VictorSPX elevatorMotor2;
+  public static TalonSRX elevatorMotor2;
   public static VictorSPX intakeMotor;
 
   public static TalonSRX leftMotor1;
@@ -78,7 +78,7 @@ public class RobotMap {
     leftMotor2 = new TalonSRX(2);
     
     elevatorMotor = new TalonSRX(3);
-    elevatorMotor2 = new VictorSPX(0);
+    elevatorMotor2 = new TalonSRX(0);
 
     intakeMotor = new VictorSPX(1);
 
@@ -97,7 +97,7 @@ public class RobotMap {
 		leftMotor2.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 1);
     //leftMotor3.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 1);
     elevatorMotor2.follow(elevatorMotor);
-    shiftSolenoid = new Solenoid(1);
+    shiftSolenoid = new Solenoid(0);
     
   }
 
@@ -110,9 +110,9 @@ public class RobotMap {
     leftMotor2 = new TalonSRX(2);
     
     elevatorMotor = new TalonSRX(3);
-    elevatorMotor2 = new VictorSPX(0);
+    elevatorMotor2 = new TalonSRX(6);
 
-    intakeMotor = new VictorSPX(1);
+    intakeMotor = new VictorSPX(0);
     
     //Inverted for motion profiling purposes.
     /*leftMotor1.setInverted(true);
@@ -131,19 +131,19 @@ public class RobotMap {
 
     elevatorMotor2.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 3);
     
-    shiftSolenoid = new Solenoid(1);
+    shiftSolenoid = new Solenoid(0);
   }
 
   public static void init() {
     //The init function for different robots.  Change based on functions above.
-    initComp();
+    initPractice();
 
     builtInAccelerometer = new BuiltInAccelerometer(Accelerometer.Range.k4G);
     rightEncoder = new Encoder(0,1);
     leftEncoder = new Encoder(2,3);
     encoderPPR=480;
+    gyro = new ADXRS450_Gyro();
     distance = new DistanceSensor();
-    gyro = new ADXRS450_Gyro(); 
     direction = new DirectionSensor();
     direction.reset();
 

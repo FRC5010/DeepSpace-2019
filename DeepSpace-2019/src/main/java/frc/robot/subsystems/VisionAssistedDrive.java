@@ -72,6 +72,7 @@ public class VisionAssistedDrive extends Subsystem {
     return 0;
   }
 
+  // arc towards target
   public double arcTowardsTarget() {
     Pose currentPose = Pose.getCurrentPose();
     if (currentPose.limeLightValid) {

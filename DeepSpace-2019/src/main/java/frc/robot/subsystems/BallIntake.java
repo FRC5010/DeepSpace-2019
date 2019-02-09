@@ -31,4 +31,7 @@ public class BallIntake extends Subsystem {
   public void ballControl(double power) {
     intakeMotor.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, power);
   }
+  public void suck(double power){
+    intakeMotor.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, -power);
+  }
 }
