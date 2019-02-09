@@ -67,7 +67,9 @@ public class Pose {
         aspectApproachAngle = RobotMap.vision.getAspectApproachAngle();
         heading = RobotMap.direction.angle();
         driveTrainEncoderLeft = RobotMap.leftEncoder.getRaw();
+        SmartDashboard.putNumber("Lencoder",driveTrainEncoderLeft);
         driveTrainEncoderRight = RobotMap.rightEncoder.getRaw();
+        SmartDashboard.putNumber("Rencoder",driveTrainEncoderRight);
         elevatorEncoder = 0; // Needs to be updated
     }
 

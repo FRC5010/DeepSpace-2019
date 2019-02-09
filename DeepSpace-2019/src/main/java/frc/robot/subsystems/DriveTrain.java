@@ -35,7 +35,7 @@ public class DriveTrain extends Subsystem {
   }
   
   public void drive(double leftPower, double rightPower){
-    leftMotors.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, -leftPower);
+    leftMotors.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, leftPower);
     rightMotors.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, rightPower);
   }
 }

@@ -7,8 +7,9 @@
 
 package frc.robot.subsystems;
 
+import com.kauailabs.navx.frc.AHRS;
+
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 
@@ -17,7 +18,7 @@ import frc.robot.RobotMap;
  */
 public class DirectionSensor extends Subsystem {
 
-  private Gyro gyro;
+  private AHRS gyro;
   private double initialOffset = 0.0;
 
   // this is to reset the gyro so it can detect the next angle

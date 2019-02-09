@@ -8,13 +8,11 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.buttons.JoystickButton;
-import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.buttons.Button;
-import frc.robot.commands.ShiftUp;
-import frc.robot.commands.TurnToAnAngle;
+import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import frc.robot.commands.ElevatorMM;
 import frc.robot.commands.ShiftDown;
+import frc.robot.commands.ShiftUp;
 import frc.robot.commands.commands_auto.FieldMovement;
 
 /**
@@ -58,6 +56,7 @@ public class OI {
   public Button driverStart = new JoystickButton(driver, 8);
   public Button driverJoyLB = new JoystickButton(driver, 9);
   public Button driverJoyRB = new JoystickButton(driver, 10);
+  
 
   public Button coDriverA = new JoystickButton(coDriver, 1);
   public Button coDriverB = new JoystickButton(coDriver, 2);
@@ -70,6 +69,8 @@ public class OI {
     driverJoyLB.whenPressed(new ShiftDown());
     driverJoyRB.whenPressed(new ShiftUp());
     driverBack.whenPressed(new FieldMovement());
+    coDriverA.whenPressed(new ElevatorMM(0));
+    coDriverB.whenPressed(new ElevatorMM(18000));
   }
 
 }

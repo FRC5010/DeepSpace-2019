@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Pose;
+import frc.robot.util.Instrum;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -124,6 +125,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     Scheduler.getInstance().run();
+    Instrum.Process(RobotMap.elevatorMotor, new StringBuilder());
   }
 
   /**

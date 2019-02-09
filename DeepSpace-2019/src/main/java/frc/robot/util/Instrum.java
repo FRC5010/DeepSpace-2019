@@ -19,6 +19,7 @@ public class Instrum {
 		SmartDashboard.putNumber("SensorPos", tal.getSelectedSensorPosition(Constants.kPIDLoopIdx));
 		SmartDashboard.putNumber("MotorOutputPercent", tal.getMotorOutputPercent());
 		SmartDashboard.putNumber("ClosedLoopError", tal.getClosedLoopError(Constants.kPIDLoopIdx));
+		SmartDashboard.putNumber("times in MM", _timesInMotionMagic);
 		
 		/* Check if Talon SRX is performing Motion Magic */
 		if (tal.getControlMode() == ControlMode.MotionMagic) {

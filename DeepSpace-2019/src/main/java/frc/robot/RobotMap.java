@@ -8,23 +8,27 @@
 package frc.robot;
 
 
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.kauailabs.navx.frc.AHRS;
 
-import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.SerialPort.Port;
 import edu.wpi.first.wpilibj.interfaces.Accelerometer;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
-import frc.robot.subsystems.Shifter;
+import frc.robot.subsystems.BallIntake;
 import frc.robot.subsystems.DirectionSensor;
 import frc.robot.subsystems.DistanceSensor;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Shifter;
 import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.VisionAssistedDrive;
-import frc.robot.subsystems.BallIntake;
+import frc.robot.util.Constants;
 
 /**
  * The RobotMap is a mapping from the ports sensors and actuators are wired into
@@ -55,7 +59,7 @@ public class RobotMap {
   public static Encoder rightEncoder;
   public static int encoderPPR;
   public static DistanceSensor distance;
-  public static Gyro gyro;
+  public static AHRS gyro;
   public static DirectionSensor direction;
   public static Elevator elevator;
   public static double moveMin = 0.2;
@@ -104,15 +108,16 @@ public class RobotMap {
   public static void initPractice(){
     RobotMap_Paths.init();
     rightMotor1 = new TalonSRX(4);
-    rightMotor2 = new TalonSRX(5);
+    rightMotor2 = new TalonSRX(6);
 
-    leftMotor1 = new TalonSRX(1);
-    leftMotor2 = new TalonSRX(2);
+    leftMotor1 = new TalonSRX(2);
+    leftMotor2 = new TalonSRX(5);
     
     elevatorMotor = new TalonSRX(3);
-    elevatorMotor2 = new TalonSRX(6);
+    elevatorMotor2 = new TalonSRX(1);
 
     intakeMotor = new VictorSPX(0);
+    shiftSolenoid = new Solenoid(0);
     
     //Inverted for motion profiling purposes.
     /*leftMotor1.setInverted(true);
@@ -126,12 +131,31 @@ public class RobotMap {
     rightMotor2.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 4);
 		//rightMotor3.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 4);
 
-		leftMotor2.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 1);
+		leftMotor2.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 2);
     //leftMotor3.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 1);
+    elevatorMotor.configFactoryDefault();
+    elevatorMotor2.configFactoryDefault();
+    elevatorMotor2.follow(elevatorMotor);
+    elevatorMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
+    elevatorMotor.setSensorPhase(true);
+    elevatorMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, Constants.kTimeoutMs);
+    elevatorMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, Constants.kTimeoutMs);
+    //configing out puts
+    elevatorMotor.configNominalOutputForward(0,Constants.kTimeoutMs);
+    elevatorMotor.configNominalOutputReverse(0,Constants.kTimeoutMs);
+    elevatorMotor.configPeakOutputForward(1,Constants.kTimeoutMs);
+    elevatorMotor.configPeakOutputReverse(-1,Constants.kTimeoutMs);
+    elevatorMotor.selectProfileSlot(Constants.kSlotIdx, Constants.kPIDLoopIdx); 
+    elevatorMotor.config_kF(Constants.kSlotIdx,Constants.kGains.kF, Constants.kTimeoutMs);  
+    elevatorMotor.config_kP(Constants.kSlotIdx,Constants.kGains.kP, Constants.kTimeoutMs);
+    elevatorMotor.config_kI(Constants.kSlotIdx,Constants.kGains.kI, Constants.kTimeoutMs);
+    elevatorMotor.config_kD(Constants.kSlotIdx,Constants.kGains.kD, Constants.kTimeoutMs);
+    //cruze velocity
+    elevatorMotor.configMotionCruiseVelocity(2500,Constants.kTimeoutMs);
+    elevatorMotor.configMotionAcceleration(2500, Constants.kTimeoutMs);
 
-    elevatorMotor2.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 3);
-    
-    shiftSolenoid = new Solenoid(0);
+    //zeroing sensor
+    elevatorMotor.setSelectedSensorPosition(0,Constants.kPIDLoopIdx, Constants.kTimeoutMs);
   }
 
   public static void init() {
@@ -143,7 +167,7 @@ public class RobotMap {
     rightEncoder = new Encoder(0,1);
     leftEncoder = new Encoder(2,3);
     encoderPPR=480;
-    gyro = new ADXRS450_Gyro();
+    gyro = new AHRS(Port.kUSB1);
     distance = new DistanceSensor();
     direction = new DirectionSensor();
     direction.reset();

@@ -7,6 +7,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.Faults;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -21,6 +22,7 @@ public class Elevator extends Subsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
   TalonSRX elevMotor = RobotMap.elevatorMotor;
+  Faults faults = new Faults();
 
   @Override
   public void initDefaultCommand() {
@@ -30,6 +32,11 @@ public class Elevator extends Subsystem {
   }
   public void raiseElevator(double power) {
     elevMotor.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, power);
+    elevMotor.getFaults(faults);
+    System.out.println("Sensor Vel: " + elevMotor.getSelectedSensorVelocity());
+    System.out.println("Sensor Pos: " + elevMotor.getSelectedSensorPosition());
+    System.out.println("Elev Out %: " + elevMotor.getMotorOutputPercent());
+    System.out.println("Out of Phs: " + faults.SensorOutOfPhase);
   }
   public void lowerElevator(double power){
     elevMotor.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, -power);

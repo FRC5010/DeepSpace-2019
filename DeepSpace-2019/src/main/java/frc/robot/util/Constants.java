@@ -1,7 +1,7 @@
 /**
  * Simple class containing constants used throughout project
  */
-package frc.robot;
+package frc.robot.util;
 
 public class Constants {
 	/**
@@ -27,5 +27,5 @@ public class Constants {
 	 * Gains used in Motion Magic, to be adjusted accordingly
      * Gains(kp, ki, kd, kf, izone, peak output);
      */
-    static final Gains kGains = new Gains(0.2, 0.0, 0.0, 0.2, 0, 1.0);
+    public static final Gains kGains = new Gains(2.4, 0.0, 0.0, 0.2775, 0, 1.0);
 }
