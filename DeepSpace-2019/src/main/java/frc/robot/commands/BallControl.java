@@ -15,7 +15,6 @@ import frc.robot.subsystems.BallIntake;
 
 public class BallControl extends Command {
   private double move;
-  private double spit;
   private double leftTrigger;
   private double rightTrigger;
   private double deadZone = 0.1;
@@ -46,12 +45,14 @@ public class BallControl extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    leftTrigger = -scaleInputs(Robot.oi.driver.getRawAxis(2));
-    rightTrigger = scaleInputs(Robot.oi.driver.getRawAxis(3));
+    leftTrigger = -scaleInputs(Robot.oi.coDriver.getRawAxis(2));
+    rightTrigger = scaleInputs(Robot.oi.coDriver.getRawAxis(3));
+    SmartDashboard.putNumber("leftTrigger: ", leftTrigger);
+    SmartDashboard.putNumber("rightTrigger: ", rightTrigger);
     if(rightTrigger <= 0){
-       move = leftTrigger;
+       move = -leftTrigger;
      }else{
-       move = rightTrigger;
+       move = -rightTrigger;
      }
    
     RobotMap.ballIntake.ballControl(move/3);

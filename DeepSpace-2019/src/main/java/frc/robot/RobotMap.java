@@ -136,6 +136,7 @@ public class RobotMap {
 
   public static void init() {
     //The init function for different robots.  Change based on functions above.
+    //initComp();
     initPractice();
 
     builtInAccelerometer = new BuiltInAccelerometer(Accelerometer.Range.k4G);
