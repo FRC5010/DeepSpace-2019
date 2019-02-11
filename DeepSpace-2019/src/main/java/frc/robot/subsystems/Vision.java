@@ -7,8 +7,9 @@
 
 package frc.robot.subsystems;
 
+import java.util.List;
+
 import org.opencv.calib3d.Calib3d;
-import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfDouble;
@@ -20,7 +21,6 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.commands.SmartDashboardManager;
 
 /**
  * Add your docs here.
@@ -29,47 +29,118 @@ public class Vision extends Subsystem {
 
   private static NetworkTable table;
 
-  // current values
-  private static double tXc = 0.0;
-  private static double tYc = 0.0;
-  private static double tAc = 0.0;
-  private static double tvXc = 0.0;
-  private static double tvYc = 0.0;
-  private static double tvZc = 0.0;
-  private static double matrixDistanceC = 0.0;
-  private static double matrixRotationAngleC = 0.0;
-  private static double matrixApproachAngleC = 0.0;
-  private static double tDistanceC = 0.0;
-  private static double leftRightRatioC = 0.0;
-  private static double tSkewC = 0.0;
-  private static double tShortC = 0.0;
-  private static double tLongC = 0.0;
-  private static double tHorC = 0.0;
-  private static double tVertC = 0.0;
-  private static double aspectApproachAngleC = 0.0; // angle determined by hor/vert
-  private static double latencyC = 0.0;
+  public static class Values {
+    public double tX = Double.NaN;
+    public double tY = Double.NaN;
+    public double tA = Double.NaN;
+    public double matrixDistance = Double.NaN;
+    public double matrixRotationAngle = Double.NaN;
+    public double matrixApproachAngle = Double.NaN;
+    public double tDistance = Double.NaN;
+    public double leftRightRatio = Double.NaN;
+    public double tSkew = Double.NaN;
+    public double tShort = Double.NaN;
+    public double tLong = Double.NaN;
+    public double tHor = Double.NaN;
+    public double tVert = Double.NaN;
+    public double aspectApproachAngle = Double.NaN; // angle determined by hor/vert
+    public double latency = Double.NaN;
+    public boolean tValid = false;
+
+    public Values(double initial) {
+      tX = tY = tA = matrixDistance = matrixRotationAngle = matrixApproachAngle = tDistance = leftRightRatio = tSkew = tShort = tLong = tHor = tVert = aspectApproachAngle = latency = initial;
+      tValid = false;
+    }
+
+    public Values(Values other) {
+      tX = other.tX;
+      tY = other.tY;
+      tA = other.tA;
+      matrixDistance = other.matrixDistance;
+      matrixRotationAngle = other.matrixRotationAngle;
+      matrixApproachAngle = other.matrixApproachAngle;
+      tDistance = other.tDistance;
+      leftRightRatio = other.leftRightRatio;
+      tSkew = other.tSkew;
+      tShort = other.tShort;
+      tLong = other.tLong;
+      tHor = other.tHor;
+      tVert = other.tVert;
+      aspectApproachAngle = other.aspectApproachAngle;
+      latency = other.latency;
+      tValid = other.tValid;
+    }
+
+    public void sum(Values other) {
+      tX += other.tX;
+      tY += other.tY;
+      tA += other.tA;
+      matrixDistance += other.matrixDistance;
+      matrixRotationAngle += other.matrixRotationAngle;
+      matrixApproachAngle += other.matrixApproachAngle;
+      tDistance += other.tDistance;
+      leftRightRatio += other.leftRightRatio;
+      tSkew += other.tSkew;
+      tShort += other.tShort;
+      tLong += other.tLong;
+      tHor += other.tHor;
+      tVert += other.tVert;
+      aspectApproachAngle += other.aspectApproachAngle;
+    }
+
+    public void averageOf(double denonminator) {
+      tX /= denonminator;
+      tY /= denonminator;
+      tA /= denonminator;
+      matrixDistance /= denonminator;
+      matrixRotationAngle /= denonminator;
+      matrixApproachAngle /= denonminator;
+      tDistance /= denonminator;
+      leftRightRatio /= denonminator;
+      tSkew /= denonminator;
+      tShort /= denonminator;
+      tLong /= denonminator;
+      tHor /= denonminator;
+      tVert /= denonminator;
+      aspectApproachAngle /= denonminator;
+    }
+
+    /** Project what the next value might be */
+    private static double linearFwdInterpolation(double x1, double y1, double x2, double y2, double x3) {
+      return y2 + ((x3 - x2) * ((y2 - y1) / (x2 - x1)));
+    }
+
+    /** Determine an estimated value in between */
+    private static double linearMidInterpolation(double x1, double y1, double x2, double y2, double x3) {
+      return y1 + ((x3 - x1) * ((y2 - y1) / (x2 - x1)));
+    }
+
+    public Values(Values one, Values two, double ts1, double ts2, double ts3) {
+      tX = linearFwdInterpolation(ts1, one.tX, ts2, two.tX, ts3);
+      tY = linearFwdInterpolation(ts1, one.tY, ts2, two.tY, ts3);
+      tA = linearFwdInterpolation(ts1, one.tA, ts2, two.tA, ts3);
+      matrixDistance = linearFwdInterpolation(ts1, one.matrixDistance, ts2, two.matrixDistance, ts3);
+      matrixRotationAngle = linearFwdInterpolation(ts1, one.matrixRotationAngle, ts2, two.matrixRotationAngle, ts3);
+      matrixApproachAngle = linearFwdInterpolation(ts1, one.matrixApproachAngle, ts2, two.matrixApproachAngle, ts3);
+      tDistance = linearFwdInterpolation(ts1, one.tDistance, ts2, two.tDistance, ts3);
+      leftRightRatio = linearFwdInterpolation(ts1, one.leftRightRatio, ts2, two.leftRightRatio, ts3);
+      tSkew = linearFwdInterpolation(ts1, one.tSkew, ts2, two.tSkew, ts3);
+      tShort = linearFwdInterpolation(ts1, one.tShort, ts2, two.tShort, ts3);
+      tLong = linearFwdInterpolation(ts1, one.tLong, ts2, two.tLong, ts3);
+      tHor = linearFwdInterpolation(ts1, one.tHor, ts2, two.tHor, ts3);
+      tVert = linearFwdInterpolation(ts1, one.tVert, ts2, two.tVert, ts3);
+      aspectApproachAngle = linearFwdInterpolation(ts1, one.aspectApproachAngle, ts2, two.aspectApproachAngle, ts3);
+      latency = 0.0;
+      tValid = true;
+    }
+  }
+
   private static double[] cornXc;
   private static double[] cornYc;
 
-  // smoothed values
-  private static double tXs = 0.0;
-  private static double tYs = 0.0;
-  private static double tAs = 0.0;
-  private static double matrixDistanceS = 0.0; // Distance from tVec
-  private static double matrixRotaionAngleS = 0.0;
-  private static double matrixApproachAngleS = 0.0;
-  private static double tDistanceS = 0.0; // Distance from tY
-  private static double leftRightRatioS = 0.0;
-  private static double tSkewS = 0.0;
-  private static double tShortS = 0.0;
-  private static double tLongS = 0.0;
-  private static double tHorS = 0.0;
-  private static double tVertS = 0.0;
-  private static double aspectApproachAngleS = 0.0;
-  private static double latencyS = 0.0;
+  private static Values current = new Values(0.0);
+  private static Values smoothed = new Values(0.0);
 
-  private static boolean tValidc = false;
-  private static boolean tValids = false;
   private static long lastValid = 0;
 
   public static final double LIME_LIGHT_HEIGHT = 36;
@@ -93,10 +164,7 @@ public class Vision extends Subsystem {
         // new Point3(-1.9363, 0.5008, 0.0), // bottom left
         // new Point3(-0.5593, 5.8258, 0.0), // top-left
         // new Point3(1.377, 5.325, 0.0) // top-right
-        new Point3(-15, 0, 0),
-        new Point3(-15, -5.75, 0),
-        new Point3(0, -5.75, 0)
-    );
+        new Point3(-15, 0, 0), new Point3(-15, -5.75, 0), new Point3(0, -5.75, 0));
 
     mCameraMatrix = Mat.eye(3, 3, CvType.CV_64F);
     mCameraMatrix.put(0, 0, 2.5751292067328632e+02);
@@ -114,112 +182,113 @@ public class Vision extends Subsystem {
     // setDefaultCommand(new MySpecialCommand());
   }
 
-  public void update() {
+  public void update(long timestamp) {
     table = NetworkTableInstance.getDefault().getTable("limelight");
-    tValidc = table.getEntry("tv").getDouble(0.0) == 0.0 ? false : true;
+    current.tValid = table.getEntry("tv").getDouble(0.0) == 0.0 ? false : true;
 
-    if (tValidc) {
+    if (current.tValid) {
       // get the raw values from the camera
-      tXc = table.getEntry("tx").getDouble(0.0);
-      tYc = table.getEntry("ty").getDouble(0.0);
-      tAc = table.getEntry("ta").getDouble(0.0);
-      tDistanceC = calculateDistance();
-      tSkewC = table.getEntry("ts").getDouble(0.0);
-      tShortC = table.getEntry("tshort").getDouble(0.0);
-      tLongC = table.getEntry("tlong").getDouble(0.0);
-      tHorC = table.getEntry("thor").getDouble(0.0);
-      tVertC = table.getEntry("tvert").getDouble(0.0);
-      latencyC = table.getEntry("tl").getDouble(0.0);
+      current.tX = table.getEntry("tx").getDouble(0.0);
+      current.tY = table.getEntry("ty").getDouble(0.0);
+      current.tA = table.getEntry("ta").getDouble(0.0);
+      current.tDistance = calculateDistance();
+      current.tSkew = table.getEntry("ts").getDouble(0.0);
+      current.tShort = table.getEntry("tshort").getDouble(0.0);
+      current.tLong = table.getEntry("tlong").getDouble(0.0);
+      current.tHor = table.getEntry("thor").getDouble(0.0);
+      current.tVert = table.getEntry("tvert").getDouble(0.0);
+      current.latency = table.getEntry("tl").getDouble(0.0);
       cornXc = table.getEntry("tcornx").getDoubleArray(new double[0]);
       cornYc = table.getEntry("tcorny").getDoubleArray(new double[0]);
 
       calculateAspectRatio();
       matrixMathOnCorners();
 
-      if (!tValids) {
+      if (!smoothed.tValid) {
         // If tValids was false, our previous saved position data is also bad (we set to
         // NaN), reset to our first raw values.
-        tXs = tXc;
-        tYs = tYc;
-        tAs = tAc;
-        tDistanceS = tDistanceC;
-        tSkewS = tSkewC;
-        tShortS = tShortC;
-        tLongS = tLongC;
-        tHorS = tHorC;
-        tVertS = tVertC;
-        latencyS = latencyC;
-        aspectApproachAngleS = aspectApproachAngleC;
-        leftRightRatioS = leftRightRatioC;
-        matrixRotaionAngleS = matrixRotationAngleC;
-        matrixApproachAngleS = matrixApproachAngleC;
-        matrixDistanceS = matrixDistanceC;
-        // Anytime the current frame is valid, the saved valid becomes true
-        tValids = true;
+        smoothed = new Values(current);
+      } else {
+        smoothValues();
+        // TODO: VINCENT UNCOMMENT THIS TO TRY NEW SMOOTING
+        //smoothMultipleValues(5);
       }
-      lastValid = System.currentTimeMillis();
-    } else {
+
+      lastValid = timestamp;
+    } else {     
       // If target is invalid for more that 0.5 seconds, it is likely off screen
-      if (tValids && (lastValid + 500) > System.currentTimeMillis()) {
+      if (smoothed.tValid && (lastValid + 50) > timestamp) {
         // Don't need to run this code if tValids is already false
-        tValids = false;
-        // If the target has been invalid too long, set to NaN
-        tAs = tYs = tXs = tDistanceS = tSkewS = tShortS = Double.NaN;
-        tLongS = tHorS = tVertS = latencyS = leftRightRatioS = Double.NaN;
-        matrixRotaionAngleS = matrixApproachAngleS = matrixDistanceS = aspectApproachAngleS = Double.NaN;
+        smoothed = new Values(Double.NaN);
+      } else if (smoothed.tValid) {
+        // We don't currently have valid data, but
+        // we can use a projection algorithm
+        // Currently, that means not changing the saved values
+        // Eventually, we should try to use past pose
+        // data to predict current updated values.
+
+        // TODO: VINCENT UNCOMMENT THIS TO TRY NEW INTERPOLATING
+        // List<Pose> lastTwo = Pose.getPreviousPoses(2);
+        // if (lastTwo.size() == 2) {
+        //   Pose p2 = lastTwo.get(1);
+        //   Pose p1 = lastTwo.get(0);
+        //   if (p2.limeLight.tValid && p1.limeLight.tValid) {
+        //     smoothed = new Values(p1.limeLight, p2.limeLight, p1.timestamp, p2.timestamp, timestamp);
+        //   }
+        // }
       }
     }
 
-    if (tValidc) {
-      smoothValues();
-    } else if (tValids) {
-      // We don't currently have valid data, but
-      // we can use a projection algorithm
-      // Currently, that means not changing the saved values
-      // Eventually, we should try to use past pose
-      // data to predict current updated values.
-    }
-
-    //printValues();
+    // printValues();
   }
 
   void printValues() {
-    SmartDashboard.putBoolean("Valid Target c", tValidc);
-    SmartDashboard.putBoolean("Valid Target s", tValids);
+    SmartDashboard.putBoolean("Valid Target c", current.tValid);
+    SmartDashboard.putBoolean("Valid Target s", smoothed.tValid);
 
     // outputting all current/raw values
-    SmartDashboard.putNumber("Target X raw", Double.isNaN(tXc) ? 0.0 : tXc);
-    SmartDashboard.putNumber("Target Y raw", Double.isNaN(tYc) ? 0.0 : tYc);
-    SmartDashboard.putNumber("Target Area raw", Double.isNaN(tAc) ? 0.0 : tAc);
-    SmartDashboard.putNumber("Target Distance raw", Double.isNaN(tDistanceC) ? 0.0 : tDistanceC);
-    SmartDashboard.putNumber("Target Skew raw", Double.isNaN(tSkewC) ? 0.0 : tSkewC);
-    SmartDashboard.putNumber("Target Short raw", Double.isNaN(tShortC) ? 0.0 : tShortC);
-    SmartDashboard.putNumber("Target Long raw", Double.isNaN(tLongC) ? 0.0 : tLongC);
-    SmartDashboard.putNumber("Target Horizontal raw", Double.isNaN(tHorC) ? 0.0 : tHorC);
-    SmartDashboard.putNumber("Target Vertical raw", Double.isNaN(tVertC) ? 0.0 : tVertC);
-    SmartDashboard.putNumber("Target Matrix Rotation Angle raw", Double.isNaN(matrixRotationAngleC) ? 0.0 : matrixRotationAngleC);
-    SmartDashboard.putNumber("Target Matrix Approach Angle raw ", Double.isNaN(matrixApproachAngleC) ? 0.0 : matrixApproachAngleC);
-    SmartDashboard.putNumber("Target Matrix Distance raw", Double.isNaN(matrixDistanceC) ? 0.0 : matrixDistanceC);
-    SmartDashboard.putNumber("Target Left/Right Ratio raw", Double.isNaN(leftRightRatioC) ? 0.0 : leftRightRatioC);
-    SmartDashboard.putNumber("Target Aspect Approach Angle raw", Double.isNaN(aspectApproachAngleC) ? 0.0 : aspectApproachAngleC);
-    SmartDashboard.putNumber("Limelight Latency raw", Double.isNaN(latencyC) ? 0.0 : latencyC);
+    SmartDashboard.putNumber("Target X raw", Double.isNaN(current.tX) ? 0.0 : current.tX);
+    SmartDashboard.putNumber("Target Y raw", Double.isNaN(current.tY) ? 0.0 : current.tY);
+    SmartDashboard.putNumber("Target Area raw", Double.isNaN(current.tA) ? 0.0 : current.tA);
+    SmartDashboard.putNumber("Target Distance raw", Double.isNaN(current.tDistance) ? 0.0 : current.tDistance);
+    SmartDashboard.putNumber("Target Skew raw", Double.isNaN(current.tSkew) ? 0.0 : current.tSkew);
+    SmartDashboard.putNumber("Target Short raw", Double.isNaN(current.tShort) ? 0.0 : current.tShort);
+    SmartDashboard.putNumber("Target Long raw", Double.isNaN(current.tLong) ? 0.0 : current.tLong);
+    SmartDashboard.putNumber("Target Horizontal raw", Double.isNaN(current.tHor) ? 0.0 : current.tHor);
+    SmartDashboard.putNumber("Target Vertical raw", Double.isNaN(current.tVert) ? 0.0 : current.tVert);
+    SmartDashboard.putNumber("Target Matrix Rotation Angle raw",
+        Double.isNaN(current.matrixRotationAngle) ? 0.0 : current.matrixRotationAngle);
+    SmartDashboard.putNumber("Target Matrix Approach Angle raw ",
+        Double.isNaN(current.matrixApproachAngle) ? 0.0 : current.matrixApproachAngle);
+    SmartDashboard.putNumber("Target Matrix Distance raw",
+        Double.isNaN(current.matrixDistance) ? 0.0 : current.matrixDistance);
+    SmartDashboard.putNumber("Target Left/Right Ratio raw",
+        Double.isNaN(current.leftRightRatio) ? 0.0 : current.leftRightRatio);
+    SmartDashboard.putNumber("Target Aspect Approach Angle raw",
+        Double.isNaN(current.aspectApproachAngle) ? 0.0 : current.aspectApproachAngle);
+    SmartDashboard.putNumber("Limelight Latency raw", Double.isNaN(current.latency) ? 0.0 : current.latency);
     // outputing all smoothed values
-    SmartDashboard.putNumber("Target X smoothed", Double.isNaN(tXs) ? 0.0 : tXs);
-    SmartDashboard.putNumber("Target Y smoothed", Double.isNaN(tYs) ? 0.0 : tYs);
-    SmartDashboard.putNumber("Target Area smoothed", Double.isNaN(tAs) ? 0.0 : tAs);
-    SmartDashboard.putNumber("Target Distance smoothed", Double.isNaN(tDistanceS) ? 0.0 : tDistanceS);
-    SmartDashboard.putNumber("Target Skew smoothed", Double.isNaN(tSkewS) ? 0.0 : tSkewS);
-    SmartDashboard.putNumber("Target Short smoothed", Double.isNaN(tShortS) ? 0.0 : tShortS);
-    SmartDashboard.putNumber("Target Long smoothed", Double.isNaN(tLongS) ? 0.0 : tLongS);
-    SmartDashboard.putNumber("Target Horizontal smoothed", Double.isNaN(tHorS) ? 0.0 : tHorS);
-    SmartDashboard.putNumber("Target Vertical smoothed", Double.isNaN(tVertS) ? 0.0 : tVertS);
-    SmartDashboard.putNumber("Target Matrix Rotation Angle smoothed", Double.isNaN(matrixRotaionAngleS) ? 0.0 : matrixRotaionAngleS);
-    SmartDashboard.putNumber("Target Matrix Approach Angle smoothed ", Double.isNaN(matrixApproachAngleS) ? 0.0 : matrixApproachAngleS);
-    SmartDashboard.putNumber("Target Matrix Distance smoothed", Double.isNaN(matrixDistanceS) ? 0.0 : matrixDistanceS);
-    SmartDashboard.putNumber("Target Left/Right Ratio smoothed", Double.isNaN(leftRightRatioS) ? 0.0 : leftRightRatioS);
-    SmartDashboard.putNumber("Target Aspect Approach Angle smoothed", Double.isNaN(aspectApproachAngleS) ? 0.0 : aspectApproachAngleS);
-    SmartDashboard.putNumber("Limelight Latency smoothed", Double.isNaN(latencyS) ? 0.0 : latencyS);
-    //corner stuff
+    SmartDashboard.putNumber("Target X smoothed", Double.isNaN(smoothed.tX) ? 0.0 : smoothed.tX);
+    SmartDashboard.putNumber("Target Y smoothed", Double.isNaN(smoothed.tY) ? 0.0 : smoothed.tY);
+    SmartDashboard.putNumber("Target Area smoothed", Double.isNaN(smoothed.tA) ? 0.0 : smoothed.tA);
+    SmartDashboard.putNumber("Target Distance smoothed", Double.isNaN(smoothed.tDistance) ? 0.0 : smoothed.tDistance);
+    SmartDashboard.putNumber("Target Skew smoothed", Double.isNaN(smoothed.tSkew) ? 0.0 : smoothed.tSkew);
+    SmartDashboard.putNumber("Target Short smoothed", Double.isNaN(smoothed.tShort) ? 0.0 : smoothed.tShort);
+    SmartDashboard.putNumber("Target Long smoothed", Double.isNaN(smoothed.tLong) ? 0.0 : smoothed.tLong);
+    SmartDashboard.putNumber("Target Horizontal smoothed", Double.isNaN(smoothed.tHor) ? 0.0 : smoothed.tHor);
+    SmartDashboard.putNumber("Target Vertical smoothed", Double.isNaN(smoothed.tVert) ? 0.0 : smoothed.tVert);
+    SmartDashboard.putNumber("Target Matrix Rotation Angle smoothed",
+        Double.isNaN(smoothed.matrixRotationAngle) ? 0.0 : smoothed.matrixRotationAngle);
+    SmartDashboard.putNumber("Target Matrix Approach Angle smoothed ",
+        Double.isNaN(smoothed.matrixApproachAngle) ? 0.0 : smoothed.matrixApproachAngle);
+    SmartDashboard.putNumber("Target Matrix Distance smoothed",
+        Double.isNaN(smoothed.matrixDistance) ? 0.0 : smoothed.matrixDistance);
+    SmartDashboard.putNumber("Target Left/Right Ratio smoothed",
+        Double.isNaN(smoothed.leftRightRatio) ? 0.0 : smoothed.leftRightRatio);
+    SmartDashboard.putNumber("Target Aspect Approach Angle smoothed",
+        Double.isNaN(smoothed.aspectApproachAngle) ? 0.0 : smoothed.aspectApproachAngle);
+    SmartDashboard.putNumber("Limelight Latency smoothed", Double.isNaN(smoothed.latency) ? 0.0 : smoothed.latency);
+    // corner stuff
     SmartDashboard.putNumber("CornerX[] length", cornXc.length);
     SmartDashboard.putNumber("CornerY[] length", cornYc.length);
     if (cornXc.length == 4) {
@@ -237,106 +306,114 @@ public class Vision extends Subsystem {
   private void matrixMathOnCorners() {
     PointFinder pointFinder = new PointFinder(cornXc, cornYc);
     // System.out.println(pointFinder);
-    
-    MatOfPoint2f imagePoints = new MatOfPoint2f(pointFinder.getBottomRight(), pointFinder.getBottomLeft(), pointFinder.getTopLeft(), pointFinder.getTopRight());
+
+    MatOfPoint2f imagePoints = new MatOfPoint2f(pointFinder.getBottomRight(), pointFinder.getBottomLeft(),
+        pointFinder.getTopLeft(), pointFinder.getTopRight());
 
     Mat rotationVector = new Mat();
     Mat translationVector = new Mat();
-    Calib3d.solvePnP(mObjectPoints, imagePoints, mCameraMatrix, mDistortionCoefficients, rotationVector, translationVector);
+    Calib3d.solvePnP(mObjectPoints, imagePoints, mCameraMatrix, mDistortionCoefficients, rotationVector,
+        translationVector);
     SmartDashboard.putNumber("rotVec0", rotationVector.get(0, 0)[0]);
     SmartDashboard.putNumber("rotVec1", rotationVector.get(1, 0)[0]);
     SmartDashboard.putNumber("rotVec2", rotationVector.get(2, 0)[0]);
-    tvXc = translationVector.get(0, 0)[0];
-    tvYc = translationVector.get(1, 0)[0];
-    tvZc = translationVector.get(2, 0)[0];
-    SmartDashboard.putNumber("tranVec X", tvXc);
-    SmartDashboard.putNumber("tranVec Y", tvYc);
-    SmartDashboard.putNumber("tranVec Z", tvZc);
+    double tvXc = translationVector.get(0, 0)[0];
+    double tvYc = translationVector.get(1, 0)[0];
+    double tvZc = translationVector.get(2, 0)[0];
 
     Mat rotationMatrix = new Mat();
     Calib3d.Rodrigues(rotationVector, rotationMatrix);
     Mat projectionMatrix = new Mat(3, 4, CvType.CV_64F);
-    projectionMatrix.put(0, 0,
-            rotationMatrix.get(0, 0)[0], rotationMatrix.get(0, 1)[0], rotationMatrix.get(0, 2)[0], translationVector.get(0, 0)[0],
-            rotationMatrix.get(1, 0)[0], rotationMatrix.get(1, 1)[0], rotationMatrix.get(1, 2)[0], translationVector.get(1, 0)[0],
-            rotationMatrix.get(2, 0)[0], rotationMatrix.get(2, 1)[0], rotationMatrix.get(2, 2)[0], translationVector.get(2, 0)[0]
-    );
-    
+    projectionMatrix.put(0, 0, rotationMatrix.get(0, 0)[0], rotationMatrix.get(0, 1)[0], rotationMatrix.get(0, 2)[0],
+        translationVector.get(0, 0)[0], rotationMatrix.get(1, 0)[0], rotationMatrix.get(1, 1)[0],
+        rotationMatrix.get(1, 2)[0], translationVector.get(1, 0)[0], rotationMatrix.get(2, 0)[0],
+        rotationMatrix.get(2, 1)[0], rotationMatrix.get(2, 2)[0], translationVector.get(2, 0)[0]);
+
     Mat cameraMatrix = new Mat();
     Mat rotMatrix = new Mat();
     Mat transVect = new Mat();
     Mat rotMatrixX = new Mat();
     Mat rotMatrixY = new Mat();
-    Mat rotMatrixZ = new Mat(); 
+    Mat rotMatrixZ = new Mat();
     Mat eulerAngles = new Mat();
-    Calib3d.decomposeProjectionMatrix(projectionMatrix, cameraMatrix, rotMatrix, transVect, rotMatrixX, rotMatrixY, rotMatrixZ, eulerAngles);
-    
+    Calib3d.decomposeProjectionMatrix(projectionMatrix, cameraMatrix, rotMatrix, transVect, rotMatrixX, rotMatrixY,
+        rotMatrixZ, eulerAngles);
+
     double rollInDegrees = eulerAngles.get(2, 0)[0];
     double pitchInDegrees = eulerAngles.get(0, 0)[0];
-    double yawInDegrees = eulerAngles.get(1, 0)[0];   
-    matrixRotationAngleC = Math.atan2(tvXc, tvZc);
-    matrixDistanceC = Math.sqrt(Math.pow(tvXc, 2) + Math.pow(tvZc, 2));
-    matrixApproachAngleC = yawInDegrees;
+    double yawInDegrees = eulerAngles.get(1, 0)[0];
+    current.matrixRotationAngle = Math.atan2(tvXc, tvZc);
+    current.matrixDistance = Math.sqrt(Math.pow(tvXc, 2) + Math.pow(tvZc, 2));
+    current.matrixApproachAngle = yawInDegrees;
   }
 
   private void calculateAspectRatio() {
     PointFinder pointFinder = new PointFinder(cornXc, cornYc);
 
-    leftRightRatioC = pointFinder.getLeftLength() / pointFinder.getRightLength();
-    double leftRightSignum = leftRightRatioC > 1 ? 1 : -1;
+    current.leftRightRatio = pointFinder.getLeftLength() / pointFinder.getRightLength();
+    double leftRightSignum = current.leftRightRatio > 1 ? 1 : -1;
 
     // Attempt to find angle between target perpendicular and camera
     // using a horizontal vs vertical ratio
-    double currentRatio = tHorC / tVertC;
-    double ratio = Math.min(1, currentRatio/originalRatio); // finding acos of a value > 1 will give NaN 
-    aspectApproachAngleC = Math.toDegrees(Math.acos(ratio)) * leftRightSignum;
+    double currentRatio = current.tHor / current.tVert;
+    double ratio = Math.min(1, currentRatio / originalRatio); // finding acos of a value > 1 will give NaN
+    current.aspectApproachAngle = Math.toDegrees(Math.acos(ratio)) * leftRightSignum;
   }
 
-  private void smoothValues() {
+  private boolean smoothValues() {
     Pose previousPose = Pose.getCurrentPose();
-    if (previousPose.limeLightValid && tValids) {
-      tXs = (previousPose.limeLightTx + tXc) / 2.0;
-      tYs = (previousPose.limeLightTy + tYc) / 2.0;
-      tAs = (previousPose.limeLightTa + tAc) / 2.0;
-      tDistanceS = (previousPose.limeLightDistance + tDistanceC) / 2.0;
-      tSkewS = (previousPose.limeLightSkew + tSkewC) / 2.0;
-      tShortS = (previousPose.limeLightShort + tShortC) / 2.0;
-      tLongS = (previousPose.limeLightLong + tLongC) / 2.0;
-      tHorS = (previousPose.limeLightHorizontal + tHorC) / 2.0;
-      tVertS = (previousPose.limeLightVertical + tVertC) / 2.0;
-      matrixRotaionAngleS = (previousPose.matrixRotationAngle + matrixRotationAngleC) / 2.0;
-      matrixApproachAngleS = (previousPose.matrixApproachAngle + matrixApproachAngleC) / 2.0;
-      matrixDistanceS = (previousPose.matrixDistance + matrixDistanceC) / 2.0;
-      leftRightRatioS = (previousPose.leftRightRatio + leftRightRatioC) / 2.0;
-      aspectApproachAngleS = (previousPose.aspectApproachAngle + aspectApproachAngleC) / 2.0;
-      latencyS = Math.floor(latencyC);
+    if (previousPose.limeLight.tValid && current.tValid) {
+      Values acc = new Values(current);
+      acc.sum(current);
+      acc.averageOf(2.0);
+      smoothed = acc;
+      return true;
     }
+    return false;
+  }
+
+  private boolean smoothMultipleValues(int size) {
+    if (current.tValid) {
+      List<Pose> poseList = Pose.getPreviousPoses(size);
+      Values acc = new Values(current);
+      double denonminator = 1;
+      for (Pose i : poseList) {
+        if (i.limeLight.tValid) {
+          acc.sum(i.limeLight);
+          denonminator++;
+        }
+      }
+      acc.averageOf(denonminator);
+      smoothed = acc;
+      return true;
+    }
+    return false;
   }
 
   public double getX() {
-    return tXs;
+    return smoothed.tX;
   }
 
   public double getY() {
-    return tYs;
+    return smoothed.tY;
   }
 
   public double getA() {
-    return tAs;
+    return smoothed.tA;
   }
 
   public double getLatency() {
-    return latencyS;
+    return smoothed.latency;
   }
 
   public boolean isTargetValid() {
-    return tValids;
+    return smoothed.tValid;
   }
 
   private double calculateDistance() {
     double distance = Double.NaN;
-    if (tValidc) {
-      double yInRadians = Math.toRadians(tYc);
+    if (current.tValid) {
+      double yInRadians = Math.toRadians(current.tY);
       distance = Math.abs((LIME_LIGHT_HEIGHT - targetHeight) / Math.tan(yInRadians));
     } else {
       distance = Double.NaN;
@@ -345,27 +422,27 @@ public class Vision extends Subsystem {
   }
 
   public double getDistance() {
-    return tDistanceS;
+    return smoothed.tDistance;
   }
 
   public double getSkew() {
-    return tSkewS;
+    return smoothed.tSkew;
   }
 
   public double getShort() {
-    return tShortS;
+    return smoothed.tShort;
   }
 
   public double getLong() {
-    return tLongS;
+    return smoothed.tLong;
   }
 
   public double getHor() {
-    return tHorS;
+    return smoothed.tHor;
   }
 
   public double getVert() {
-    return tVertS;
+    return smoothed.tVert;
   }
 
   public double[] getCornX() {
@@ -377,23 +454,23 @@ public class Vision extends Subsystem {
   }
 
   public double getMatrixRotationAngle() {
-    return matrixRotaionAngleS;
+    return smoothed.matrixRotationAngle;
   }
 
   public double getMatrixApproachAngle() {
-    return matrixApproachAngleS;
+    return smoothed.matrixApproachAngle;
   }
 
   public double getMatrixDistance() {
-    return matrixDistanceS;
+    return smoothed.matrixDistance;
   }
 
   public double getLeftRightRatio() {
-    return leftRightRatioS;
+    return smoothed.leftRightRatio;
   }
 
   public double getAspectApproachAngle() {
-    return aspectApproachAngleS;
+    return smoothed.aspectApproachAngle;
   }
 
   public void toggleLimelight() {

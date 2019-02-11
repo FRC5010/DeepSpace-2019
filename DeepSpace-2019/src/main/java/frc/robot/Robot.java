@@ -37,7 +37,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    RobotMap.init();
+    //RobotMap.init();
+    // Uncomment this to use simulator
+    RobotMap.initSim();
     oi = new OI();
     
     m_chooser.setDefaultOption("Default Auto", new ExampleCommand());
@@ -55,7 +57,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    Pose.update();
+    Pose.update(System.currentTimeMillis() / 10);
   }
 
   /**

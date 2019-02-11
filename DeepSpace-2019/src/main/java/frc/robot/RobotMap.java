@@ -14,6 +14,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Solenoid;
@@ -174,7 +175,26 @@ public class RobotMap {
     encoderPPR=480;
     gyro = new AHRS(Port.kUSB1);
     distance = new DistanceSensor();
-    direction = new DirectionSensor();
+    direction = new DirectionSensor(gyro);
+    direction.reset();
+
+    elevator = new Elevator();
+    shifter = new Shifter();
+    driveTrain = new DriveTrain();
+    vision = new Vision();
+    vision.changePipeline(0);
+    visionDrive = new VisionAssistedDrive();
+    ballIntake = new BallIntake();
+  }
+
+  public static void initSim() {
+    elevatorMotor = new TalonSRX(3);
+    rightEncoder = new Encoder(0,1);
+    leftEncoder = new Encoder(2,3);
+    encoderPPR=480;
+    
+    distance = new DistanceSensor();
+    direction = new DirectionSensor(null);
     direction.reset();
 
     elevator = new Elevator();

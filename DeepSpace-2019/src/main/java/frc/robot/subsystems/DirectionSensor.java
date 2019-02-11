@@ -22,9 +22,11 @@ public class DirectionSensor extends Subsystem {
   private double initialOffset = 0.0;
 
   // this is to reset the gyro so it can detect the next angle
-  public DirectionSensor() {
-    RobotMap.gyro.reset();
-    this.gyro = RobotMap.gyro;
+  public DirectionSensor(AHRS gyro) {
+    this.gyro = gyro;
+    if (null != gyro) {
+      gyro.reset();
+    }
   }
 
   public DirectionSensor(double initialOffset) {
@@ -34,8 +36,11 @@ public class DirectionSensor extends Subsystem {
   }
 
   public double angle() {
-    SmartDashboard.putNumber("gyro", gyro.getAngle() + initialOffset);
-    return -(gyro.getAngle() + initialOffset);
+    if (null != gyro) {
+      SmartDashboard.putNumber("gyro", gyro.getAngle() + initialOffset);
+      return -(gyro.getAngle() + initialOffset);
+    }
+    return 0;
   }
 
   public static double boundHalfDegrees(double angle_degrees) {
@@ -47,7 +52,9 @@ public class DirectionSensor extends Subsystem {
   }
 
   public void reset() {
-    gyro.reset();
+    if (null != gyro) {
+      gyro.reset();
+    }
   }
   // Put methods for controlling this subsystem
   // here. Call these from Commands.

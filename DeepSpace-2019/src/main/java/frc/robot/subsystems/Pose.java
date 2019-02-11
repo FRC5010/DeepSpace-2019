@@ -8,39 +8,22 @@
 package frc.robot.subsystems;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
+import frc.robot.subsystems.Vision.Values;
 
 /**
  * Add your docs here.
  */
 public class Pose {
     public final long timestamp; // round down to minimum resolution
-    public final double limeLightTx;
-    public final double limeLightTy;
-    public final double limeLightTa;
-    public final boolean limeLightValid;
-    public final double limeLightDistance;
-    public final double limeLightSkew;
-    public final double limeLightShort;
-    public final double limeLightLong;
-    public final double limeLightHorizontal;
-    public final double limeLightVertical;
-    public final double limeLightLatency;
-    public final double matrixRotationAngle;
-    public final double matrixApproachAngle;
-    public final double matrixDistance;
-    public final double leftRightRatio;
-    public final double aspectApproachAngle;
+    public final Vision.Values limeLight;
 
     public final long driveTrainEncoderLeft;
     public final long driveTrainEncoderRight;
     public final double heading;
-    public final long elevatorEncoder;
+    public final double elevatorEncoder;
 
     // public static final Map<Long, Pose> poseMap = new HashMap<Long, Pose>();
     public static final List<Pose> poseList = new ArrayList<Pose>();
@@ -49,63 +32,54 @@ public class Pose {
 
     public Pose(long timestamp) {
         this.timestamp = timestamp;
-        limeLightTx = RobotMap.vision.getX();
-        limeLightTy = RobotMap.vision.getY();
-        limeLightTa = RobotMap.vision.getA();
-        limeLightValid = RobotMap.vision.isTargetValid();
-        limeLightDistance = RobotMap.vision.getDistance();
-        limeLightSkew = RobotMap.vision.getSkew();
-        limeLightShort = RobotMap.vision.getShort();
-        limeLightLong = RobotMap.vision.getLong();
-        limeLightHorizontal = RobotMap.vision.getHor();
-        limeLightVertical = RobotMap.vision.getVert();
-        limeLightLatency = RobotMap.vision.getLatency();
-        matrixRotationAngle = RobotMap.vision.getMatrixRotationAngle();
-        matrixApproachAngle = RobotMap.vision.getMatrixApproachAngle();
-        matrixDistance = RobotMap.vision.getMatrixDistance();
-        leftRightRatio = RobotMap.vision.getLeftRightRatio();
-        aspectApproachAngle = RobotMap.vision.getAspectApproachAngle();
+        limeLight = new Values(0.0);
+        limeLight.tX = RobotMap.vision.getX();
+        limeLight.tY = RobotMap.vision.getY();
+        limeLight.tA = RobotMap.vision.getA();
+        limeLight.tValid = RobotMap.vision.isTargetValid();
+        limeLight.tDistance = RobotMap.vision.getDistance();
+        limeLight.tSkew = RobotMap.vision.getSkew();
+        limeLight.tShort = RobotMap.vision.getShort();
+        limeLight.tLong = RobotMap.vision.getLong();
+        limeLight.tHor = RobotMap.vision.getHor();
+        limeLight.tVert = RobotMap.vision.getVert();
+        limeLight.latency = RobotMap.vision.getLatency();
+        limeLight.matrixRotationAngle = RobotMap.vision.getMatrixRotationAngle();
+        limeLight.matrixApproachAngle = RobotMap.vision.getMatrixApproachAngle();
+        limeLight.matrixDistance = RobotMap.vision.getMatrixDistance();
+        limeLight.leftRightRatio = RobotMap.vision.getLeftRightRatio();
+        limeLight.aspectApproachAngle = RobotMap.vision.getAspectApproachAngle();
         heading = RobotMap.direction.angle();
         driveTrainEncoderLeft = RobotMap.leftEncoder.getRaw();
-        SmartDashboard.putNumber("Lencoder",driveTrainEncoderLeft);
         driveTrainEncoderRight = RobotMap.rightEncoder.getRaw();
-        SmartDashboard.putNumber("Rencoder",driveTrainEncoderRight);
-        elevatorEncoder = 0; // Needs to be updated
+        elevatorEncoder = RobotMap.elevator.getCurrentPosition();
     }
 
     private Pose() {
         timestamp = 0;
-        limeLightTx = 0.0;
-        limeLightTy = 0.0;
-        limeLightTa = 0.0;
-        limeLightDistance = 0.0;
-        limeLightValid = false;
-        limeLightSkew = 0.0;
-        limeLightShort = 0.0;
-        limeLightLong = 0.0;
-        limeLightHorizontal = 0.0;
-        limeLightVertical = 0.0;
-        limeLightLatency = 0.0;
-        matrixRotationAngle = 0.0;
-        matrixDistance = 0.0;
-        matrixApproachAngle = 0.0;
-        leftRightRatio = 0.0;
-        aspectApproachAngle = 0.0;
-
+        limeLight = new Values(0.0);
         driveTrainEncoderLeft = 0;
         driveTrainEncoderRight = 0;
         heading = 0.0;
-        elevatorEncoder = 0;
+        elevatorEncoder = 0.0;
     }
 
     public static Pose getCurrentPose() {
         return currentPose;
     }
 
-    public static Pose update() {
-        RobotMap.vision.update();
+    /** Might return less than the requested size */
+    public static List<Pose> getPreviousPoses(int setSize) {
+        if (poseList.size() < setSize) {
+            setSize = poseList.size() - 1;
+        }
+        return poseList.subList(poseList.size() - setSize - 1, poseList.size() - 1);
+    }
 
-        currentPose = new Pose(System.currentTimeMillis() / 10); // round down to minimum resolution);
+    public static Pose update(long timestamp) {
+        RobotMap.vision.update(timestamp);
+
+        currentPose = new Pose(timestamp); // round down to minimum resolution);
         poseList.add(currentPose);
 
         if (poseList.size() > poseListLimit) {
