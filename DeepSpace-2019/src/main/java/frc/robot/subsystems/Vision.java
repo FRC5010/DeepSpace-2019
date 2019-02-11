@@ -239,7 +239,7 @@ public class Vision extends Subsystem {
       }
     }
 
-    // printValues();
+    printValues();
   }
 
   void printValues() {
@@ -256,16 +256,11 @@ public class Vision extends Subsystem {
     SmartDashboard.putNumber("Target Long raw", Double.isNaN(current.tLong) ? 0.0 : current.tLong);
     SmartDashboard.putNumber("Target Horizontal raw", Double.isNaN(current.tHor) ? 0.0 : current.tHor);
     SmartDashboard.putNumber("Target Vertical raw", Double.isNaN(current.tVert) ? 0.0 : current.tVert);
-    SmartDashboard.putNumber("Target Matrix Rotation Angle raw",
-        Double.isNaN(current.matrixRotationAngle) ? 0.0 : current.matrixRotationAngle);
-    SmartDashboard.putNumber("Target Matrix Approach Angle raw ",
-        Double.isNaN(current.matrixApproachAngle) ? 0.0 : current.matrixApproachAngle);
-    SmartDashboard.putNumber("Target Matrix Distance raw",
-        Double.isNaN(current.matrixDistance) ? 0.0 : current.matrixDistance);
-    SmartDashboard.putNumber("Target Left/Right Ratio raw",
-        Double.isNaN(current.leftRightRatio) ? 0.0 : current.leftRightRatio);
-    SmartDashboard.putNumber("Target Aspect Approach Angle raw",
-        Double.isNaN(current.aspectApproachAngle) ? 0.0 : current.aspectApproachAngle);
+    SmartDashboard.putNumber("Target Matrix Rotation Angle raw", Double.isNaN(current.matrixRotationAngle) ? 0.0 : current.matrixRotationAngle);
+    SmartDashboard.putNumber("Target Matrix Approach Angle raw ", Double.isNaN(current.matrixApproachAngle) ? 0.0 : current.matrixApproachAngle);
+    SmartDashboard.putNumber("Target Matrix Distance raw", Double.isNaN(current.matrixDistance) ? 0.0 : current.matrixDistance);
+    SmartDashboard.putNumber("Target Left/Right Ratio raw", Double.isNaN(current.leftRightRatio) ? 0.0 : current.leftRightRatio);
+    SmartDashboard.putNumber("Target Aspect Approach Angle raw", Double.isNaN(current.aspectApproachAngle) ? 0.0 : current.aspectApproachAngle);
     SmartDashboard.putNumber("Limelight Latency raw", Double.isNaN(current.latency) ? 0.0 : current.latency);
     // outputing all smoothed values
     SmartDashboard.putNumber("Target X smoothed", Double.isNaN(smoothed.tX) ? 0.0 : smoothed.tX);
@@ -277,21 +272,14 @@ public class Vision extends Subsystem {
     SmartDashboard.putNumber("Target Long smoothed", Double.isNaN(smoothed.tLong) ? 0.0 : smoothed.tLong);
     SmartDashboard.putNumber("Target Horizontal smoothed", Double.isNaN(smoothed.tHor) ? 0.0 : smoothed.tHor);
     SmartDashboard.putNumber("Target Vertical smoothed", Double.isNaN(smoothed.tVert) ? 0.0 : smoothed.tVert);
-    SmartDashboard.putNumber("Target Matrix Rotation Angle smoothed",
-        Double.isNaN(smoothed.matrixRotationAngle) ? 0.0 : smoothed.matrixRotationAngle);
-    SmartDashboard.putNumber("Target Matrix Approach Angle smoothed ",
-        Double.isNaN(smoothed.matrixApproachAngle) ? 0.0 : smoothed.matrixApproachAngle);
-    SmartDashboard.putNumber("Target Matrix Distance smoothed",
-        Double.isNaN(smoothed.matrixDistance) ? 0.0 : smoothed.matrixDistance);
-    SmartDashboard.putNumber("Target Left/Right Ratio smoothed",
-        Double.isNaN(smoothed.leftRightRatio) ? 0.0 : smoothed.leftRightRatio);
-    SmartDashboard.putNumber("Target Aspect Approach Angle smoothed",
-        Double.isNaN(smoothed.aspectApproachAngle) ? 0.0 : smoothed.aspectApproachAngle);
+    SmartDashboard.putNumber("Target Matrix Rotation Angle smoothed", Double.isNaN(smoothed.matrixRotationAngle) ? 0.0 : smoothed.matrixRotationAngle);
+    SmartDashboard.putNumber("Target Matrix Approach Angle smoothed ", Double.isNaN(smoothed.matrixApproachAngle) ? 0.0 : smoothed.matrixApproachAngle);
+    SmartDashboard.putNumber("Target Matrix Distance smoothed", Double.isNaN(smoothed.matrixDistance) ? 0.0 : smoothed.matrixDistance);
+    SmartDashboard.putNumber("Target Left/Right Ratio smoothed", Double.isNaN(smoothed.leftRightRatio) ? 0.0 : smoothed.leftRightRatio);
+    SmartDashboard.putNumber("Target Aspect Approach Angle smoothed", Double.isNaN(smoothed.aspectApproachAngle) ? 0.0 : smoothed.aspectApproachAngle);
     SmartDashboard.putNumber("Limelight Latency smoothed", Double.isNaN(smoothed.latency) ? 0.0 : smoothed.latency);
     // corner stuff
-    SmartDashboard.putNumber("CornerX[] length", cornXc.length);
-    SmartDashboard.putNumber("CornerY[] length", cornYc.length);
-    if (cornXc.length == 4) {
+    if (cornXc != null && cornXc.length == 4) {
       SmartDashboard.putNumber("Corner X [0]", cornXc[0]);
       SmartDashboard.putNumber("Corner X [1]", cornXc[1]);
       SmartDashboard.putNumber("Corner X [2]", cornXc[2]);
@@ -300,6 +288,15 @@ public class Vision extends Subsystem {
       SmartDashboard.putNumber("Corner Y [1]", cornYc[1]);
       SmartDashboard.putNumber("Corner Y [2]", cornYc[2]);
       SmartDashboard.putNumber("Corner Y [3]", cornYc[3]);
+    }
+    double[] camtranValues = table.getEntry("camtran").getDoubleArray(new double[0]);
+    if (camtranValues != null && camtranValues.length == 6) {
+      SmartDashboard.putNumber("Camtran x", camtranValues[0]);
+      SmartDashboard.putNumber("Camtran y", camtranValues[1]);
+      SmartDashboard.putNumber("Camtran z", camtranValues[2]);
+      SmartDashboard.putNumber("Camtran pitch", camtranValues[3]);
+      SmartDashboard.putNumber("Camtran yaw", camtranValues[4]);
+      SmartDashboard.putNumber("Camtran roll", camtranValues[5]);
     }
   }
 
