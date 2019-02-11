@@ -60,6 +60,9 @@ dependencies {
 
     // SnobotSim
     snobotSimCompile snobotSimJava()
+
+    simulation rootProject.files('halsim_ds_socketd.dll')
+    // simulation "edu.wpi.first.halsim:halsim_ds_socket:${wpi.wpilibVersion}:${wpi.platforms.desktop}debug@zip"
 }
 
 // Setting up my Jar File. In this case, adding all libraries into the main jar ('fat jar')

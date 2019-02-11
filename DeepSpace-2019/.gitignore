@@ -161,3 +161,4 @@ bin/
 # End of https://www.gitignore.io/api/c++,java,linux,macos,gradle,windows,visualstudiocode
 !pathfinder.dll
 !pathfinderjni.dll
+!halsim_ds_socketd.dll

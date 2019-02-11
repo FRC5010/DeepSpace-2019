@@ -40,12 +40,12 @@ public class VisionAssistedDrive extends Subsystem {
   // returns a steering motor output to turn robot towards target
   public double turnTowardsTarget() {
     double steerAmt = 0;
-    if (Pose.getCurrentPose().limeLightValid) {
-      steerAmt = (Shifter.isLowGear ? lowGear.steerKp : highGear.steerKp) * Pose.getCurrentPose().limeLightTx;
+    if (Pose.getCurrentPose().limeLight.tValid) {
+      steerAmt = (Shifter.isLowGear ? lowGear.steerKp : highGear.steerKp) * Pose.getCurrentPose().limeLight.tX;
       
-      if (Pose.getCurrentPose().limeLightTx > 1.0) {
+      if (Pose.getCurrentPose().limeLight.tX > 1.0) {
         steerAmt += Shifter.isLowGear ? lowGear.moveMin : highGear.moveMin;
-      } else if (Pose.getCurrentPose().limeLightTx < 1.0) {
+      } else if (Pose.getCurrentPose().limeLight.tX < 1.0) {
         steerAmt -= Shifter.isLowGear ? lowGear.moveMin : highGear.moveMin;
       }
     }
@@ -56,8 +56,8 @@ public class VisionAssistedDrive extends Subsystem {
   public double moveTowardsTarget() {
     double moveAmt = 0;
 
-    double distanceFromTarget = Pose.getCurrentPose().limeLightDistance;
-    if (Pose.getCurrentPose().limeLightValid) {
+    double distanceFromTarget = Pose.getCurrentPose().limeLight.tDistance;
+    if (Pose.getCurrentPose().limeLight.tValid) {
       double error = minRotationDistance - distanceFromTarget;
       moveAmt = (Shifter.isLowGear ? lowGear.moveKp : highGear.moveKp) * error;
 
@@ -75,17 +75,17 @@ public class VisionAssistedDrive extends Subsystem {
   // arc towards target
   public double arcTowardsTarget() {
     Pose currentPose = Pose.getCurrentPose();
-    if (currentPose.limeLightValid) {
-      double distance = currentPose.limeLightDistance;
+    if (currentPose.limeLight.tValid) {
+      double distance = currentPose.limeLight.tDistance;
       System.out.println("-------");
-      double rotationAngle = currentPose.limeLightTx;
+      double rotationAngle = currentPose.limeLight.tX;
       System.out.println("Angle: " + rotationAngle);
       double errorDistance = distance - minRotationDistance;
       System.out.println("ErrorDistance: " + errorDistance);
-      double approachAngle = Math.signum(currentPose.aspectApproachAngle) * (errorDistance > 0 ? errorDistance / 3.0 : 0.0);
+      double approachAngle = Math.signum(currentPose.limeLight.aspectApproachAngle) * (errorDistance > 0 ? errorDistance / 3.0 : 0.0);
       System.out.println("DesAngle: " + approachAngle);
       
-      double error = (currentPose.aspectApproachAngle < approachAngle) ? 0.0 : approachAngle - rotationAngle;
+      double error = (currentPose.limeLight.aspectApproachAngle < approachAngle) ? 0.0 : approachAngle - rotationAngle;
       System.out.println("Error: " + error);
       double steerAmt = (Shifter.isLowGear ? lowGear.steerKp : highGear.steerKp) * error;
       System.out.println("SteerAmt: " + steerAmt);
