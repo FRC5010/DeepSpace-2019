@@ -7,6 +7,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.Faults;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
@@ -31,14 +32,27 @@ public class Elevator extends Subsystem {
     // setDefaultCommand(new MySpecialCommand());
   }
   public void raiseElevator(double power) {
-    elevMotor.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, power);
+    elevMotor.set(ControlMode.PercentOutput, power);
+
+  }
+
+  public void moveToPosition(double setPoint) {
+    RobotMap.elevatorMotor.set(ControlMode.MotionMagic,setPoint);
+  }
+
+  public double getCurrentPosition() {
+    return RobotMap.elevatorMotor.getSelectedSensorPosition();
+  }
+
+  public void returnToManualControl() {
+    RobotMap.elevatorMotor.set(ControlMode.PercentOutput, 0);
+  }
+  public void tuneElevator(double power){
+    elevMotor.set(ControlMode.PercentOutput, power);
     elevMotor.getFaults(faults);
     System.out.println("Sensor Vel: " + elevMotor.getSelectedSensorVelocity());
     System.out.println("Sensor Pos: " + elevMotor.getSelectedSensorPosition());
     System.out.println("Elev Out %: " + elevMotor.getMotorOutputPercent());
     System.out.println("Out of Phs: " + faults.SensorOutOfPhase);
-  }
-  public void lowerElevator(double power){
-    elevMotor.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, -power);
   }
 }
