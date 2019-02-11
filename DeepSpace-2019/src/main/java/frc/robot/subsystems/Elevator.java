@@ -31,7 +31,7 @@ public class Elevator extends Subsystem {
     // setDefaultCommand(new MySpecialCommand());
   }
   public void raiseElevator(double power) {
-    elevMotor.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, power);
+    elevMotor.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, -power);
     elevMotor.getFaults(faults);
     System.out.println("Sensor Vel: " + elevMotor.getSelectedSensorVelocity());
     System.out.println("Sensor Pos: " + elevMotor.getSelectedSensorPosition());
@@ -39,6 +39,7 @@ public class Elevator extends Subsystem {
     System.out.println("Out of Phs: " + faults.SensorOutOfPhase);
   }
   public void lowerElevator(double power){
-    elevMotor.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, -power);
+    elevMotor.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, power);
   }
 }
+                                                                  

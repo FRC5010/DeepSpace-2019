@@ -13,6 +13,8 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import frc.robot.commands.ElevatorMM;
 import frc.robot.commands.ShiftDown;
 import frc.robot.commands.ShiftUp;
+import frc.robot.commands.BeakOpen;
+import frc.robot.commands.BeakClose;
 import frc.robot.commands.commands_auto.FieldMovement;
 
 /**
@@ -55,8 +57,9 @@ public class OI {
   public Button driverBack = new JoystickButton(driver, 7);
   public Button driverStart = new JoystickButton(driver, 8);
   public Button driverJoyLB = new JoystickButton(driver, 9);
-  public Button driverJoyRB = new JoystickButton(driver, 10);
-  
+  public Button driverJoyRB = new JoystickButton(driver, 10);  
+  public Button driverA = new JoystickButton(driver, 1);
+  public Button driverB = new JoystickButton(driver, 2);
 
   public Button coDriverA = new JoystickButton(coDriver, 1);
   public Button coDriverB = new JoystickButton(coDriver, 2);
@@ -69,6 +72,9 @@ public class OI {
     driverJoyLB.whenPressed(new ShiftDown());
     driverJoyRB.whenPressed(new ShiftUp());
     driverBack.whenPressed(new FieldMovement());
+    driverLB.whenPressed(new BeakOpen());
+    driverRB.whenPressed(new BeakClose());
+
     coDriverA.whenPressed(new ElevatorMM(0));
     coDriverB.whenPressed(new ElevatorMM(18000));
   }

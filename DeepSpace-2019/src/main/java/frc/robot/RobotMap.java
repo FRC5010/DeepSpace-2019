@@ -17,10 +17,12 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.SerialPort.Port;
 import edu.wpi.first.wpilibj.interfaces.Accelerometer;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 import frc.robot.subsystems.BallIntake;
+import frc.robot.subsystems.BeakIntake;
 import frc.robot.subsystems.DirectionSensor;
 import frc.robot.subsystems.DistanceSensor;
 import frc.robot.subsystems.DriveTrain;
@@ -42,6 +44,7 @@ public class RobotMap {
   public static TalonSRX elevatorMotor;
   public static TalonSRX elevatorMotor2;
   public static VictorSPX intakeMotor;
+  public static DoubleSolenoid beakSolenoid;
 
   public static TalonSRX leftMotor1;
   public static TalonSRX leftMotor2;
@@ -64,6 +67,7 @@ public class RobotMap {
   public static Elevator elevator;
   public static double moveMin = 0.2;
   public static BallIntake ballIntake;
+  public static BeakIntake beakIntake;
   // For example to map the left and right motors, you could define the
   // following variables to use with your drivetrain subsystem.
   // public static int leftMotor = 1;
@@ -117,6 +121,7 @@ public class RobotMap {
     elevatorMotor2 = new TalonSRX(1);
 
     intakeMotor = new VictorSPX(0);
+    beakSolenoid = new DoubleSolenoid(2, 1);
     shiftSolenoid = new Solenoid(0);
     
     //Inverted for motion profiling purposes.
@@ -179,5 +184,6 @@ public class RobotMap {
     vision.changePipeline(0);
     visionDrive = new VisionAssistedDrive();
     ballIntake = new BallIntake();
+    beakIntake = new BeakIntake();
   }
 }

@@ -8,7 +8,8 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
-import frc.robot.RobotMapJQ;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import frc.robot.RobotMap;
 
 /**
  * Add your docs here.
@@ -25,13 +26,10 @@ public class BeakIntake extends Subsystem {
   }
 
   public void beakOpen(){
-    RobotMapJQ.beakSolenoid.set(true);
+    RobotMap.beakSolenoid.set(DoubleSolenoid.Value.kForward);
   }
 
   public void beakClose(){
-    RobotMapJQ.beakSolenoid.set(false);
+    RobotMap.beakSolenoid.set(DoubleSolenoid.Value.kReverse);
   }
-
-
-
 }
