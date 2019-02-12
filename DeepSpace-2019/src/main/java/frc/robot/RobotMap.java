@@ -161,6 +161,7 @@ public class RobotMap {
     vision.changePipeline(0);
     visionDrive = new VisionAssistedDrive();
     ballIntake = new BallIntake();
+    beakIntake = new BeakIntake();
   }
 
   public static void initCommands() {
