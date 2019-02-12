@@ -38,8 +38,6 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     RobotMap.init();
-    // Uncomment this to use simulator
-    //RobotMap.initSim();
     oi = new OI();
     
     m_chooser.setDefaultOption("Default Auto", new ExampleCommand());

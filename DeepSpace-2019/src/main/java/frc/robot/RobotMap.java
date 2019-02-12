@@ -7,6 +7,11 @@
 
 package frc.robot;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
@@ -14,14 +19,13 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.kauailabs.navx.frc.AHRS;
 
-import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.BuiltInAccelerometer;
-import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.SerialPort.Port;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.interfaces.Accelerometer;
-import edu.wpi.first.wpilibj.interfaces.Gyro;
 import frc.robot.subsystems.BallIntake;
 import frc.robot.subsystems.BeakIntake;
 import frc.robot.subsystems.DirectionSensor;
@@ -79,39 +83,28 @@ public class RobotMap {
   // public static int rangefinderPort = 1;
   // public static int rangefinderModule = 1;
   public static void initComp() {
-    RobotMap_Paths.init();
-    rightMotor1 = new TalonSRX(4);
-    rightMotor2 = new TalonSRX(5);
-
-    leftMotor1 = new TalonSRX(1);
-    leftMotor2 = new TalonSRX(2);
-    
-    elevatorMotor = new TalonSRX(3);
-    elevatorMotor2 = new TalonSRX(0);
-
-    intakeMotor = new VictorSPX(1);
-
-    //Inverted for motion profiling purposes.
-    /*leftMotor1.setInverted(true);
-    leftMotor2.setInverted(true);
-    leftMotor3.setInverted(true);*/
-
-    rightMotor1.setInverted(true);
-    rightMotor2.setInverted(true);
-    //rightMotor3.setInverted(true);
-
-    rightMotor2.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 4);
-		//rightMotor3.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 4);
-
-		leftMotor2.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 1);
-    //leftMotor3.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 1);
-    elevatorMotor2.follow(elevatorMotor);
-    shiftSolenoid = new Solenoid(0);
-    
+    initPractice();
   }
 
   public static void initPractice(){
     RobotMap_Paths.init();
+    initRobotComponents();
+    initMotors();
+    initSubsystems();
+    initCommands();
+  }
+
+  public static void initRobotComponents() {
+    builtInAccelerometer = new BuiltInAccelerometer(Accelerometer.Range.k4G);
+    rightEncoder = new Encoder(0,1);
+    leftEncoder = new Encoder(2,3);
+    encoderPPR=480;
+    gyro = new AHRS(Port.kUSB1);
+    beakSolenoid = new DoubleSolenoid(2, 1);
+    shiftSolenoid = new Solenoid(0);
+  }
+
+  public static void initMotors() {
     rightMotor1 = new TalonSRX(4);
     rightMotor2 = new TalonSRX(6);
 
@@ -122,23 +115,13 @@ public class RobotMap {
     elevatorMotor2 = new TalonSRX(1);
 
     intakeMotor = new VictorSPX(0);
-    beakSolenoid = new DoubleSolenoid(2, 1);
-    shiftSolenoid = new Solenoid(0);
     
-    //Inverted for motion profiling purposes.
-    /*leftMotor1.setInverted(true);
-    leftMotor2.setInverted(true);
-    leftMotor3.setInverted(true);*/
-
     rightMotor1.setInverted(true);
     rightMotor2.setInverted(true);
-    //rightMotor3.setInverted(true);
 
     rightMotor2.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 4);
-		//rightMotor3.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 4);
-
 		leftMotor2.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 2);
-    //leftMotor3.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 1);
+
     elevatorMotor.configFactoryDefault();
     elevatorMotor2.configFactoryDefault();
     elevatorMotor2.follow(elevatorMotor);
@@ -164,20 +147,10 @@ public class RobotMap {
     elevatorMotor.setSelectedSensorPosition(0,Constants.kPIDLoopIdx, Constants.kTimeoutMs);
   }
 
-  public static void init() {
-    //The init function for different robots.  Change based on functions above.
-    initComp();
-    //initPractice();
-
-    builtInAccelerometer = new BuiltInAccelerometer(Accelerometer.Range.k4G);
-    rightEncoder = new Encoder(0,1);
-    leftEncoder = new Encoder(2,3);
-    encoderPPR=480;
-    gyro = new AHRS(Port.kUSB1);
+  public static void initSubsystems() {
     distance = new DistanceSensor();
     direction = new DirectionSensor(gyro);
     direction.reset();
-
     elevator = new Elevator();
     shifter = new Shifter();
     driveTrain = new DriveTrain();
@@ -187,23 +160,35 @@ public class RobotMap {
     ballIntake = new BallIntake();
   }
 
-  public static void initSim() {
-    elevatorMotor = new TalonSRX(3);
-    rightEncoder = new Encoder(0,1);
-    leftEncoder = new Encoder(2,3);
-    encoderPPR=480;
-    
-    distance = new DistanceSensor();
-    direction = new DirectionSensor(null);
-    direction.reset();
+  public static void initCommands() {
 
-    elevator = new Elevator();
-    shifter = new Shifter();
-    driveTrain = new DriveTrain();
-    vision = new Vision();
-    vision.changePipeline(0);
-    visionDrive = new VisionAssistedDrive();
-    ballIntake = new BallIntake();
-    beakIntake = new BeakIntake();
   }
+
+  public static void init() {
+    //The init function for different robots.  Change based on functions above.
+    File fieldMapFile = new File(Filesystem.getLaunchDirectory().toPath() + "/robot.txt");
+    String data = "";
+    try {
+      BufferedReader reader = new BufferedReader(new FileReader(fieldMapFile));
+      while (reader.ready()) {
+          data = reader.readLine();
+      }
+      if (data.compareToIgnoreCase("PRACTICE") == 0) {
+        initPractice();
+      } else if (data.compareToIgnoreCase("COMP") == 0) {
+        initComp();
+      } else if (data.compareToIgnoreCase("HOBBES") == 0) {
+        RobotMapHobbes.initHobbes();
+      } else if (data.compareToIgnoreCase("SIM") == 0) {
+        RobotMapSim.initSim();
+      } else {
+        initComp();
+      }
+    } catch (FileNotFoundException e) {
+      initComp();
+    } catch (IOException e) {
+      initComp();
+    }
+  }
+  
 }
