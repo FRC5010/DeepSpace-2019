@@ -7,7 +7,10 @@
 
 package frc.robot;
 
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 import edu.wpi.first.wpilibj.Encoder;
 import frc.robot.subsystems.BallIntake;
@@ -19,14 +22,14 @@ import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Shifter;
 import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.VisionAssistedDrive;
-
+import frc.robot.util.Constants;
 /**
  * Add your docs here.
  */
 public class RobotMapSim {
 
     public static void initSim() {
-        RobotMap.elevatorMotor = new TalonSRX(3);
+        initMotors();
         RobotMap.rightEncoder = new Encoder(0, 1);
         RobotMap.leftEncoder = new Encoder(2,3);
         RobotMap.encoderPPR=480;
@@ -38,11 +41,53 @@ public class RobotMapSim {
         RobotMap.elevator = new Elevator();
         RobotMap.shifter = new Shifter();
         RobotMap.driveTrain = new DriveTrain();
-        RobotMap.vision = new Vision();
-        RobotMap.vision.changePipeline(0);
-        RobotMap.visionDrive = new VisionAssistedDrive();
         RobotMap.ballIntake = new BallIntake();
         RobotMap.beakIntake = new BeakIntake();
+        RobotMap.vision = new Vision();
+        RobotMap.visionDrive = new VisionAssistedDrive();
+      }
+
+      public static void initMotors() {
+        RobotMap.rightMotor1 = new WPI_TalonSRX(4);
+        RobotMap.rightMotor2 = new WPI_TalonSRX(6);
+    
+        RobotMap.leftMotor1 = new WPI_TalonSRX(2);
+        RobotMap.leftMotor2 = new WPI_TalonSRX(5);
+        
+        RobotMap.elevatorMotor = new WPI_TalonSRX(3);
+        RobotMap.elevatorMotor2 = new WPI_TalonSRX(1);
+    
+        RobotMap.intakeMotor = new WPI_VictorSPX(0);
+        
+        RobotMap.rightMotor1.setInverted(true);
+        RobotMap.rightMotor2.setInverted(true);
+    
+        RobotMap.rightMotor2.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 4);
+        RobotMap.leftMotor2.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 2);
+    
+        RobotMap.elevatorMotor.configFactoryDefault();
+        RobotMap.elevatorMotor2.configFactoryDefault();
+        RobotMap.elevatorMotor2.follow(RobotMap.elevatorMotor);
+        RobotMap.elevatorMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
+        RobotMap.elevatorMotor.setSensorPhase(true);
+        RobotMap.elevatorMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, Constants.kTimeoutMs);
+        RobotMap.elevatorMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, Constants.kTimeoutMs);
+        //configing out puts
+        RobotMap.elevatorMotor.configNominalOutputForward(0,Constants.kTimeoutMs);
+        RobotMap.elevatorMotor.configNominalOutputReverse(0,Constants.kTimeoutMs);
+        RobotMap.elevatorMotor.configPeakOutputForward(1,Constants.kTimeoutMs);
+        RobotMap.elevatorMotor.configPeakOutputReverse(-1,Constants.kTimeoutMs);
+        RobotMap.elevatorMotor.selectProfileSlot(Constants.kSlotIdx, Constants.kPIDLoopIdx); 
+        RobotMap.elevatorMotor.config_kF(Constants.kSlotIdx,Constants.kGains.kF, Constants.kTimeoutMs);  
+        RobotMap.elevatorMotor.config_kP(Constants.kSlotIdx,Constants.kGains.kP, Constants.kTimeoutMs);
+        RobotMap.elevatorMotor.config_kI(Constants.kSlotIdx,Constants.kGains.kI, Constants.kTimeoutMs);
+        RobotMap.elevatorMotor.config_kD(Constants.kSlotIdx,Constants.kGains.kD, Constants.kTimeoutMs);
+        //cruze velocity
+        RobotMap.elevatorMotor.configMotionCruiseVelocity(2500,Constants.kTimeoutMs);
+        RobotMap.elevatorMotor.configMotionAcceleration(2500, Constants.kTimeoutMs);
+    
+        //zeroing sensor
+        RobotMap.elevatorMotor.setSelectedSensorPosition(0,Constants.kPIDLoopIdx, Constants.kTimeoutMs);
       }
 }
 

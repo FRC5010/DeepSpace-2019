@@ -17,12 +17,15 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.SerialPort.Port;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.interfaces.Accelerometer;
@@ -44,15 +47,15 @@ import frc.robot.util.Constants;
  * floating around.
  */
 public class RobotMap {
-  public static TalonSRX rightMotor1;
-  public static TalonSRX rightMotor2;
-  public static TalonSRX elevatorMotor;
-  public static TalonSRX elevatorMotor2;
-  public static VictorSPX intakeMotor;
+  public static WPI_TalonSRX rightMotor1;
+  public static WPI_TalonSRX rightMotor2;
+  public static WPI_TalonSRX elevatorMotor;
+  public static WPI_TalonSRX elevatorMotor2;
+  public static WPI_VictorSPX intakeMotor;
   public static DoubleSolenoid beakSolenoid;
 
-  public static TalonSRX leftMotor1;
-  public static TalonSRX leftMotor2;
+  public static WPI_TalonSRX leftMotor1;
+  public static WPI_TalonSRX leftMotor2;
   //public static TalonSRX leftMotor3;
 
   public static Solenoid shiftSolenoid;
@@ -105,16 +108,16 @@ public class RobotMap {
   }
 
   public static void initMotors() {
-    rightMotor1 = new TalonSRX(4);
-    rightMotor2 = new TalonSRX(6);
+    rightMotor1 = new WPI_TalonSRX(4);
+    rightMotor2 = new WPI_TalonSRX(6);
 
-    leftMotor1 = new TalonSRX(2);
-    leftMotor2 = new TalonSRX(5);
+    leftMotor1 = new WPI_TalonSRX(2);
+    leftMotor2 = new WPI_TalonSRX(5);
     
-    elevatorMotor = new TalonSRX(3);
-    elevatorMotor2 = new TalonSRX(1);
+    elevatorMotor = new WPI_TalonSRX(3);
+    elevatorMotor2 = new WPI_TalonSRX(1);
 
-    intakeMotor = new VictorSPX(0);
+    intakeMotor = new WPI_VictorSPX(0);
     
     rightMotor1.setInverted(true);
     rightMotor2.setInverted(true);
@@ -173,13 +176,13 @@ public class RobotMap {
       while (reader.ready()) {
           data = reader.readLine();
       }
-      if (data.compareToIgnoreCase("PRACTICE") == 0) {
+      if (data.compareToIgnoreCase("PRACTICE") == 0 && RobotBase.isReal()) {
         initPractice();
-      } else if (data.compareToIgnoreCase("COMP") == 0) {
+      } else if (data.compareToIgnoreCase("COMP") == 0  && RobotBase.isReal()) {
         initComp();
-      } else if (data.compareToIgnoreCase("HOBBES") == 0) {
+      } else if (data.compareToIgnoreCase("HOBBES") == 0 && RobotBase.isReal()) {
         RobotMapHobbes.initHobbes();
-      } else if (data.compareToIgnoreCase("SIM") == 0) {
+      } else if (data.compareToIgnoreCase("SIM") == 0 || RobotBase.isSimulation()) {
         RobotMapSim.initSim();
       } else {
         initComp();

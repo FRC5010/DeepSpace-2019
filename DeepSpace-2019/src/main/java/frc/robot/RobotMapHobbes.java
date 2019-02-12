@@ -7,7 +7,7 @@
 
 package frc.robot;
 
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.Solenoid;
 
@@ -16,11 +16,11 @@ import edu.wpi.first.wpilibj.Solenoid;
  */
 public class RobotMapHobbes {
     public static void initHobbes() {
-        RobotMap.rightMotor1 = new TalonSRX(4);
-        RobotMap.rightMotor2 = new TalonSRX(5);
+        RobotMap.rightMotor1 = new WPI_TalonSRX(4);
+        RobotMap.rightMotor2 = new WPI_TalonSRX(5);
     
-        RobotMap.leftMotor1 = new TalonSRX(1);
-        RobotMap.leftMotor2 = new TalonSRX(2);
+        RobotMap.leftMotor1 = new WPI_TalonSRX(1);
+        RobotMap.leftMotor2 = new WPI_TalonSRX(2);
         
         RobotMap.rightMotor1.setInverted(true);
         RobotMap.rightMotor2.setInverted(true);
