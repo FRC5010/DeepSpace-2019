@@ -211,7 +211,7 @@ public class Vision extends Subsystem {
       } else {
         smoothValues();
         // TODO: VINCENT UNCOMMENT THIS TO TRY NEW SMOOTING
-        //smoothMultipleValues(5);
+        smoothMultipleValues(5);
       }
 
       lastValid = timestamp;
@@ -228,14 +228,14 @@ public class Vision extends Subsystem {
         // data to predict current updated values.
 
         // TODO: VINCENT UNCOMMENT THIS TO TRY NEW INTERPOLATING
-        // List<Pose> lastTwo = Pose.getPreviousPoses(2);
-        // if (lastTwo.size() == 2) {
-        //   Pose p2 = lastTwo.get(1);
-        //   Pose p1 = lastTwo.get(0);
-        //   if (p2.limeLight.tValid && p1.limeLight.tValid) {
-        //     smoothed = new Values(p1.limeLight, p2.limeLight, p1.timestamp, p2.timestamp, timestamp);
-        //   }
-        // }
+        List<Pose> lastTwo = Pose.getPreviousPoses(2);
+        if (lastTwo.size() == 2) {
+          Pose p2 = lastTwo.get(1);
+          Pose p1 = lastTwo.get(0);
+          if (p2.limeLight.tValid && p1.limeLight.tValid) {
+            smoothed = new Values(p1.limeLight, p2.limeLight, p1.timestamp, p2.timestamp, timestamp);
+          }
+        }
       }
     }
 

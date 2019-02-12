@@ -55,7 +55,7 @@ public class BallControl extends Command {
        move = -rightTrigger;
      }
    
-    RobotMap.ballIntake.ballControl(move/3);
+    RobotMap.ballIntake.ballControl(move);
    // RobotMap.ballIntake.suck(leftTrigger);
     SmartDashboard.putNumber("Ball intake power: ", move);
   }
