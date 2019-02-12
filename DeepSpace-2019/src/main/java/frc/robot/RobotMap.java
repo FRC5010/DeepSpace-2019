@@ -123,6 +123,7 @@ public class RobotMap {
 
     intakeMotor = new VictorSPX(0);
     beakSolenoid = new DoubleSolenoid(2, 1);
+    beakIntake = new BeakIntake();
     shiftSolenoid = new Solenoid(0);
     
     //Inverted for motion profiling purposes.
@@ -166,8 +167,8 @@ public class RobotMap {
 
   public static void init() {
     //The init function for different robots.  Change based on functions above.
-    initComp();
-    //initPractice();
+    //initComp();
+    initPractice();
 
     builtInAccelerometer = new BuiltInAccelerometer(Accelerometer.Range.k4G);
     rightEncoder = new Encoder(0,1);
