@@ -70,7 +70,7 @@ public class Pose {
 
     /** Might return less than the requested size */
     public static List<Pose> getPreviousPoses(int setSize) {
-        if (poseList.size() < setSize) {
+        if (poseList.size() <= setSize) {
             setSize = poseList.size() - 1;
         }
         return poseList.subList(poseList.size() - setSize - 1, poseList.size() - 1);
