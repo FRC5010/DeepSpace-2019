@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.Solenoid;
  */
 public class RobotMapHobbes {
     public static void initHobbes() {
+        RobotMap.initRobotComponents();
         RobotMap.rightMotor1 = new WPI_TalonSRX(4);
         RobotMap.rightMotor2 = new WPI_TalonSRX(5);
     
@@ -29,6 +30,6 @@ public class RobotMapHobbes {
     
         RobotMap.leftMotor2.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 1);
     
-        RobotMap.shiftSolenoid = new Solenoid(0);    
+        RobotMap.initSubsystems();
       }    
 }
