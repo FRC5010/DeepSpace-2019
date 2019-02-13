@@ -15,6 +15,7 @@ import org.opencv.core.Mat;
 import org.opencv.core.MatOfDouble;
 import org.opencv.core.MatOfPoint2f;
 import org.opencv.core.MatOfPoint3f;
+import org.opencv.core.Point;
 import org.opencv.core.Point3;
 
 import edu.wpi.first.networktables.NetworkTable;
@@ -160,11 +161,18 @@ public class Vision extends Subsystem {
 
   public Vision() {
     table = NetworkTableInstance.getDefault().getTable("limelight");
-    mObjectPoints = new MatOfPoint3f(new Point3(0.0, 0.0, 0.0), // bottom right
-        // new Point3(-1.9363, 0.5008, 0.0), // bottom left
-        // new Point3(-0.5593, 5.8258, 0.0), // top-left
-        // new Point3(1.377, 5.325, 0.0) // top-right
-        new Point3(-15, 0, 0), new Point3(-15, -5.75, 0), new Point3(0, -5.75, 0));
+    mObjectPoints = new MatOfPoint3f(
+      // first target
+      new Point3(-6, 2.91, 0),
+      new Point3(-7.38, 2.41, 0),
+      new Point3(-5.44, 2.91, 0),
+      new Point3(-4.06, -2.41, 0),
+      // second target
+      new Point3(4.06, -2.41, 0),
+      new Point3(5.44, 2.91, 0),
+      new Point3(7.38, 2.41, 0),
+      new Point3(6, -2.91, 0)
+    );
 
     mCameraMatrix = Mat.eye(3, 3, CvType.CV_64F);
     mCameraMatrix.put(0, 0, 2.5751292067328632e+02);
@@ -209,15 +217,15 @@ public class Vision extends Subsystem {
         // NaN), reset to our first raw values.
         smoothed = new Values(current);
       } else {
-        smoothValues();
+        //smoothValues();
         // TODO: VINCENT UNCOMMENT THIS TO TRY NEW SMOOTING
-        //smoothMultipleValues(5);
+        smoothMultipleValues(5);
       }
 
       lastValid = timestamp;
     } else {     
       // If target is invalid for more that 0.5 seconds, it is likely off screen
-      if (smoothed.tValid && (lastValid + 50) > timestamp) {
+      if (smoothed.tValid && (lastValid + 500) > timestamp) {
         // Don't need to run this code if tValids is already false
         smoothed = new Values(Double.NaN);
       } else if (smoothed.tValid) {
@@ -228,14 +236,14 @@ public class Vision extends Subsystem {
         // data to predict current updated values.
 
         // TODO: VINCENT UNCOMMENT THIS TO TRY NEW INTERPOLATING
-        // List<Pose> lastTwo = Pose.getPreviousPoses(2);
-        // if (lastTwo.size() == 2) {
-        //   Pose p2 = lastTwo.get(1);
-        //   Pose p1 = lastTwo.get(0);
-        //   if (p2.limeLight.tValid && p1.limeLight.tValid) {
-        //     smoothed = new Values(p1.limeLight, p2.limeLight, p1.timestamp, p2.timestamp, timestamp);
-        //   }
-        // }
+        List<Pose> lastTwo = Pose.getPreviousPoses(2);
+        if (lastTwo.size() == 2) {
+          Pose p2 = lastTwo.get(1);
+          Pose p1 = lastTwo.get(0);
+          if (p2.limeLight.tValid && p1.limeLight.tValid) {
+            smoothed = new Values(p1.limeLight, p2.limeLight, p1.timestamp, p2.timestamp, timestamp);
+          }
+        }
       }
     }
 
@@ -245,6 +253,8 @@ public class Vision extends Subsystem {
   void printValues() {
     SmartDashboard.putBoolean("Valid Target c", current.tValid);
     SmartDashboard.putBoolean("Valid Target s", smoothed.tValid);
+
+    SmartDashboard.putNumber("tx thingie", table.getEntry("tx").getDouble(0.0));
 
     // outputting all current/raw values
     SmartDashboard.putNumber("Target X raw", Double.isNaN(current.tX) ? 0.0 : current.tX);
@@ -279,15 +289,15 @@ public class Vision extends Subsystem {
     SmartDashboard.putNumber("Target Aspect Approach Angle smoothed", Double.isNaN(smoothed.aspectApproachAngle) ? 0.0 : smoothed.aspectApproachAngle);
     SmartDashboard.putNumber("Limelight Latency smoothed", Double.isNaN(smoothed.latency) ? 0.0 : smoothed.latency);
     // corner stuff
-    if (cornXc != null && cornXc.length == 4) {
-      SmartDashboard.putNumber("Corner X [0]", cornXc[0]);
-      SmartDashboard.putNumber("Corner X [1]", cornXc[1]);
-      SmartDashboard.putNumber("Corner X [2]", cornXc[2]);
-      SmartDashboard.putNumber("Corner X [3]", cornXc[3]);
-      SmartDashboard.putNumber("Corner Y [0]", cornYc[0]);
-      SmartDashboard.putNumber("Corner Y [1]", cornYc[1]);
-      SmartDashboard.putNumber("Corner Y [2]", cornYc[2]);
-      SmartDashboard.putNumber("Corner Y [3]", cornYc[3]);
+    if (cornXc != null ) {
+      for (int i = 0; i < cornXc.length; ++i) {
+        SmartDashboard.putNumber("Corner X ["+i+"]", cornXc[i]);
+      }
+    }
+    if (cornYc != null ) {
+        for (int i = 0; i < cornYc.length; ++i) {
+        SmartDashboard.putNumber("Corner Y ["+i+"]", cornYc[i]);
+      }
     }
     double[] camtranValues = table.getEntry("camtran").getDoubleArray(new double[0]);
     if (camtranValues != null && camtranValues.length == 6) {
@@ -301,16 +311,22 @@ public class Vision extends Subsystem {
   }
 
   private void matrixMathOnCorners() {
-    PointFinder pointFinder = new PointFinder(cornXc, cornYc);
-    // System.out.println(pointFinder);
+    //PointFinder pointFinder = new PointFinder(cornXc, cornYc);
 
-    MatOfPoint2f imagePoints = new MatOfPoint2f(pointFinder.getBottomRight(), pointFinder.getBottomLeft(),
-        pointFinder.getTopLeft(), pointFinder.getTopRight());
+    MatOfPoint2f imagePoints = new MatOfPoint2f(
+      new Point(cornXc[0], cornYc[0]),
+      new Point(cornXc[1], cornYc[1]),
+      new Point(cornXc[2], cornYc[2]),
+      new Point(cornXc[3], cornYc[3]),
+      new Point(cornXc[4], cornYc[4]),
+      new Point(cornXc[5], cornYc[5]),
+      new Point(cornXc[6], cornYc[6]),
+      new Point(cornXc[7], cornYc[7])
+    );
 
     Mat rotationVector = new Mat();
     Mat translationVector = new Mat();
-    Calib3d.solvePnP(mObjectPoints, imagePoints, mCameraMatrix, mDistortionCoefficients, rotationVector,
-        translationVector);
+    Calib3d.solvePnP(mObjectPoints, imagePoints, mCameraMatrix, mDistortionCoefficients, rotationVector, translationVector);
     SmartDashboard.putNumber("rotVec0", rotationVector.get(0, 0)[0]);
     SmartDashboard.putNumber("rotVec1", rotationVector.get(1, 0)[0]);
     SmartDashboard.putNumber("rotVec2", rotationVector.get(2, 0)[0]);
