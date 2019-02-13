@@ -30,8 +30,8 @@ public class DirectionSensor extends Subsystem {
   }
 
   public DirectionSensor(double initialOffset) {
-    RobotMap.gyro.reset();
     this.gyro = RobotMap.gyro;
+    gyro.reset();
     this.initialOffset = initialOffset;
   }
 
