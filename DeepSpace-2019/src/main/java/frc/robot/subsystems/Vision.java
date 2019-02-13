@@ -209,8 +209,8 @@ public class Vision extends Subsystem {
       cornXc = table.getEntry("tcornx").getDoubleArray(new double[0]);
       cornYc = table.getEntry("tcorny").getDoubleArray(new double[0]);
 
-      calculateAspectRatio();
-      matrixMathOnCorners();
+      //calculateAspectRatio();
+      //matrixMathOnCorners();
 
       if (!smoothed.tValid) {
         // If tValids was false, our previous saved position data is also bad (we set to

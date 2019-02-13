@@ -15,8 +15,6 @@ import java.io.IOException;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.kauailabs.navx.frc.AHRS;
@@ -38,6 +36,7 @@ import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Shifter;
 import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.VisionAssistedDrive;
+import frc.robot.subsystems.Wrist;
 import frc.robot.util.Constants;
 
 /**
@@ -51,6 +50,7 @@ public class RobotMap {
   public static WPI_TalonSRX rightMotor2;
   public static WPI_TalonSRX elevatorMotor;
   public static WPI_TalonSRX elevatorMotor2;
+  public static WPI_TalonSRX wristMotor;
   public static WPI_VictorSPX intakeMotor;
   public static DoubleSolenoid beakSolenoid;
 
@@ -74,6 +74,7 @@ public class RobotMap {
   public static DirectionSensor direction;
   public static Elevator elevator;
   public static double moveMin = 0.2;
+  public static Wrist wrist;
   public static BallIntake ballIntake;
   public static BeakIntake beakIntake;
   // For example to map the left and right motors, you could define the
@@ -114,17 +115,19 @@ public class RobotMap {
 
     leftMotor1 = new WPI_TalonSRX(2);
     leftMotor2 = new WPI_TalonSRX(5);
-    
-    elevatorMotor = new WPI_TalonSRX(3);
-    elevatorMotor2 = new WPI_TalonSRX(1);
-
-    intakeMotor = new WPI_VictorSPX(0);
-    
     rightMotor1.setInverted(true);
     rightMotor2.setInverted(true);
 
     rightMotor2.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 4);
 		leftMotor2.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 2);
+    
+    intakeMotor = new WPI_VictorSPX(0);
+    
+    wristMotor = new WPI_TalonSRX(7);
+    wristMotor.configFactoryDefault();
+
+    elevatorMotor = new WPI_TalonSRX(3);
+    elevatorMotor2 = new WPI_TalonSRX(1);
 
     elevatorMotor.configFactoryDefault();
     elevatorMotor2.configFactoryDefault();
@@ -163,6 +166,7 @@ public class RobotMap {
     visionDrive = new VisionAssistedDrive();
     ballIntake = new BallIntake();
     beakIntake = new BeakIntake();
+    wrist = new Wrist();
   }
 
   public static void initCommands() {

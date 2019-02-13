@@ -9,52 +9,53 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.Faults;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
-import frc.robot.commands.RaiseElevator;
+import frc.robot.commands.MoveWrist;
 
 /**
  * Add your docs here.
  */
-public class Elevator extends Subsystem {
+public class Wrist extends Subsystem {
 
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
-  WPI_TalonSRX elevMotor = RobotMap.elevatorMotor;
+  WPI_VictorSPX wristMotor = RobotMap.intakeMotor;
   Faults faults = new Faults();
 
   @Override
   public void initDefaultCommand() {
-    setDefaultCommand(new RaiseElevator());
+    setDefaultCommand(new MoveWrist());
     // Set the default command for a subsystem here.
     // setDefaultCommand(new MySpecialCommand());
   }
 
-  public void raiseElevator(double power) {
-    elevMotor.set(ControlMode.PercentOutput, power);
+  public void moveWrist(double power) {
+    wristMotor.set(ControlMode.PercentOutput, power);
 
   }
 
   public void moveToPosition(double setPoint) {
-    RobotMap.elevatorMotor.set(ControlMode.MotionMagic, setPoint);
+    wristMotor.set(ControlMode.MotionMagic, setPoint);
   }
 
   public double getCurrentPosition() {
-    return RobotMap.elevatorMotor.getSelectedSensorPosition();
+    return wristMotor.getSelectedSensorPosition();
   }
 
   public void returnToManualControl() {
-    RobotMap.elevatorMotor.set(ControlMode.PercentOutput, 0);
+    wristMotor.set(ControlMode.PercentOutput, 0);
   }
 
-  public void tuneElevator(double power) {
-    elevMotor.set(ControlMode.PercentOutput, power);
-    elevMotor.getFaults(faults);
-    System.out.println("Sensor Vel: " + elevMotor.getSelectedSensorVelocity());
-    System.out.println("Sensor Pos: " + elevMotor.getSelectedSensorPosition());
-    System.out.println("Elev Out %: " + elevMotor.getMotorOutputPercent());
-    System.out.println("Out of Phs: " + faults.SensorOutOfPhase);
+  public void tuneWrist(double power) {
+    wristMotor.set(ControlMode.PercentOutput, power);
+    wristMotor.getFaults(faults);
+    // System.out.println("Sensor Vel: " + wristMotor.getSelectedSensorVelocity());
+    // System.out.println("Sensor Pos: " + wristMotor.getSelectedSensorPosition());
+    System.out.println("Elev Out %: " + wristMotor.getMotorOutputPercent());
+    // System.out.println("Out of Phs: " + faults.SensorOutOfPhase);
   }
 }
