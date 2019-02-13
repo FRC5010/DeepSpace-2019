@@ -1,0 +1,136 @@
+!!com.snobot.simulator.config.v1.SimulatorConfigV1
+mAccelerometers: []
+mAnalogIn: []
+mAnalogOut: []
+mDefaultI2CWrappers: {}
+mDefaultSpiWrappers: {}
+mDigitalIO:
+- mHandle: 0
+  mName: Digital IO 0
+  mType: com.snobot.simulator.module_wrapper.wpi.WpiDigitalIoWrapper
+- mHandle: 1
+  mName: Digital IO 1
+  mType: com.snobot.simulator.module_wrapper.wpi.WpiDigitalIoWrapper
+- mHandle: 2
+  mName: Digital IO 2
+  mType: com.snobot.simulator.module_wrapper.wpi.WpiDigitalIoWrapper
+- mHandle: 3
+  mName: Digital IO 3
+  mType: com.snobot.simulator.module_wrapper.wpi.WpiDigitalIoWrapper
+mEncoders:
+- mConnectedSpeedControllerHandle: 104
+  mHandle: 0
+  mName: Encoder 0
+  mType: com.snobot.simulator.module_wrapper.wpi.WpiEncoderWrapper
+- mConnectedSpeedControllerHandle: 102
+  mHandle: 1
+  mName: Encoder 1
+  mType: com.snobot.simulator.module_wrapper.wpi.WpiEncoderWrapper
+- mConnectedSpeedControllerHandle: 103
+  mHandle: 103
+  mName: CAN Encoder (3)
+  mType: com.snobot.simulator.simulator_components.ctre.CtreTalonSrxSpeedControllerSim$CtreEncoder
+mGyros: []
+mPwm:
+- mHandle: 100
+  mMotorModelConfig:
+    mGearReduction: 1.0
+    mGearboxEfficiency: 1.0
+    mHasBrake: false
+    mInverted: false
+    mMotorType: Andymark RS 775-125
+    mNumMotors: 1
+  mMotorSimConfig: !!com.snobot.simulator.motor_sim.RotationalLoadMotorSimulationConfig
+    mArmCenterOfMass: 0.0
+    mArmMass: 0.0
+    mConstantAssistTorque: 0.0
+    mOverCenterAssistTorque: 0.0
+  mName: CAN SC 0
+  mType: com.snobot.simulator.simulator_components.ctre.CtreTalonSrxSpeedControllerSim
+- mHandle: 101
+  mMotorModelConfig:
+    mGearReduction: 1.0
+    mGearboxEfficiency: 1.0
+    mHasBrake: false
+    mInverted: false
+    mMotorType: CIM
+    mNumMotors: 1
+  mMotorSimConfig: !!com.snobot.simulator.motor_sim.GravityLoadMotorSimulationConfig
+    mLoad: 0.0
+  mName: CAN SC 1
+  mType: com.snobot.simulator.simulator_components.ctre.CtreTalonSrxSpeedControllerSim
+- mHandle: 102
+  mMotorModelConfig:
+    mGearReduction: 1.0
+    mGearboxEfficiency: 1.0
+    mHasBrake: true
+    mInverted: false
+    mMotorType: CIM
+    mNumMotors: 1
+  mMotorSimConfig: !!com.snobot.simulator.motor_sim.RotationalLoadMotorSimulationConfig
+    mArmCenterOfMass: 0.0
+    mArmMass: 0.0
+    mConstantAssistTorque: 0.0
+    mOverCenterAssistTorque: 0.0
+  mName: CAN SC 2
+  mType: com.snobot.simulator.simulator_components.ctre.CtreTalonSrxSpeedControllerSim
+- mHandle: 103
+  mMotorModelConfig:
+    mGearReduction: 1.0
+    mGearboxEfficiency: 1.0
+    mHasBrake: false
+    mInverted: false
+    mMotorType: CIM
+    mNumMotors: 1
+  mMotorSimConfig: !!com.snobot.simulator.motor_sim.GravityLoadMotorSimulationConfig
+    mLoad: 0.0
+  mName: CAN SC 3
+  mType: com.snobot.simulator.simulator_components.ctre.CtreTalonSrxSpeedControllerSim
+- mHandle: 104
+  mMotorModelConfig:
+    mGearReduction: 1.0
+    mGearboxEfficiency: 1.0
+    mHasBrake: false
+    mInverted: false
+    mMotorType: CIM
+    mNumMotors: 1
+  mMotorSimConfig: !!com.snobot.simulator.motor_sim.RotationalLoadMotorSimulationConfig
+    mArmCenterOfMass: 0.0
+    mArmMass: 0.0
+    mConstantAssistTorque: 0.0
+    mOverCenterAssistTorque: 0.0
+  mName: CAN SC 4
+  mType: com.snobot.simulator.simulator_components.ctre.CtreTalonSrxSpeedControllerSim
+- mHandle: 105
+  mMotorModelConfig:
+    mGearReduction: 1.0
+    mGearboxEfficiency: 1.0
+    mHasBrake: false
+    mInverted: false
+    mMotorType: CIM
+    mNumMotors: 1
+  mMotorSimConfig: !!com.snobot.simulator.motor_sim.RotationalLoadMotorSimulationConfig
+    mArmCenterOfMass: 0.0
+    mArmMass: 0.0
+    mConstantAssistTorque: 0.0
+    mOverCenterAssistTorque: 0.0
+  mName: CAN SC 5
+  mType: com.snobot.simulator.simulator_components.ctre.CtreTalonSrxSpeedControllerSim
+- mHandle: 106
+  mMotorModelConfig:
+    mGearReduction: 1.0
+    mGearboxEfficiency: 1.0
+    mHasBrake: false
+    mInverted: false
+    mMotorType: CIM
+    mNumMotors: 1
+  mMotorSimConfig: !!com.snobot.simulator.motor_sim.RotationalLoadMotorSimulationConfig
+    mArmCenterOfMass: 0.0
+    mArmMass: 0.0
+    mConstantAssistTorque: 0.0
+    mOverCenterAssistTorque: 0.0
+  mName: CAN SC 6
+  mType: com.snobot.simulator.simulator_components.ctre.CtreTalonSrxSpeedControllerSim
+mRelays: []
+mSimulatorComponents: []
+mSolenoids: []

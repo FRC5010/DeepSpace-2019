@@ -31,13 +31,14 @@ public class Elevator extends Subsystem {
     // Set the default command for a subsystem here.
     // setDefaultCommand(new MySpecialCommand());
   }
+
   public void raiseElevator(double power) {
     elevMotor.set(ControlMode.PercentOutput, power);
 
   }
 
   public void moveToPosition(double setPoint) {
-    RobotMap.elevatorMotor.set(ControlMode.MotionMagic,setPoint);
+    RobotMap.elevatorMotor.set(ControlMode.MotionMagic, setPoint);
   }
 
   public double getCurrentPosition() {
@@ -47,7 +48,8 @@ public class Elevator extends Subsystem {
   public void returnToManualControl() {
     RobotMap.elevatorMotor.set(ControlMode.PercentOutput, 0);
   }
-  public void tuneElevator(double power){
+
+  public void tuneElevator(double power) {
     elevMotor.set(ControlMode.PercentOutput, power);
     elevMotor.getFaults(faults);
     System.out.println("Sensor Vel: " + elevMotor.getSelectedSensorVelocity());
