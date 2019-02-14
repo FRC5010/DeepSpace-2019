@@ -25,18 +25,6 @@ public class BallControl extends Command {
     requires(RobotMap.ballIntake);
   }
 
-  private double scaleInputs(double input){
-    if (Math.abs(input) < deadZone) {
-			input = 0;
-		} else if (input > 0) {
-			input = (input - deadZone) * 1 / (1 - deadZone);
-		} else if (input < 0) {
-			input = (input + deadZone) * 1 / (1 - deadZone);
-		}
-
-		return Math.pow(input, 3);
-  }
-
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
@@ -45,13 +33,13 @@ public class BallControl extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    leftTrigger = -scaleInputs(Robot.oi.coDriver.getRawAxis(2));
-    rightTrigger = scaleInputs(Robot.oi.coDriver.getRawAxis(3));
+    leftTrigger = -Robot.oi.getLeftTrigger(Robot.oi.coDriver);
+    rightTrigger = Robot.oi.getRightTrigger(Robot.oi.coDriver);
     SmartDashboard.putNumber("leftTrigger: ", leftTrigger);
     SmartDashboard.putNumber("rightTrigger: ", rightTrigger);
-    if(rightTrigger <= 0){
+    if (rightTrigger <= 0){
        move = -leftTrigger;
-     }else{
+     } else {
        move = -rightTrigger;
      }
    

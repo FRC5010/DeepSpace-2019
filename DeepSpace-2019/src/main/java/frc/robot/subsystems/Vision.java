@@ -180,8 +180,9 @@ public class Vision extends Subsystem {
     mCameraMatrix.put(1, 1, 2.5635071715912881e+02);
     mCameraMatrix.put(1, 2, 1.1971433393615548e+02);
 
-    mDistortionCoefficients = new MatOfDouble(2.9684613693070039e-01, -1.4380252254747885e+00, -2.2098421479494509e-03,
-        -3.3894563533907176e-03, 2.5344430354806740e+00);
+    // mDistortionCoefficients = new MatOfDouble(2.9684613693070039e-01, -1.4380252254747885e+00, -2.2098421479494509e-03,
+    //     -3.3894563533907176e-03, 2.5344430354806740e+00);
+    mDistortionCoefficients = new MatOfDouble(0);
   }
 
   @Override
@@ -218,7 +219,6 @@ public class Vision extends Subsystem {
         smoothed = new Values(current);
       } else {
         //smoothValues();
-        // TODO: VINCENT UNCOMMENT THIS TO TRY NEW SMOOTING
         smoothMultipleValues(5);
       }
 
@@ -235,7 +235,7 @@ public class Vision extends Subsystem {
         // Eventually, we should try to use past pose
         // data to predict current updated values.
 
-        // TODO: VINCENT UNCOMMENT THIS TO TRY NEW INTERPOLATING
+        // Linear interpolating the past poses to predict the current value (avoid jitterness)
         List<Pose> lastTwo = Pose.getPreviousPoses(2);
         if (lastTwo.size() == 2) {
           Pose p2 = lastTwo.get(1);
@@ -253,8 +253,6 @@ public class Vision extends Subsystem {
   void printValues() {
     SmartDashboard.putBoolean("Valid Target c", current.tValid);
     SmartDashboard.putBoolean("Valid Target s", smoothed.tValid);
-
-    SmartDashboard.putNumber("tx thingie", table.getEntry("tx").getDouble(0.0));
 
     // outputting all current/raw values
     SmartDashboard.putNumber("Target X raw", Double.isNaN(current.tX) ? 0.0 : current.tX);
@@ -311,8 +309,6 @@ public class Vision extends Subsystem {
   }
 
   private void matrixMathOnCorners() {
-    //PointFinder pointFinder = new PointFinder(cornXc, cornYc);
-
     MatOfPoint2f imagePoints = new MatOfPoint2f(
       new Point(cornXc[0], cornYc[0]),
       new Point(cornXc[1], cornYc[1]),
@@ -330,10 +326,14 @@ public class Vision extends Subsystem {
     SmartDashboard.putNumber("rotVec0", rotationVector.get(0, 0)[0]);
     SmartDashboard.putNumber("rotVec1", rotationVector.get(1, 0)[0]);
     SmartDashboard.putNumber("rotVec2", rotationVector.get(2, 0)[0]);
+    SmartDashboard.putNumber("translationVec0", translationVector.get(0, 0)[0]);
+    SmartDashboard.putNumber("translationVec1", translationVector.get(1, 0)[0]);
+    SmartDashboard.putNumber("translationVec2", translationVector.get(2, 0)[0]);
     double tvXc = translationVector.get(0, 0)[0];
     double tvYc = translationVector.get(1, 0)[0];
     double tvZc = translationVector.get(2, 0)[0];
 
+    // converting from rotational matrix to vector
     Mat rotationMatrix = new Mat();
     Calib3d.Rodrigues(rotationVector, rotationMatrix);
     Mat projectionMatrix = new Mat(3, 4, CvType.CV_64F);

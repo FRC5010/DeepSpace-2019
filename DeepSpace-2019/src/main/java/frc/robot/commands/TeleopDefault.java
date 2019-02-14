@@ -23,18 +23,6 @@ public class TeleopDefault extends Command {
     requires(RobotMap.driveTrain);
   }
 
-  public double scaleInputs(double input) {
-    if (Math.abs(input) < deadZone) {
-      input = 0;
-    } else if (input > 0) {
-      input = (input - deadZone) * 1 / (1 - deadZone);
-    } else if (input < 0) {
-      input = (input + deadZone) * 1 / (1 - deadZone);
-    }
-
-    return Math.pow(input, 3);
-  }
-
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
@@ -43,8 +31,6 @@ public class TeleopDefault extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    // System.out.println("Distance: " + Pose.getCurrentPose().limeLightDistance);
-
     if ((Robot.oi.driverRB.get() || Robot.oi.driverLB.get()) && Pose.getCurrentPose().limeLight.tValid) {
       RobotMap.vision.changePipeline(Robot.oi.driverRB.get() ? 0 : 1);
       steerAmt = RobotMap.visionDrive.turnTowardsTarget();
@@ -53,8 +39,8 @@ public class TeleopDefault extends Command {
       RobotMap.driveTrain.drive(steerAmt + moveAmt, -steerAmt + moveAmt);
     } else {
       RobotMap.vision.changePipeline(0);
-      moveAmt = -scaleInputs(Robot.oi.driver.getRawAxis(1));
-      steerAmt = scaleInputs(Robot.oi.driver.getRawAxis(4));
+      moveAmt = -Robot.oi.getLeftJoystickForward(Robot.oi.driver);
+      steerAmt = Robot.oi.getRightJoystickHorizontal(Robot.oi.coDriver);
       RobotMap.driveTrain.drive(moveAmt + steerAmt, moveAmt - steerAmt);
     }
 
