@@ -78,7 +78,7 @@ public class Pose {
 
     public static Pose update(long timestamp) {
         RobotMap.vision.update(timestamp);
-
+        
         currentPose = new Pose(timestamp); // round down to minimum resolution);
         poseList.add(currentPose);
 

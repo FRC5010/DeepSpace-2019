@@ -15,8 +15,6 @@ import java.io.IOException;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.kauailabs.navx.frc.AHRS;
@@ -38,6 +36,7 @@ import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Shifter;
 import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.VisionAssistedDrive;
+import frc.robot.subsystems.Wrist;
 import frc.robot.util.Constants;
 
 /**
@@ -51,6 +50,7 @@ public class RobotMap {
   public static WPI_TalonSRX rightMotor2;
   public static WPI_TalonSRX elevatorMotor;
   public static WPI_TalonSRX elevatorMotor2;
+  public static WPI_TalonSRX wristMotor;
   public static WPI_VictorSPX intakeMotor;
   public static DoubleSolenoid beakSolenoid;
 
@@ -74,6 +74,7 @@ public class RobotMap {
   public static DirectionSensor direction;
   public static Elevator elevator;
   public static double moveMin = 0.2;
+  public static Wrist wrist;
   public static BallIntake ballIntake;
   public static BeakIntake beakIntake;
   // For example to map the left and right motors, you could define the
@@ -104,6 +105,7 @@ public class RobotMap {
     encoderPPR=480;
     gyro = new AHRS(Port.kUSB1);
     beakSolenoid = new DoubleSolenoid(2, 1);
+    beakIntake = new BeakIntake();
     shiftSolenoid = new Solenoid(0);
   }
 
@@ -113,17 +115,39 @@ public class RobotMap {
 
     leftMotor1 = new WPI_TalonSRX(2);
     leftMotor2 = new WPI_TalonSRX(5);
-    
-    elevatorMotor = new WPI_TalonSRX(3);
-    elevatorMotor2 = new WPI_TalonSRX(1);
-
-    intakeMotor = new WPI_VictorSPX(0);
-    
     rightMotor1.setInverted(true);
     rightMotor2.setInverted(true);
 
     rightMotor2.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 4);
 		leftMotor2.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 2);
+    
+    intakeMotor = new WPI_VictorSPX(0);
+    
+    wristMotor = new WPI_TalonSRX(7);
+    wristMotor.configFactoryDefault();
+    wristMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
+    wristMotor.setSensorPhase(true);
+    wristMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, Constants.kTimeoutMs);
+    wristMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, Constants.kTimeoutMs);
+    //configing outputs
+    wristMotor.configNominalOutputForward(0,Constants.kTimeoutMs);
+    wristMotor.configNominalOutputReverse(0,Constants.kTimeoutMs);
+    wristMotor.configPeakOutputForward(1,Constants.kTimeoutMs);
+    wristMotor.configPeakOutputReverse(-1,Constants.kTimeoutMs);
+    wristMotor.selectProfileSlot(Constants.kSlotIdx, Constants.kPIDLoopIdx); 
+    wristMotor.config_kF(Constants.kSlotIdx,Constants.wristGains.kF, Constants.kTimeoutMs);  
+    wristMotor.config_kP(Constants.kSlotIdx,Constants.wristGains.kP, Constants.kTimeoutMs);
+    wristMotor.config_kI(Constants.kSlotIdx,Constants.wristGains.kI, Constants.kTimeoutMs);
+    wristMotor.config_kD(Constants.kSlotIdx,Constants.wristGains.kD, Constants.kTimeoutMs);
+    //cruise velocity
+    wristMotor.configMotionCruiseVelocity(2500,Constants.kTimeoutMs);
+    wristMotor.configMotionAcceleration(2500, Constants.kTimeoutMs);
+
+    //zeroing sensor
+    wristMotor.setSelectedSensorPosition(0,Constants.kPIDLoopIdx, Constants.kTimeoutMs);
+
+    elevatorMotor = new WPI_TalonSRX(3);
+    elevatorMotor2 = new WPI_TalonSRX(1);
 
     elevatorMotor.configFactoryDefault();
     elevatorMotor2.configFactoryDefault();
@@ -132,7 +156,7 @@ public class RobotMap {
     elevatorMotor.setSensorPhase(true);
     elevatorMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, Constants.kTimeoutMs);
     elevatorMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, Constants.kTimeoutMs);
-    //configing out puts
+    //configing outputs
     elevatorMotor.configNominalOutputForward(0,Constants.kTimeoutMs);
     elevatorMotor.configNominalOutputReverse(0,Constants.kTimeoutMs);
     elevatorMotor.configPeakOutputForward(1,Constants.kTimeoutMs);
@@ -142,7 +166,7 @@ public class RobotMap {
     elevatorMotor.config_kP(Constants.kSlotIdx,Constants.kGains.kP, Constants.kTimeoutMs);
     elevatorMotor.config_kI(Constants.kSlotIdx,Constants.kGains.kI, Constants.kTimeoutMs);
     elevatorMotor.config_kD(Constants.kSlotIdx,Constants.kGains.kD, Constants.kTimeoutMs);
-    //cruze velocity
+    //cruise velocity
     elevatorMotor.configMotionCruiseVelocity(2500,Constants.kTimeoutMs);
     elevatorMotor.configMotionAcceleration(2500, Constants.kTimeoutMs);
 
@@ -162,6 +186,7 @@ public class RobotMap {
     visionDrive = new VisionAssistedDrive();
     ballIntake = new BallIntake();
     beakIntake = new BeakIntake();
+    wrist = new Wrist();
   }
 
   public static void initCommands() {
