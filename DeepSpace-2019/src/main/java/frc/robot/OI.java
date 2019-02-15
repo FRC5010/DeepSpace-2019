@@ -69,6 +69,8 @@ public class OI {
   public Button coDriverLB = new JoystickButton(coDriver, 5);
   public Button coDriverRB = new JoystickButton(coDriver, 6);
 
+  private static double deadZone = 0.15;
+
   public OI() {
     driverJoyLB.whenPressed(new ShiftDown());
     driverJoyRB.whenPressed(new ShiftUp());
@@ -80,4 +82,40 @@ public class OI {
     coDriverB.whenPressed(new ElevatorMM(18000));
   }
 
+  public static double scaleInputs(double input) {
+    if (Math.abs(input) < deadZone) {
+      input = 0;
+    } else if (input > 0) {
+      input = (input - deadZone) * 1 / (1 - deadZone);
+    } else if (input < 0) {
+      input = (input + deadZone) * 1 / (1 - deadZone);
+    }
+    return Math.pow(input, 3);
+  }
+
+  // TODO: check and make sure axis parameters are correct
+
+  public double getLeftJoystickForward (Joystick joystick) {
+    return scaleInputs(joystick.getRawAxis(1));
+  }
+
+  public double getRightJoystickForward (Joystick joystick) {
+    return scaleInputs(joystick.getRawAxis(5));
+  }
+
+  public double getLeftJoystickHorizontal (Joystick joystick) {
+    return scaleInputs(joystick.getRawAxis(6));
+  }
+
+  public double getRightJoystickHorizontal (Joystick joystick) {
+    return scaleInputs(joystick.getRawAxis(4));
+  }
+
+  public double getLeftTrigger (Joystick joystick) {
+    return scaleInputs(joystick.getRawAxis(2));
+  }
+  
+  public double getRightTrigger(Joystick joystick) {
+    return scaleInputs(joystick.getRawAxis(3));
+  }
 }

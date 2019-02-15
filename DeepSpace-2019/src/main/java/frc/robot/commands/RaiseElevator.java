@@ -23,18 +23,6 @@ public class RaiseElevator extends Command {
     requires(RobotMap.elevator);
   }
 
-  private double scaleInputs(double input){
-    if (Math.abs(input) < deadZone) {
-			input = 0;
-		} else if (input > 0) {
-			input = (input - deadZone) * 1 / (1 - deadZone);
-		} else if (input < 0) {
-			input = (input + deadZone) * 1 / (1 - deadZone);
-		}
-
-		return Math.pow(input, 3);
-  }
-
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
@@ -43,7 +31,7 @@ public class RaiseElevator extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    moveUp = scaleInputs(Robot.oi.coDriver.getRawAxis(1));
+    moveUp = Robot.oi.getLeftJoystickForward(Robot.oi.coDriver);
    
     RobotMap.elevator.raiseElevator(moveUp);
     SmartDashboard.putNumber("Elevator power", moveUp);
