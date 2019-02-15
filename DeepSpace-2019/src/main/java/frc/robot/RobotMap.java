@@ -107,6 +107,7 @@ public class RobotMap {
     beakSolenoid = new DoubleSolenoid(2, 1);
     beakIntake = new BeakIntake();
     shiftSolenoid = new Solenoid(0);
+    //wrist = new Wrist();
   }
 
   public static void initMotors() {
@@ -121,27 +122,28 @@ public class RobotMap {
     rightMotor2.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 4);
 		leftMotor2.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 2);
     
+
     intakeMotor = new WPI_VictorSPX(0);
     
     wristMotor = new WPI_TalonSRX(7);
-    wristMotor.configFactoryDefault();
-    wristMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
-    wristMotor.setSensorPhase(true);
-    wristMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, Constants.kTimeoutMs);
-    wristMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, Constants.kTimeoutMs);
-    //configing outputs
-    wristMotor.configNominalOutputForward(0,Constants.kTimeoutMs);
-    wristMotor.configNominalOutputReverse(0,Constants.kTimeoutMs);
-    wristMotor.configPeakOutputForward(1,Constants.kTimeoutMs);
-    wristMotor.configPeakOutputReverse(-1,Constants.kTimeoutMs);
-    wristMotor.selectProfileSlot(Constants.kSlotIdx, Constants.kPIDLoopIdx); 
-    wristMotor.config_kF(Constants.kSlotIdx,Constants.wristGains.kF, Constants.kTimeoutMs);  
-    wristMotor.config_kP(Constants.kSlotIdx,Constants.wristGains.kP, Constants.kTimeoutMs);
-    wristMotor.config_kI(Constants.kSlotIdx,Constants.wristGains.kI, Constants.kTimeoutMs);
-    wristMotor.config_kD(Constants.kSlotIdx,Constants.wristGains.kD, Constants.kTimeoutMs);
-    //cruise velocity
-    wristMotor.configMotionCruiseVelocity(2500,Constants.kTimeoutMs);
-    wristMotor.configMotionAcceleration(2500, Constants.kTimeoutMs);
+     wristMotor.configFactoryDefault();
+    // wristMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
+    // wristMotor.setSensorPhase(true);
+    // wristMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, Constants.kTimeoutMs);
+    // wristMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, Constants.kTimeoutMs);
+    // //configing outputs
+    // wristMotor.configNominalOutputForward(0,Constants.kTimeoutMs);
+    // wristMotor.configNominalOutputReverse(0,Constants.kTimeoutMs);
+    // wristMotor.configPeakOutputForward(1,Constants.kTimeoutMs);
+    // wristMotor.configPeakOutputReverse(-1,Constants.kTimeoutMs);
+    // wristMotor.selectProfileSlot(Constants.kSlotIdx, Constants.kPIDLoopIdx); 
+    // wristMotor.config_kF(Constants.kSlotIdx,Constants.wristGains.kF, Constants.kTimeoutMs);  
+    // wristMotor.config_kP(Constants.kSlotIdx,Constants.wristGains.kP, Constants.kTimeoutMs);
+    // wristMotor.config_kI(Constants.kSlotIdx,Constants.wristGains.kI, Constants.kTimeoutMs);
+    // wristMotor.config_kD(Constants.kSlotIdx,Constants.wristGains.kD, Constants.kTimeoutMs);
+    // //cruise velocity
+    // wristMotor.configMotionCruiseVelocity(2500,Constants.kTimeoutMs);
+    // wristMotor.configMotionAcceleration(2500, Constants.kTimeoutMs);
 
     //zeroing sensor
     wristMotor.setSelectedSensorPosition(0,Constants.kPIDLoopIdx, Constants.kTimeoutMs);

@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
+//mport frc.robot.RobotMap;
 import frc.robot.subsystems.Elevator;
 
 public class MoveWrist extends Command {
@@ -45,7 +46,7 @@ public class MoveWrist extends Command {
   protected void execute() {
     moveUp = -scaleInputs(Robot.oi.coDriver.getRawAxis(5));
    
-    RobotMap.wrist.tuneWrist(moveUp);
+    RobotMap.wrist.moveWrist(moveUp);
     SmartDashboard.putNumber("Wrist power", moveUp);
   }
 
