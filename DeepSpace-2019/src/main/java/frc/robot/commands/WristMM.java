@@ -33,7 +33,10 @@ public class WristMM extends Command {
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return false;
+    double pos = RobotMap.wrist.getCurrentPosition();
+    double err = (Math.abs(setPoint-pos)/setPoint);
+    
+    return err < 0.01;
   }
 
   // Called once after isFinished returns true

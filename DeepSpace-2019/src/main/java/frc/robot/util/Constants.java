@@ -29,5 +29,5 @@ public class Constants {
      */
 	public static final Gains kGains = new Gains(2.4, 0.0, 0.0, 0.2775, 0, 1.0);
 	
-	public static final Gains wristGains = new Gains(2.4,0.0,0.0,0.0547,0,0);
+	public static final Gains wristGains = new Gains(2.4,0.0,.1,0.0547,0,0);
 }

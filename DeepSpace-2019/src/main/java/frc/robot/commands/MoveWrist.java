@@ -44,7 +44,7 @@ public class MoveWrist extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    moveUp = -scaleInputs(Robot.oi.coDriver.getRawAxis(5));
+    moveUp = -scaleInputs(Robot.oi.coDriver.getRawAxis(5)) * .6;
    
     RobotMap.wrist.moveWrist(moveUp);
     SmartDashboard.putNumber("Wrist power", moveUp);

@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import frc.robot.commands.ElevatorMM;
 import frc.robot.commands.ShiftDown;
 import frc.robot.commands.ShiftUp;
+import frc.robot.commands.WristMM;
 import frc.robot.commands.BeakOpen;
 import frc.robot.commands.BeakClose;
 import frc.robot.commands.commands_auto.FieldMovement;
@@ -77,6 +78,8 @@ public class OI {
     driverBack.whenPressed(new FieldMovement());
     driverLB.whenPressed(new BeakOpen());
     driverRB.whenPressed(new BeakClose());
+    driverB.whileHeld(new WristMM(18000));
+    driverA.whileHeld(new WristMM(0));
 
     coDriverA.whenPressed(new ElevatorMM(0));
     coDriverB.whenPressed(new ElevatorMM(18000));

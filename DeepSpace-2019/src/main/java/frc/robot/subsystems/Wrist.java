@@ -8,6 +8,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.Faults;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
@@ -40,7 +41,7 @@ public class Wrist extends Subsystem {
   }
 
   public void moveToPosition(double setPoint) {
-    wristMotor.set(ControlMode.MotionMagic, setPoint);
+    wristMotor.set(ControlMode.MotionMagic, setPoint);//, DemandType.ArbitraryFeedForward, .3);
   }
 
   public double getCurrentPosition() {

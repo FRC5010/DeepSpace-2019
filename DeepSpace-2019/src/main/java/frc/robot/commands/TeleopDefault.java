@@ -41,9 +41,9 @@ public class TeleopDefault extends Command {
       // steerAmt = RobotMap.visionDrive.arcTowardsTarget();
       RobotMap.driveTrain.drive(steerAmt + moveAmt, -steerAmt + moveAmt);
     } else {
-      RobotMap.vision.changePipeline(0);
+      RobotMap.vision.changePipeline(-1);
       moveAmt = -Robot.oi.getLeftJoystickForward(Robot.oi.driver);
-      steerAmt = Robot.oi.getRightJoystickHorizontal(Robot.oi.coDriver);
+      steerAmt = Robot.oi.getRightJoystickHorizontal(Robot.oi.driver);
       RobotMap.driveTrain.drive(moveAmt + steerAmt, moveAmt - steerAmt);
     }
 
