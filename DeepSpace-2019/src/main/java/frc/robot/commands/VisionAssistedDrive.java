@@ -8,19 +8,12 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Robot;
-import frc.robot.RobotMap;
-import frc.robot.subsystems.Elevator;
 
-public class RaiseElevator extends Command {
-  private double moveUp;
-  private double deadZone = 0.15;  
-
-  public RaiseElevator() {
+public class VisionAssistedDrive extends Command {
+  
+  public VisionAssistedDrive() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
-    requires(RobotMap.elevator);
   }
 
   // Called just before this Command runs the first time
@@ -31,10 +24,6 @@ public class RaiseElevator extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    moveUp = Robot.oi.elevatorLiftControl.getValue();
-   
-    RobotMap.elevator.raiseElevator(moveUp);
-    SmartDashboard.putNumber("Elevator power", moveUp);
   }
 
   // Make this return true when this Command no longer needs to run execute()
