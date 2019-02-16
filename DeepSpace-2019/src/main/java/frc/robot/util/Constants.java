@@ -23,11 +23,17 @@ public class Constants {
 	 */
 	public static final int kTimeoutMs = 30;
 
+
+	/**
+	 * Motor neutral dead-band, set to the minimum 0.1%.
+	 */
+	public final static double kNeutralDeadband = 0.001;
+	
 	/**
 	 * Gains used in Motion Magic, to be adjusted accordingly
      * Gains(kp, ki, kd, kf, izone, peak output);
      */
-	public static final Gains kGains = new Gains(2.4, 0.0, 0.0, 0.2775, 0, 1.0);
+	public static final Gains kGains = new Gains(4, 0.0, 8, 0.2775, 0, 1.0);
 	
-	public static final Gains wristGains = new Gains(2.4,0.0,.1,0.0547,0,0);
+	public static final Gains wristGains = new Gains(0.1,0,0,0.0,0,1.0);
 }

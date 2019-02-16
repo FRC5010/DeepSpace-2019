@@ -11,8 +11,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
-//mport frc.robot.RobotMap;
-import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Wrist;
 
 public class MoveWrist extends Command {
   private double moveUp;
@@ -48,6 +47,13 @@ public class MoveWrist extends Command {
    
     RobotMap.wrist.moveWrist(moveUp);
     SmartDashboard.putNumber("Wrist power", moveUp);
+    SmartDashboard.putNumber("Wrist position", RobotMap.wristMotor.getSelectedSensorPosition());
+    double tics = RobotMap.wristMotor.getSelectedSensorPosition();
+    double angle = RobotMap.wrist.ticsToAngle(tics);
+    SmartDashboard.putNumber("Wrist Angle", angle);
+    double cosine = Math.cos(Math.toRadians(angle));
+    double calcFF = Wrist.feedForward * cosine;
+    SmartDashboard.putNumber("Wrist Calc FF", calcFF);
   }
 
   // Make this return true when this Command no longer needs to run execute()

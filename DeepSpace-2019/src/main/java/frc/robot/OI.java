@@ -10,13 +10,15 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import frc.robot.commands.BeakClose;
+import frc.robot.commands.BeakOpen;
 import frc.robot.commands.ElevatorMM;
 import frc.robot.commands.ShiftDown;
 import frc.robot.commands.ShiftUp;
 import frc.robot.commands.WristMM;
-import frc.robot.commands.BeakOpen;
-import frc.robot.commands.BeakClose;
 import frc.robot.commands.commands_auto.FieldMovement;
+import frc.robot.subsystems.Wrist;
+import frc.robot.subsystems.Elevator.Position;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -62,6 +64,7 @@ public class OI {
   public Button driverJoyRB = new JoystickButton(driver, 10);  
   public Button driverA = new JoystickButton(driver, 1);
   public Button driverB = new JoystickButton(driver, 2);
+  public Button driverY = new JoystickButton(driver, 4);
 
   public Button coDriverA = new JoystickButton(coDriver, 1);
   public Button coDriverB = new JoystickButton(coDriver, 2);
@@ -78,11 +81,13 @@ public class OI {
     driverBack.whenPressed(new FieldMovement());
     driverLB.whenPressed(new BeakOpen());
     driverRB.whenPressed(new BeakClose());
-    driverB.whileHeld(new WristMM(18000));
-    driverA.whileHeld(new WristMM(0));
+    // driverY.whenPressed(new WristMM(Wrist.CARGO_HIGH));
+    // driverB.whenPressed(new WristMM(Wrist.CARGO_MIDDLE));
+    // driverA.whenPressed(new WristMM(Wrist.CARGO_LOW));
 
-    coDriverA.whenPressed(new ElevatorMM(0));
-    coDriverB.whenPressed(new ElevatorMM(18000));
+    coDriverA.whenPressed(new ElevatorMM(Position.LOW));
+    coDriverB.whenPressed(new ElevatorMM(Position.MIDDLE));
+    coDriverY.whenPressed(new ElevatorMM(Position.HIGH));
   }
 
   public static double scaleInputs(double input) {

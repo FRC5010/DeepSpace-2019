@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
-import frc.robot.subsystems.Elevator;
 
 public class RaiseElevator extends Command {
   private double moveUp;
@@ -31,10 +30,14 @@ public class RaiseElevator extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    moveUp = Robot.oi.getLeftJoystickForward(Robot.oi.coDriver);
+    moveUp = -Robot.oi.getLeftJoystickForward(Robot.oi.coDriver);
    
+    RobotMap.elevator.ballState = Robot.oi.coDriverLB.get();
+    SmartDashboard.putBoolean("Elevator MM Ball", RobotMap.elevator.ballState);
+
     RobotMap.elevator.raiseElevator(moveUp);
     SmartDashboard.putNumber("Elevator power", moveUp);
+    SmartDashboard.putNumber("Elevator position", RobotMap.elevatorMotor.getSelectedSensorPosition());
   }
 
   // Make this return true when this Command no longer needs to run execute()

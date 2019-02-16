@@ -92,7 +92,7 @@ public class RobotMap {
   }
 
   public static void initPractice(){
-    RobotMap_Paths.init();
+   // RobotMap_Paths.init();
     initRobotComponents();
     initMotors();
     initSubsystems();
@@ -127,66 +127,16 @@ public class RobotMap {
     intakeMotor = new WPI_VictorSPX(0);
     
     wristMotor = new WPI_TalonSRX(7);
-    wristMotor.configFactoryDefault();
-    wristMotor.setNeutralMode(NeutralMode.Brake);
-    wristMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
-    wristMotor.setSensorPhase(true);
-    wristMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, Constants.kTimeoutMs);
-    wristMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, Constants.kTimeoutMs);
-    //configing outputs
-    wristMotor.configNominalOutputForward(0,Constants.kTimeoutMs);
-    wristMotor.configNominalOutputReverse(0,Constants.kTimeoutMs);
-    wristMotor.configPeakOutputForward(1,Constants.kTimeoutMs);
-    wristMotor.configPeakOutputReverse(-1,Constants.kTimeoutMs);
-    wristMotor.selectProfileSlot(Constants.kSlotIdx, Constants.kPIDLoopIdx); 
-    wristMotor.config_kF(Constants.kSlotIdx,Constants.wristGains.kF, Constants.kTimeoutMs);  
-    wristMotor.config_kP(Constants.kSlotIdx,Constants.wristGains.kP, Constants.kTimeoutMs);
-    wristMotor.config_kI(Constants.kSlotIdx,Constants.wristGains.kI, Constants.kTimeoutMs);
-    wristMotor.config_kD(Constants.kSlotIdx,Constants.wristGains.kD, Constants.kTimeoutMs);
-    // wristMotor.configClosedLoopPeakOutput(0, 1, Constants.kTimeoutMs);
-    // wristMotor.configClosedLoopPeriod(0, 1, Constants.kTimeoutMs);
-    // wristMotor.configClosedLoopPeakOutput(1, 1, Constants.kTimeoutMs);
-
-    //cruise velocity
-    wristMotor.configMotionCruiseVelocity(5000,Constants.kTimeoutMs);
-    wristMotor.configMotionAcceleration(5000, Constants.kTimeoutMs);
-
-    //zeroing sensor
-    wristMotor.setSelectedSensorPosition(0,Constants.kPIDLoopIdx, Constants.kTimeoutMs);
 
     elevatorMotor = new WPI_TalonSRX(3);
     elevatorMotor2 = new WPI_TalonSRX(1);
-
-    elevatorMotor.configFactoryDefault();
-    elevatorMotor2.configFactoryDefault();
-    elevatorMotor2.follow(elevatorMotor);
-    elevatorMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
-    elevatorMotor.setSensorPhase(true);
-    elevatorMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, Constants.kTimeoutMs);
-    elevatorMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, Constants.kTimeoutMs);
-    //configing outputs
-    elevatorMotor.configNominalOutputForward(0,Constants.kTimeoutMs);
-    elevatorMotor.configNominalOutputReverse(0,Constants.kTimeoutMs);
-    elevatorMotor.configPeakOutputForward(1,Constants.kTimeoutMs);
-    elevatorMotor.configPeakOutputReverse(-1,Constants.kTimeoutMs);
-    elevatorMotor.selectProfileSlot(Constants.kSlotIdx, Constants.kPIDLoopIdx); 
-    elevatorMotor.config_kF(Constants.kSlotIdx,Constants.kGains.kF, Constants.kTimeoutMs);  
-    elevatorMotor.config_kP(Constants.kSlotIdx,Constants.kGains.kP, Constants.kTimeoutMs);
-    elevatorMotor.config_kI(Constants.kSlotIdx,Constants.kGains.kI, Constants.kTimeoutMs);
-    elevatorMotor.config_kD(Constants.kSlotIdx,Constants.kGains.kD, Constants.kTimeoutMs);
-    //cruise velocity
-    elevatorMotor.configMotionCruiseVelocity(2500,Constants.kTimeoutMs);
-    elevatorMotor.configMotionAcceleration(2500, Constants.kTimeoutMs);
-
-    //zeroing sensor
-    elevatorMotor.setSelectedSensorPosition(0,Constants.kPIDLoopIdx, Constants.kTimeoutMs);
   }
 
   public static void initSubsystems() {
     distance = new DistanceSensor();
     direction = new DirectionSensor(gyro);
     direction.reset();
-    elevator = new Elevator();
+    elevator = new Elevator(elevatorMotor, elevatorMotor2);
     shifter = new Shifter();
     driveTrain = new DriveTrain();
     vision = new Vision();

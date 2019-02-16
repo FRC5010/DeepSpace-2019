@@ -33,17 +33,19 @@ public class BallControl extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    leftTrigger = -Robot.oi.getLeftTrigger(Robot.oi.coDriver);
+    leftTrigger = Robot.oi.getLeftTrigger(Robot.oi.coDriver);
     rightTrigger = Robot.oi.getRightTrigger(Robot.oi.coDriver);
     SmartDashboard.putNumber("leftTrigger: ", leftTrigger);
     SmartDashboard.putNumber("rightTrigger: ", rightTrigger);
-    if (rightTrigger <= 0){
-       move = -leftTrigger;
-     } else {
+    if (leftTrigger > 0){
+       move = leftTrigger;
+     } else if (rightTrigger > 0) {
        move = -rightTrigger;
+     } else {
+       move = -.30;
      }
    
-    RobotMap.ballIntake.ballControl(move/3);
+    RobotMap.ballIntake.ballControl(move/4);
    // RobotMap.ballIntake.suck(leftTrigger);
     SmartDashboard.putNumber("Ball intake power: ", move);
   }

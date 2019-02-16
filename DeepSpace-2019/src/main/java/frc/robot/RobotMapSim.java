@@ -38,7 +38,7 @@ public class RobotMapSim {
         RobotMap.direction = new DirectionSensor(null);
         RobotMap.direction.reset();
     
-        RobotMap.elevator = new Elevator();
+        RobotMap.elevator = new Elevator(RobotMap.elevatorMotor, RobotMap.elevatorMotor2);
         RobotMap.shifter = new Shifter();
         RobotMap.driveTrain = new DriveTrain();
         RobotMap.ballIntake = new BallIntake();
