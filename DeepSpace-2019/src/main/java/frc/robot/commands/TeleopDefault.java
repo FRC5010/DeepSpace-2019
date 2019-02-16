@@ -31,9 +31,9 @@ public class TeleopDefault extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    // System.out.println("Distance: " + Pose.getCurrentPose().limeLightDistance);
 
     if (false) {
+      //temporarily disabled due to bugs
       //scaleInputs(Robot.oi.driver.getRawAxis(3)) >= 0 && Pose.getCurrentPose().limeLight.tValid
       RobotMap.vision.changePipeline(Robot.oi.driverRB.get() ? 0 : 1);
       steerAmt = RobotMap.visionDrive.turnTowardsTarget();
@@ -41,9 +41,9 @@ public class TeleopDefault extends Command {
       // steerAmt = RobotMap.visionDrive.arcTowardsTarget();
       RobotMap.driveTrain.drive(steerAmt + moveAmt, -steerAmt + moveAmt);
     } else {
-      RobotMap.vision.changePipeline(-1);
-      moveAmt = -Robot.oi.getLeftJoystickForward(Robot.oi.driver);
-      steerAmt = Robot.oi.getRightJoystickHorizontal(Robot.oi.driver);
+      RobotMap.vision.changePipeline(0);
+      moveAmt = -Robot.oi.driveTrainForward.getValue();
+      steerAmt = Robot.oi.driveTrainTurn.getValue();
       RobotMap.driveTrain.drive(moveAmt + steerAmt, moveAmt - steerAmt);
     }
 

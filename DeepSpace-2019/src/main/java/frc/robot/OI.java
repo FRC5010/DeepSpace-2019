@@ -25,36 +25,64 @@ import frc.robot.subsystems.Elevator.Position;
  * interface to the commands and command groups that allow control of the robot.
  */
 public class OI {
-  //// CREATING BUTTONS
-  // One type of button is a joystick button which is any button on a
-  //// joystick.
-  // You create one by telling it which joystick it's on and which button
-  // number it is.
-  // Joystick stick = new Joystick(port);
-  // Button button = new JoystickButton(stick, buttonNumber);
+  
+  public class JoystickAxis {
+    public final Joystick joystick;
+    public final int axis;
+    public double minPower = 0.15, maxPower = 1000;
+    public boolean inversed = false;
 
-  // There are a few additional built in buttons you can use. Additionally,
-  // by subclassing Button you can create custom triggers and bind those to
-  // commands the same as any other Button.
+    public JoystickAxis(Joystick pjoystick, int paxis) {
+      joystick = pjoystick;
+      axis = paxis;
+    }
 
-  //// TRIGGERING COMMANDS WITH BUTTONS
-  // Once you have a button, it's trivial to bind it to a button in one of
-  // three ways:
+    public JoystickAxis(Joystick pjoystick, int paxis, double pminPower, double pmaxPower) {
+      joystick = pjoystick;
+      axis = paxis;
+      minPower = pminPower;
+      maxPower = pmaxPower;
+    }
 
-  // Start the command when the button is pressed and let it run the command
-  // until it is finished as determined by it's isFinished method.
-  // button.whenPressed(new ExampleCommand());
+    public JoystickAxis(Joystick pjoystick, int paxis, boolean pinversed) {
+      joystick = pjoystick;
+      axis = paxis;
+      inversed = pinversed;
+    }
 
-  // Run the command while the button is being held down and interrupt it once
-  // the button is released.
-  // button.whileHeld(new ExampleCommand());
+    public JoystickAxis(Joystick pjoystick, int paxis, double pminPower, double pmaxPower, boolean pinversed) {
+      joystick = pjoystick;
+      axis = paxis;
+      minPower = pminPower;
+      maxPower = pmaxPower;
+      inversed = pinversed;
+    }
 
-  // Start the command when the button is released and let it run the command
-  // until it is finished as determined by it's isFinished method.
-  // button.whenReleased(new ExampleCommand());
+    public double getValue() {
+      return Math.max(scaleInputs(joystick.getRawAxis(axis)), maxPower);
+    }
+
+    // I don't think we use this function for anything else besides joysticks
+    private double scaleInputs(double input) {
+      if (Math.abs(input) < minPower) {
+        input = 0;
+      } else if (input > 0) {
+        input = (input - minPower) * 1 / (1 - minPower);
+      } else if (input < 0) {
+        input = (input + minPower) * 1 / (1 - minPower);
+      }
+      return Math.pow(input, 3);
+    }
+
+    // "clamps" a value between the range min and max
+    // private double clamp(double value, double min, double max) {
+    //   double absValue = Math.abs(value);
+    //   return absValue < max ? (absValue > min ? absValue : min) : max;
+    // }
+  }
+
   public Joystick driver = new Joystick(0);
   public Joystick coDriver = new Joystick(1);
-
   
   public Button driverLB = new JoystickButton(driver, 5);
   public Button driverRB = new JoystickButton(driver, 6);
@@ -73,7 +101,12 @@ public class OI {
   public Button coDriverLB = new JoystickButton(coDriver, 5);
   public Button coDriverRB = new JoystickButton(coDriver, 6);
 
-  private static double deadZone = 0.15;
+  public JoystickAxis driveTrainForward;
+  public JoystickAxis driveTrainTurn;
+  public JoystickAxis elevatorLiftControl;
+  public JoystickAxis ballIntake;
+  public JoystickAxis ballOuttake;
+  public JoystickAxis wristControl;
 
   public OI() {
     driverJoyLB.whenPressed(new ShiftDown());
@@ -101,29 +134,12 @@ public class OI {
     return Math.pow(input, 3);
   }
 
-  // TODO: check and make sure axis parameters are correct
-
-  public double getLeftJoystickForward (Joystick joystick) {
-    return scaleInputs(joystick.getRawAxis(1));
-  }
-
-  public double getRightJoystickForward (Joystick joystick) {
-    return scaleInputs(joystick.getRawAxis(5));
-  }
-
-  public double getLeftJoystickHorizontal (Joystick joystick) {
-    return scaleInputs(joystick.getRawAxis(6));
-  }
-
-  public double getRightJoystickHorizontal (Joystick joystick) {
-    return scaleInputs(joystick.getRawAxis(4));
-  }
-
-  public double getLeftTrigger (Joystick joystick) {
-    return scaleInputs(joystick.getRawAxis(2));
-  }
-  
-  public double getRightTrigger(Joystick joystick) {
-    return scaleInputs(joystick.getRawAxis(3));
+    // TODO: make sure axis number is correct!
+    driveTrainForward = new JoystickAxis(driver, 1);
+    driveTrainTurn = new JoystickAxis(driver, 4);
+    elevatorLiftControl = new JoystickAxis(coDriver, 1);
+    ballIntake = new JoystickAxis(coDriver, 2);
+    ballOuttake = new JoystickAxis(coDriver, 3);
+    wristControl = new JoystickAxis(coDriver, 5);
   }
 }

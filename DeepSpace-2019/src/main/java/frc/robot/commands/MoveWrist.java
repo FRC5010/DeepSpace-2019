@@ -23,18 +23,6 @@ public class MoveWrist extends Command {
     requires(RobotMap.wrist);
   }
 
-  private double scaleInputs(double input){
-    if (Math.abs(input) < deadZone) {
-			input = 0;
-		} else if (input > 0) {
-			input = (input - deadZone) * 1 / (1 - deadZone);
-		} else if (input < 0) {
-			input = (input + deadZone) * 1 / (1 - deadZone);
-		}
-
-		return Math.pow(input, 3);
-  }
-
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
@@ -43,7 +31,8 @@ public class MoveWrist extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    moveUp = -scaleInputs(Robot.oi.coDriver.getRawAxis(5)) * .6;
+    // TODO: test setting max value on joystick instead of using percent
+    moveUp = -Robot.oi.wristControl.getValue() * 0.6;
    
     RobotMap.wrist.moveWrist(moveUp);
     SmartDashboard.putNumber("Wrist power", moveUp);

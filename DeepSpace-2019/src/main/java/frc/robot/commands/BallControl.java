@@ -17,7 +17,6 @@ public class BallControl extends Command {
   private double move;
   private double leftTrigger;
   private double rightTrigger;
-  private double deadZone = 0.1;
 
   public BallControl() {
     // Use requires() here to declare subsystem dependencies
@@ -33,8 +32,8 @@ public class BallControl extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    leftTrigger = Robot.oi.getLeftTrigger(Robot.oi.coDriver);
-    rightTrigger = Robot.oi.getRightTrigger(Robot.oi.coDriver);
+    leftTrigger = -Robot.oi.ballIntake.getValue();
+    rightTrigger = Robot.oi.ballOuttake.getValue();
     SmartDashboard.putNumber("leftTrigger: ", leftTrigger);
     SmartDashboard.putNumber("rightTrigger: ", rightTrigger);
     if (leftTrigger > 0){

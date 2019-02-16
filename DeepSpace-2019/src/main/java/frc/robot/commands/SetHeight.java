@@ -41,9 +41,15 @@ public class SetHeight extends PIDCommand {
 
   private double snapToHeight() {
     //Returns height of what the bot is closest to height-wise
-    //Locations:
+    //Locations (heights in cm):
     //48, 70, 118, 140, 188, 210
     //Alternates hatch locations and rocket cargo holes
+
+    //Hatch holes
+    //48, 118, 188
+
+    //Cargo holes
+    //70, 140, 210
     double snapHeight = 0;
     
     //double curHeight = RobotMap.elevator.getHeight();
