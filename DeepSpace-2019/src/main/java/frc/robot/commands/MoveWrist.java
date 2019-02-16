@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
+//mport frc.robot.RobotMap;
 import frc.robot.subsystems.Elevator;
 
 public class MoveWrist extends Command {
@@ -31,9 +32,10 @@ public class MoveWrist extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    moveUp = -Robot.oi.wristControl.getValue();
+    // TODO: test setting max value on joystick instead of using percent
+    moveUp = -Robot.oi.wristControl.getValue() * 0.6;
    
-    RobotMap.wrist.tuneWrist(moveUp);
+    RobotMap.wrist.moveWrist(moveUp);
     SmartDashboard.putNumber("Wrist power", moveUp);
   }
 

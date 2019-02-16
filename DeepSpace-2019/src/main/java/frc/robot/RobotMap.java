@@ -14,6 +14,7 @@ import java.io.FileReader;
 import java.io.IOException;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
@@ -107,6 +108,7 @@ public class RobotMap {
     beakSolenoid = new DoubleSolenoid(2, 1);
     beakIntake = new BeakIntake();
     shiftSolenoid = new Solenoid(0);
+    //wrist = new Wrist();
   }
 
   public static void initMotors() {
@@ -121,11 +123,13 @@ public class RobotMap {
     rightMotor2.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 4);
 		leftMotor2.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 2);
     
+
     intakeMotor = new WPI_VictorSPX(0);
     
     wristMotor = new WPI_TalonSRX(7);
     wristMotor.configFactoryDefault();
-    wristMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
+    wristMotor.setNeutralMode(NeutralMode.Brake);
+    wristMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
     wristMotor.setSensorPhase(true);
     wristMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, Constants.kTimeoutMs);
     wristMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, Constants.kTimeoutMs);
@@ -139,9 +143,13 @@ public class RobotMap {
     wristMotor.config_kP(Constants.kSlotIdx,Constants.wristGains.kP, Constants.kTimeoutMs);
     wristMotor.config_kI(Constants.kSlotIdx,Constants.wristGains.kI, Constants.kTimeoutMs);
     wristMotor.config_kD(Constants.kSlotIdx,Constants.wristGains.kD, Constants.kTimeoutMs);
+    // wristMotor.configClosedLoopPeakOutput(0, 1, Constants.kTimeoutMs);
+    // wristMotor.configClosedLoopPeriod(0, 1, Constants.kTimeoutMs);
+    // wristMotor.configClosedLoopPeakOutput(1, 1, Constants.kTimeoutMs);
+
     //cruise velocity
-    wristMotor.configMotionCruiseVelocity(2500,Constants.kTimeoutMs);
-    wristMotor.configMotionAcceleration(2500, Constants.kTimeoutMs);
+    wristMotor.configMotionCruiseVelocity(5000,Constants.kTimeoutMs);
+    wristMotor.configMotionAcceleration(5000, Constants.kTimeoutMs);
 
     //zeroing sensor
     wristMotor.setSelectedSensorPosition(0,Constants.kPIDLoopIdx, Constants.kTimeoutMs);
@@ -182,7 +190,7 @@ public class RobotMap {
     shifter = new Shifter();
     driveTrain = new DriveTrain();
     vision = new Vision();
-    vision.changePipeline(0);
+    vision.changePipeline(-1);
     visionDrive = new VisionAssistedDrive();
     ballIntake = new BallIntake();
     beakIntake = new BeakIntake();

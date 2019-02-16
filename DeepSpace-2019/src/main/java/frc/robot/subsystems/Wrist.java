@@ -8,8 +8,10 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.Faults;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -23,7 +25,7 @@ public class Wrist extends Subsystem {
 
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
-  WPI_VictorSPX wristMotor = RobotMap.intakeMotor;
+  WPI_TalonSRX wristMotor = RobotMap.wristMotor;
   Faults faults = new Faults();
 
   @Override
@@ -39,7 +41,7 @@ public class Wrist extends Subsystem {
   }
 
   public void moveToPosition(double setPoint) {
-    wristMotor.set(ControlMode.MotionMagic, setPoint);
+    wristMotor.set(ControlMode.MotionMagic, setPoint);//, DemandType.ArbitraryFeedForward, .3);
   }
 
   public double getCurrentPosition() {
@@ -55,7 +57,7 @@ public class Wrist extends Subsystem {
     wristMotor.getFaults(faults);
     // System.out.println("Sensor Vel: " + wristMotor.getSelectedSensorVelocity());
     // System.out.println("Sensor Pos: " + wristMotor.getSelectedSensorPosition());
-    System.out.println("Elev Out %: " + wristMotor.getMotorOutputPercent());
+    System.out.println("wrist Out %: " + wristMotor.getMotorOutputPercent());
     // System.out.println("Out of Phs: " + faults.SensorOutOfPhase);
   }
 }
