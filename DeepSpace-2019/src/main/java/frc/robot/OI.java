@@ -29,7 +29,7 @@ public class OI {
   public class JoystickAxis {
     public final Joystick joystick;
     public final int axis;
-    public double minPower = 0.15, maxPower = 1000;
+    public double minPower = 0.15;
     public boolean inversed = false;
 
     public JoystickAxis(Joystick pjoystick, int paxis) {
@@ -41,7 +41,6 @@ public class OI {
       joystick = pjoystick;
       axis = paxis;
       minPower = pminPower;
-      maxPower = pmaxPower;
     }
 
     public JoystickAxis(Joystick pjoystick, int paxis, boolean pinversed) {
@@ -54,12 +53,11 @@ public class OI {
       joystick = pjoystick;
       axis = paxis;
       minPower = pminPower;
-      maxPower = pmaxPower;
       inversed = pinversed;
     }
 
     public double getValue() {
-      return Math.max(scaleInputs(joystick.getRawAxis(axis)), maxPower);
+      return scaleInputs(joystick.getRawAxis(axis));
     }
 
     // I don't think we use this function for anything else besides joysticks
@@ -121,18 +119,6 @@ public class OI {
     coDriverA.whenPressed(new ElevatorMM(Position.LOW));
     coDriverB.whenPressed(new ElevatorMM(Position.MIDDLE));
     coDriverY.whenPressed(new ElevatorMM(Position.HIGH));
-  }
-
-  public static double scaleInputs(double input) {
-    if (Math.abs(input) < deadZone) {
-      input = 0;
-    } else if (input > 0) {
-      input = (input - deadZone) * 1 / (1 - deadZone);
-    } else if (input < 0) {
-      input = (input + deadZone) * 1 / (1 - deadZone);
-    }
-    return Math.pow(input, 3);
-  }
 
     // TODO: make sure axis number is correct!
     driveTrainForward = new JoystickAxis(driver, 1);
