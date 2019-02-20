@@ -17,72 +17,19 @@ import frc.robot.commands.ShiftDown;
 import frc.robot.commands.ShiftUp;
 import frc.robot.commands.WristMM;
 import frc.robot.commands.commands_auto.FieldMovement;
-import frc.robot.subsystems.Wrist;
+import frc.robot.dynasty.JoystickAxis;
 import frc.robot.subsystems.Elevator.Position;
-
+import frc.robot.subsystems.Wrist;
 
 /**
  * This class is the glue that binds the controls on the physical operator
  * interface to the commands and command groups that allow control of the robot.
  */
 public class OI {
-  
-  public class JoystickAxis {
-    public final Joystick joystick;
-    public final int axis;
-    public double minPower = 0.15;
-    public boolean inversed = false;
-
-    public JoystickAxis(Joystick pjoystick, int paxis) {
-      joystick = pjoystick;
-      axis = paxis;
-    }
-
-    public JoystickAxis(Joystick pjoystick, int paxis, double pminPower, double pmaxPower) {
-      joystick = pjoystick;
-      axis = paxis;
-      minPower = pminPower;
-    }
-
-    public JoystickAxis(Joystick pjoystick, int paxis, boolean pinversed) {
-      joystick = pjoystick;
-      axis = paxis;
-      inversed = pinversed;
-    }
-
-    public JoystickAxis(Joystick pjoystick, int paxis, double pminPower, double pmaxPower, boolean pinversed) {
-      joystick = pjoystick;
-      axis = paxis;
-      minPower = pminPower;
-      inversed = pinversed;
-    }
-
-    public double getValue() {
-      return scaleInputs(joystick.getRawAxis(axis));
-    }
-
-    // I don't think we use this function for anything else besides joysticks
-    private double scaleInputs(double input) {
-      if (Math.abs(input) < minPower) {
-        input = 0;
-      } else if (input > 0) {
-        input = (input - minPower) * 1 / (1 - minPower);
-      } else if (input < 0) {
-        input = (input + minPower) * 1 / (1 - minPower);
-      }
-      return Math.pow(input, 3);
-    }
-
-    // "clamps" a value between the range min and max
-    // private double clamp(double value, double min, double max) {
-    //   double absValue = Math.abs(value);
-    //   return absValue < max ? (absValue > min ? absValue : min) : max;
-    // }
-  }
 
   public Joystick driver = new Joystick(0);
   public Joystick coDriver = new Joystick(1);
-  
+
   public Button driverLB = new JoystickButton(driver, 5);
   public Button driverRB = new JoystickButton(driver, 6);
   public Button driverBack = new JoystickButton(driver, 7);
@@ -116,7 +63,7 @@ public class OI {
     driverLB.whenPressed(new BeakOpen());
     driverRB.whenPressed(new BeakClose());
 
-     driverY.whenPressed(new WristMM(Wrist.CARGO_HIGH));
+    driverY.whenPressed(new WristMM(Wrist.CARGO_HIGH));
     driverB.whenPressed(new WristMM(Wrist.CARGO_MIDDLE));
     driverA.whenPressed(new WristMM(Wrist.CARGO_LOW));
 
@@ -124,11 +71,18 @@ public class OI {
     coDriverB.whenPressed(new ElevatorMM(Position.MIDDLE));
     coDriverY.whenPressed(new ElevatorMM(Position.HIGH));
 
-    driveTrainForward = new JoystickAxis(driver, 1);
-    driveTrainTurn = new JoystickAxis(driver, 4);
-    elevatorLiftControl = new JoystickAxis(coDriver, 1);
-    ballIntake = new JoystickAxis(coDriver, 2);
-    ballOuttake = new JoystickAxis(coDriver, 3);
-    wristControl = new JoystickAxis(coDriver, 5);
+    driveTrainForward = new JoystickAxis(driver, 1, true, 0.7);
+    driveTrainTurn = new JoystickAxis(driver, 4, 0.5);
+
+    elevatorLiftControl = new JoystickAxis(coDriver, 1, true);
+    elevatorLiftControl.setLowerLimit(-0.5);
+
+    ballIntake = new JoystickAxis(coDriver, 2, 0.3);
+    ballIntake.setLowerLimit(0);
+    ballOuttake = new JoystickAxis(coDriver, 3, true, 0.3);
+    ballOuttake.setUpperLimit(0);
+
+    wristControl = new JoystickAxis(coDriver, 5, true, Wrist.MAX_FWD_OUT);
+    wristControl.setLowerLimit(Wrist.MAX_REV_OUT);
   }
 }

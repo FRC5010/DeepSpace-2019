@@ -9,9 +9,8 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.OI;
-import frc.robot.Robot;
 import frc.robot.RobotMap;
+import frc.robot.Robot;
 import frc.robot.subsystems.Elevator;
 
 public class ElevatorMM extends Command {
@@ -75,10 +74,11 @@ public class ElevatorMM extends Command {
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
+    double manualPower = Robot.oi.elevatorLiftControl.getValue();
     double pos = RobotMap.elevator.getCurrentPosition();
-    double err = (Math.abs(setPoint - pos) / 10000);
-    SmartDashboard.putNumber("Elevator MM err", err * 100);
-    return err < 0.05;
+    double err = Math.abs(setPoint - pos);
+    SmartDashboard.putNumber("Elevator MM err", err);
+    return err < 50 || RobotMap.elevator.motorStuck() || 0 != manualPower;
   }
 
   // Called once after isFinished returns true
@@ -94,5 +94,5 @@ public class ElevatorMM extends Command {
   protected void interrupted() {
     end();
   }
-  
+
 }

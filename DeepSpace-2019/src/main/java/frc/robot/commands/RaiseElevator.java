@@ -14,7 +14,6 @@ import frc.robot.RobotMap;
 
 public class RaiseElevator extends Command {
   private double moveUp;
-  private double deadZone = 0.15;  
 
   public RaiseElevator() {
     // Use requires() here to declare subsystem dependencies
@@ -30,8 +29,9 @@ public class RaiseElevator extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    moveUp = -Robot.oi.elevatorLiftControl.getValue();
-   
+    moveUp = Robot.oi.elevatorLiftControl.getValue();
+
+    // Read and output this to get screen feedback
     RobotMap.elevator.ballState = Robot.oi.coDriverLB.get();
     SmartDashboard.putBoolean("Elevator MM Ball", RobotMap.elevator.ballState);
 

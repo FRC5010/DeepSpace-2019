@@ -8,14 +8,10 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
-import frc.robot.subsystems.Wrist;
 
 public class MoveWrist extends Command {
-  private double moveUp;
-  private double deadZone = 0.15;  
 
   public MoveWrist() {
     // Use requires() here to declare subsystem dependencies
@@ -31,16 +27,7 @@ public class MoveWrist extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    moveUp = -Robot.oi.wristControl.getValue() * 0.6;
-   
-    RobotMap.wrist.moveWrist(moveUp);
-    SmartDashboard.putNumber("Wrist position", RobotMap.wristMotor.getSelectedSensorPosition());
-    double tics = RobotMap.wristMotor.getSelectedSensorPosition();
-    double angle = RobotMap.wrist.ticsToAngle(tics);
-    SmartDashboard.putNumber("Wrist Angle", angle);
-    double cosine = Math.cos(Math.toRadians(angle));
-    double calcFF = Wrist.feedForward * cosine;
-    SmartDashboard.putNumber("Wrist Calc FF", calcFF);
+    RobotMap.wrist.moveWrist(Robot.oi.wristControl.getValue());
   }
 
   // Make this return true when this Command no longer needs to run execute()

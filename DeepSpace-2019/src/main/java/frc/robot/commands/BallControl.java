@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
-import frc.robot.subsystems.BallIntake;
 
 public class BallControl extends Command {
   private double move;
@@ -36,17 +35,15 @@ public class BallControl extends Command {
     rightTrigger = Robot.oi.ballOuttake.getValue();
     SmartDashboard.putNumber("leftTrigger: ", leftTrigger);
     SmartDashboard.putNumber("rightTrigger: ", rightTrigger);
-    if (leftTrigger > 0){
-       move = leftTrigger;
-     } else if (rightTrigger > 0) {
-       move = -rightTrigger;
-     } else {
-       move = -.30;
-     }
-   
-    RobotMap.ballIntake.ballControl(move * 0.3);
-   // RobotMap.ballIntake.suck(leftTrigger);
-    SmartDashboard.putNumber("Ball intake power: ", move);
+    if (leftTrigger != 0) {
+      move = leftTrigger;
+    } else if (rightTrigger != 0) {
+      move = rightTrigger;
+    } else {
+      move = -.10;
+    }
+
+    RobotMap.ballIntake.ballControl(move);
   }
 
   // Make this return true when this Command no longer needs to run execute()

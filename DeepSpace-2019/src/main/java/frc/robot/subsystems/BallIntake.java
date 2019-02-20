@@ -7,19 +7,20 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 import frc.robot.commands.BallControl;
 
 /**
- * Add your docs here.
+ * Ball Intake controls the Cargo Ball intake motor.
  */
 public class BallIntake extends Subsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
-  VictorSPX intakeMotor = RobotMap.intakeMotor;
+  WPI_VictorSPX intakeMotor = RobotMap.intakeMotor;
 
   @Override
   public void initDefaultCommand() {
@@ -29,9 +30,7 @@ public class BallIntake extends Subsystem {
   }
 
   public void ballControl(double power) {
+    SmartDashboard.putNumber("Ball intake power: ", power);
     intakeMotor.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, power);
   }
-  // public void suck(double power){
-  //   intakeMotor.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, -power);
-  // }
 }

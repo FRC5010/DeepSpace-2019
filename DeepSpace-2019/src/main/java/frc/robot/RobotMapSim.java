@@ -22,6 +22,7 @@ import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Shifter;
 import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.VisionAssistedDrive;
+import frc.robot.subsystems.Wrist;
 import frc.robot.util.Constants;
 /**
  * Add your docs here.
@@ -39,6 +40,7 @@ public class RobotMapSim {
         RobotMap.direction.reset();
     
         RobotMap.elevator = new Elevator(RobotMap.elevatorMotor, RobotMap.elevatorMotor2);
+        RobotMap.wrist = new Wrist();
         RobotMap.shifter = new Shifter();
         RobotMap.driveTrain = new DriveTrain();
         RobotMap.ballIntake = new BallIntake();
@@ -65,29 +67,7 @@ public class RobotMapSim {
         RobotMap.rightMotor2.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 4);
         RobotMap.leftMotor2.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 2);
     
-        RobotMap.elevatorMotor.configFactoryDefault();
-        RobotMap.elevatorMotor2.configFactoryDefault();
-        RobotMap.elevatorMotor2.follow(RobotMap.elevatorMotor);
-        RobotMap.elevatorMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
-        RobotMap.elevatorMotor.setSensorPhase(true);
-        RobotMap.elevatorMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, Constants.kTimeoutMs);
-        RobotMap.elevatorMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, Constants.kTimeoutMs);
-        //configing out puts
-        RobotMap.elevatorMotor.configNominalOutputForward(0,Constants.kTimeoutMs);
-        RobotMap.elevatorMotor.configNominalOutputReverse(0,Constants.kTimeoutMs);
-        RobotMap.elevatorMotor.configPeakOutputForward(1,Constants.kTimeoutMs);
-        RobotMap.elevatorMotor.configPeakOutputReverse(-1,Constants.kTimeoutMs);
-        RobotMap.elevatorMotor.selectProfileSlot(Constants.kSlotIdx, Constants.kPIDLoopIdx); 
-        RobotMap.elevatorMotor.config_kF(Constants.kSlotIdx,Constants.kGains.kF, Constants.kTimeoutMs);  
-        RobotMap.elevatorMotor.config_kP(Constants.kSlotIdx,Constants.kGains.kP, Constants.kTimeoutMs);
-        RobotMap.elevatorMotor.config_kI(Constants.kSlotIdx,Constants.kGains.kI, Constants.kTimeoutMs);
-        RobotMap.elevatorMotor.config_kD(Constants.kSlotIdx,Constants.kGains.kD, Constants.kTimeoutMs);
-        //cruze velocity
-        RobotMap.elevatorMotor.configMotionCruiseVelocity(2500,Constants.kTimeoutMs);
-        RobotMap.elevatorMotor.configMotionAcceleration(2500, Constants.kTimeoutMs);
-    
-        //zeroing sensor
-        RobotMap.elevatorMotor.setSelectedSensorPosition(0,Constants.kPIDLoopIdx, Constants.kTimeoutMs);
+        RobotMap.wristMotor = new WPI_TalonSRX(7);
       }
 }
 

@@ -33,16 +33,17 @@ public class TeleopDefault extends Command {
 
     if (false) {
       System.out.println("right trigger pressed");
-      //temporarily disabled due to bugs
-      //scaleInputs(Robot.oi.driver.getRawAxis(3)) >= 0 && Pose.getCurrentPose().limeLight.tValid
+      // temporarily disabled due to bugs
+      // scaleInputs(Robot.oi.driver.getRawAxis(3)) >= 0 &&
+      // Pose.getCurrentPose().limeLight.tValid
       // RobotMap.vision.changePipeline(Robot.oi.driverRB.get() ? 0 : 1);
       // steerAmt = RobotMap.visionDrive.turnTowardsTarget();
       // moveAmt = RobotMap.visionDrive.moveTowardsTarget();
       // RobotMap.driveTrain.drive(steerAmt + moveAmt, -steerAmt + moveAmt);
     } else {
       RobotMap.vision.changePipeline(-1);
-      moveAmt = -Robot.oi.driveTrainForward.getValue() * 0.7;
-      steerAmt = Robot.oi.driveTrainTurn.getValue() * 0.5;
+      moveAmt = Robot.oi.driveTrainForward.getValue();
+      steerAmt = Robot.oi.driveTrainTurn.getValue();
       RobotMap.driveTrain.drive(moveAmt + steerAmt, moveAmt - steerAmt);
     }
 
@@ -57,7 +58,7 @@ public class TeleopDefault extends Command {
     return false;
   }
 
-  // Called  once after isFinished returns true
+  // Called once after isFinished returns true
   @Override
   protected void end() {
   }

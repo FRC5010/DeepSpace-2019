@@ -54,10 +54,10 @@ public class RobotMap {
 
   public static WPI_TalonSRX leftMotor1;
   public static WPI_TalonSRX leftMotor2;
-  //public static TalonSRX leftMotor3;
+  // public static TalonSRX leftMotor3;
 
   public static Solenoid shiftSolenoid;
-  
+
   public static Accelerometer builtInAccelerometer;
 
   public static Shifter shifter;
@@ -92,9 +92,9 @@ public class RobotMap {
     initCommands();
   }
 
-  public static void initPractice(){
+  public static void initPractice() {
     SmartDashboard.putString("Robot", "Practice");
-   // RobotMap_Paths.init();
+    // RobotMap_Paths.init();
     initRobotComponents();
     initMotorsPrac();
     initSubsystems();
@@ -103,15 +103,15 @@ public class RobotMap {
 
   public static void initRobotComponents() {
     builtInAccelerometer = new BuiltInAccelerometer(Accelerometer.Range.k4G);
-    rightEncoder = new Encoder(0,1);
-    leftEncoder = new Encoder(2,3);
-    encoderPPR=480;
+    rightEncoder = new Encoder(0, 1);
+    leftEncoder = new Encoder(2, 3);
+    encoderPPR = 480;
     gyro = new AHRS(Port.kUSB1);
     beakSolenoid = new DoubleSolenoid(2, 1);
     beakIntake = new BeakIntake();
     shiftSolenoid = new Solenoid(0);
-    //wrist = new Wrist();
   }
+
   public static void initMotorsComp() {
     rightMotor1 = new WPI_TalonSRX(3);
     rightMotor2 = new WPI_TalonSRX(6);
@@ -122,17 +122,17 @@ public class RobotMap {
     rightMotor2.setInverted(true);
 
     rightMotor2.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 3);
-		leftMotor2.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 2);
-    
+    leftMotor2.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 2);
 
     intakeMotor = new WPI_VictorSPX(0);
-    
+
     wristMotor = new WPI_TalonSRX(4);
 
     elevatorMotor = new WPI_TalonSRX(7);
     elevatorMotor2 = new WPI_TalonSRX(1);
     elevatorMotor2.setInverted(true);
   }
+
   public static void initMotorsPrac() {
     rightMotor1 = new WPI_TalonSRX(4);
     rightMotor2 = new WPI_TalonSRX(6);
@@ -143,11 +143,10 @@ public class RobotMap {
     rightMotor2.setInverted(true);
 
     rightMotor2.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 4);
-		leftMotor2.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 2);
-    
+    leftMotor2.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 2);
 
     intakeMotor = new WPI_VictorSPX(0);
-    
+
     wristMotor = new WPI_TalonSRX(7);
 
     elevatorMotor = new WPI_TalonSRX(3);
@@ -174,17 +173,17 @@ public class RobotMap {
   }
 
   public static void init() {
-    //The init function for different robots.  Change based on functions above.
+    // The init function for different robots. Change based on functions above.
     File fieldMapFile = new File(Filesystem.getOperatingDirectory().toPath() + "/robot.txt");
     String data = "COMP";
     try {
       BufferedReader reader = new BufferedReader(new FileReader(fieldMapFile));
       while (reader.ready()) {
-          data = reader.readLine();
+        data = reader.readLine();
       }
       if (data.compareToIgnoreCase("PRACTICE") == 0 && RobotBase.isReal()) {
         initPractice();
-      } else if (data.compareToIgnoreCase("COMP") == 0  && RobotBase.isReal()) {
+      } else if (data.compareToIgnoreCase("COMP") == 0 && RobotBase.isReal()) {
         initComp();
       } else if (data.compareToIgnoreCase("HOBBES") == 0 && RobotBase.isReal()) {
         RobotMapHobbes.initHobbes();
@@ -199,5 +198,5 @@ public class RobotMap {
       initComp();
     }
   }
-  
+
 }

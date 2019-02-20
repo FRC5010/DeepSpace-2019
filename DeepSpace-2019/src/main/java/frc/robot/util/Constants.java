@@ -3,6 +3,8 @@
  */
 package frc.robot.util;
 
+import frc.robot.subsystems.Wrist;
+
 public class Constants {
 	/**
 	 * Which PID slot to pull gains from. Starting 2018, you can choose from
@@ -10,6 +12,7 @@ public class Constants {
 	 * configuration.
 	 */
 	public static final int kSlotIdx = 0;
+	public static final int kSlotDown = 1;
 
 	/**
 	 * Talon SRX/ Victor SPX will supported multiple (cascaded) PID loops. For
@@ -35,5 +38,6 @@ public class Constants {
      */
 	public static final Gains kGains = new Gains(4, 0.0, 8, 0.2775, 0, 1.0);
 	
-	public static final Gains wristGains = new Gains(0.1,0,0,0.0,0,1.0);
+	public static final Gains wristGains = new Gains(0.1,0,0,0.0,0,Wrist.MAX_FWD_OUT);
+	public static final Gains wristDownGains = new Gains(0.1,0,0,0.0,0,Wrist.MAX_REV_OUT);
 }
