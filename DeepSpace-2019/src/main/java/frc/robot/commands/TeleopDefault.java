@@ -17,7 +17,6 @@ public class TeleopDefault extends Command {
 
   private double moveAmt;
   private double steerAmt;
-  private double deadZone = 0.15;
 
   public TeleopDefault() {
     requires(RobotMap.driveTrain);
@@ -33,17 +32,17 @@ public class TeleopDefault extends Command {
   protected void execute() {
 
     if (false) {
+      System.out.println("right trigger pressed");
       //temporarily disabled due to bugs
       //scaleInputs(Robot.oi.driver.getRawAxis(3)) >= 0 && Pose.getCurrentPose().limeLight.tValid
-      RobotMap.vision.changePipeline(Robot.oi.driverRB.get() ? 0 : 1);
-      steerAmt = RobotMap.visionDrive.turnTowardsTarget();
-      moveAmt = RobotMap.visionDrive.moveTowardsTarget();
-      // steerAmt = RobotMap.visionDrive.arcTowardsTarget();
-      RobotMap.driveTrain.drive(steerAmt + moveAmt, -steerAmt + moveAmt);
+      // RobotMap.vision.changePipeline(Robot.oi.driverRB.get() ? 0 : 1);
+      // steerAmt = RobotMap.visionDrive.turnTowardsTarget();
+      // moveAmt = RobotMap.visionDrive.moveTowardsTarget();
+      // RobotMap.driveTrain.drive(steerAmt + moveAmt, -steerAmt + moveAmt);
     } else {
-      RobotMap.vision.changePipeline(0);
-      moveAmt = -Robot.oi.driveTrainForward.getValue();
-      steerAmt = Robot.oi.driveTrainTurn.getValue();
+      RobotMap.vision.changePipeline(-1);
+      moveAmt = -Robot.oi.driveTrainForward.getValue() * 0.7;
+      steerAmt = Robot.oi.driveTrainTurn.getValue() * 0.5;
       RobotMap.driveTrain.drive(moveAmt + steerAmt, moveAmt - steerAmt);
     }
 

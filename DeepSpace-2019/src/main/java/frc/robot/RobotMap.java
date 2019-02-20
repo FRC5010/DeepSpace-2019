@@ -13,9 +13,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.kauailabs.navx.frc.AHRS;
@@ -28,6 +25,7 @@ import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.SerialPort.Port;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.interfaces.Accelerometer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.BallIntake;
 import frc.robot.subsystems.BeakIntake;
 import frc.robot.subsystems.DirectionSensor;
@@ -38,7 +36,6 @@ import frc.robot.subsystems.Shifter;
 import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.VisionAssistedDrive;
 import frc.robot.subsystems.Wrist;
-import frc.robot.util.Constants;
 
 /**
  * The RobotMap is a mapping from the ports sensors and actuators are wired into
@@ -88,13 +85,18 @@ public class RobotMap {
   // public static int rangefinderPort = 1;
   // public static int rangefinderModule = 1;
   public static void initComp() {
-    initPractice();
+    SmartDashboard.putString("Robot", "Competition");
+    initRobotComponents();
+    initMotorsComp();
+    initSubsystems();
+    initCommands();
   }
 
   public static void initPractice(){
+    SmartDashboard.putString("Robot", "Practice");
    // RobotMap_Paths.init();
     initRobotComponents();
-    initMotors();
+    initMotorsPrac();
     initSubsystems();
     initCommands();
   }
@@ -110,8 +112,28 @@ public class RobotMap {
     shiftSolenoid = new Solenoid(0);
     //wrist = new Wrist();
   }
+  public static void initMotorsComp() {
+    rightMotor1 = new WPI_TalonSRX(3);
+    rightMotor2 = new WPI_TalonSRX(6);
 
-  public static void initMotors() {
+    leftMotor1 = new WPI_TalonSRX(2);
+    leftMotor2 = new WPI_TalonSRX(5);
+    rightMotor1.setInverted(true);
+    rightMotor2.setInverted(true);
+
+    rightMotor2.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 3);
+		leftMotor2.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 2);
+    
+
+    intakeMotor = new WPI_VictorSPX(0);
+    
+    wristMotor = new WPI_TalonSRX(4);
+
+    elevatorMotor = new WPI_TalonSRX(7);
+    elevatorMotor2 = new WPI_TalonSRX(1);
+    elevatorMotor2.setInverted(true);
+  }
+  public static void initMotorsPrac() {
     rightMotor1 = new WPI_TalonSRX(4);
     rightMotor2 = new WPI_TalonSRX(6);
 
@@ -153,8 +175,8 @@ public class RobotMap {
 
   public static void init() {
     //The init function for different robots.  Change based on functions above.
-    File fieldMapFile = new File(Filesystem.getLaunchDirectory().toPath() + "/robot.txt");
-    String data = "";
+    File fieldMapFile = new File(Filesystem.getOperatingDirectory().toPath() + "/robot.txt");
+    String data = "COMP";
     try {
       BufferedReader reader = new BufferedReader(new FileReader(fieldMapFile));
       while (reader.ready()) {

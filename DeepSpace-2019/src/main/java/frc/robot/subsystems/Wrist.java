@@ -27,10 +27,10 @@ public class Wrist extends Subsystem {
   public static double lowestAngle = 32;
   public static double feedForward = 0.195;
   public static double ZERO = 1;
-  public static double HATCH_LOW = -lowestAngle + 1;
+  public static double HATCH_LOW = -lowestAngle + 5;
   public static double HATCH_MIDDLE = 0;
   public static double HATCH_HIGH = 70;
-  public static double CARGO_LOW = -lowestAngle + 1;
+  public static double CARGO_LOW = -lowestAngle + 5;
   public static double CARGO_MIDDLE = 0;
   public static double CARGO_HIGH = 70;
   public static double CARGO_SHIP = 0;
@@ -46,8 +46,8 @@ public class Wrist extends Subsystem {
     //configing outputs
     wristMotor.configNominalOutputForward(0,Constants.kTimeoutMs);
     wristMotor.configNominalOutputReverse(0,Constants.kTimeoutMs);
-    wristMotor.configPeakOutputForward(1,Constants.kTimeoutMs);
-    wristMotor.configPeakOutputReverse(-1,Constants.kTimeoutMs);
+    wristMotor.configPeakOutputForward(.5,Constants.kTimeoutMs);
+    wristMotor.configPeakOutputReverse(-.3,Constants.kTimeoutMs);
     wristMotor.selectProfileSlot(Constants.kSlotIdx, Constants.kPIDLoopIdx); 
     
     SmartDashboard.putNumber("Wrist P", Constants.wristGains.kP);
@@ -62,7 +62,7 @@ public class Wrist extends Subsystem {
     wristMotor.configAllowableClosedloopError(Constants.kSlotIdx, 5000, Constants.kTimeoutMs);
     wristMotor.config_IntegralZone(Constants.kSlotIdx, 100, Constants.kTimeoutMs);
     
-    wristMotor.configClosedLoopPeakOutput(0, 1, Constants.kTimeoutMs);
+    wristMotor.configClosedLoopPeakOutput(0, .5, Constants.kTimeoutMs);
 
     wristMotor.configClosedLoopPeriod(0, 1, Constants.kTimeoutMs);
     wristMotor.configClosedLoopPeriod(1, 1, Constants.kTimeoutMs);
@@ -88,7 +88,14 @@ public class Wrist extends Subsystem {
   }
 
   public void moveWrist(double power) {
-    feedForward = SmartDashboard.getNumber("Wrist Feed Forward", 0.2);
+    feedForward = SmartDashboard.getNumber("Wrist Feed Forward", 0.195);
+    if (Math.signum(power) == -1) {
+      power = Math.max(-.15, power);
+    } else {
+      power = Math.min(.35, power);
+    }
+    SmartDashboard.putNumber("Wrist power", power);
+
     wristMotor.set(ControlMode.PercentOutput, power, DemandType.ArbitraryFeedForward, feedForward);
   }
 
@@ -97,11 +104,12 @@ public class Wrist extends Subsystem {
     double kI = SmartDashboard.getNumber("Wrist I", 0);
     double kD = SmartDashboard.getNumber("Wrist D", 4);
     double kF = SmartDashboard.getNumber("Wrist F", 0.2);
+    feedForward = SmartDashboard.getNumber("Wrist Feed Forward", 0.2);
     wristMotor.config_kF(Constants.kSlotIdx,kF, Constants.kTimeoutMs);  
     wristMotor.config_kP(Constants.kSlotIdx,kP, Constants.kTimeoutMs);
     wristMotor.config_kI(Constants.kSlotIdx,kI, Constants.kTimeoutMs);
     wristMotor.config_kD(Constants.kSlotIdx,kD, Constants.kTimeoutMs);
-    wristMotor.set(ControlMode.MotionMagic, setPoint, DemandType.ArbitraryFeedForward, feedForward);
+    wristMotor.set(ControlMode.Position, setPoint, DemandType.ArbitraryFeedForward, feedForward);
     SmartDashboard.putNumber("Wrist Vel", wristMotor.getActiveTrajectoryVelocity());
   }
 

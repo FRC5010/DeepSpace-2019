@@ -144,7 +144,7 @@ public class Vision extends Subsystem {
 
   private static long lastValid = 0;
 
-  public static final double LIME_LIGHT_HEIGHT = 36;
+  public static final double LIME_LIGHT_HEIGHT = 32.75; // Measured on Comp Bot
   public static final double targetHeight = 24;
 
   // The largest possible ratio from the front
@@ -501,10 +501,12 @@ public class Vision extends Subsystem {
     pipelineNumber = ppipelineNumber;
     if (ppipelineNumber != -1) {
       table.getEntry("camMode").setNumber(0);
+      table.getEntry("stream").setNumber(1);
+      table.getEntry("pipeline").setNumber(ppipelineNumber);
     } else {
       table.getEntry("camMode").setNumber(1);
+      table.getEntry("stream").setNumber(2);
       return;
     }
-    table.getEntry("pipeline").setNumber(ppipelineNumber);
   }
 }

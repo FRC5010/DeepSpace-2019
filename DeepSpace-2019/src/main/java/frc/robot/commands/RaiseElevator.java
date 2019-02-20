@@ -30,7 +30,7 @@ public class RaiseElevator extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    moveUp = Robot.oi.elevatorLiftControl.getValue();
+    moveUp = -Robot.oi.elevatorLiftControl.getValue();
    
     RobotMap.elevator.ballState = Robot.oi.coDriverLB.get();
     SmartDashboard.putBoolean("Elevator MM Ball", RobotMap.elevator.ballState);

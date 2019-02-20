@@ -50,8 +50,8 @@ public class Pose {
         limeLight.leftRightRatio = RobotMap.vision.getLeftRightRatio();
         limeLight.aspectApproachAngle = RobotMap.vision.getAspectApproachAngle();
         heading = RobotMap.direction.angle();
-        driveTrainEncoderLeft = RobotMap.leftEncoder.getRaw();
-        driveTrainEncoderRight = RobotMap.rightEncoder.getRaw();
+        driveTrainEncoderLeft = RobotMap.distance.getLeftRaw();
+        driveTrainEncoderRight = RobotMap.distance.getRightRaw();
         elevatorEncoder = RobotMap.elevator.getCurrentPosition();
     }
 

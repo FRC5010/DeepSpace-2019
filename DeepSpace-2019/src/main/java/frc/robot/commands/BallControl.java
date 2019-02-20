@@ -32,7 +32,7 @@ public class BallControl extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    leftTrigger = -Robot.oi.ballIntake.getValue();
+    leftTrigger = Robot.oi.ballIntake.getValue();
     rightTrigger = Robot.oi.ballOuttake.getValue();
     SmartDashboard.putNumber("leftTrigger: ", leftTrigger);
     SmartDashboard.putNumber("rightTrigger: ", rightTrigger);
@@ -44,7 +44,7 @@ public class BallControl extends Command {
        move = -.30;
      }
    
-    RobotMap.ballIntake.ballControl(move/4);
+    RobotMap.ballIntake.ballControl(move * 0.3);
    // RobotMap.ballIntake.suck(leftTrigger);
     SmartDashboard.putNumber("Ball intake power: ", move);
   }

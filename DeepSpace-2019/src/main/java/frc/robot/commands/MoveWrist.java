@@ -31,11 +31,9 @@ public class MoveWrist extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    // TODO: test setting max value on joystick instead of using percent
     moveUp = -Robot.oi.wristControl.getValue() * 0.6;
    
     RobotMap.wrist.moveWrist(moveUp);
-    SmartDashboard.putNumber("Wrist power", moveUp);
     SmartDashboard.putNumber("Wrist position", RobotMap.wristMotor.getSelectedSensorPosition());
     double tics = RobotMap.wristMotor.getSelectedSensorPosition();
     double angle = RobotMap.wrist.ticsToAngle(tics);

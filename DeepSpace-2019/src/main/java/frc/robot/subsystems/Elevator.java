@@ -111,6 +111,7 @@ public class Elevator extends Subsystem {
   }
 
   public double getCurrentPosition() {
+    SmartDashboard.putNumber("Elevator position: ", elevMotor.getSelectedSensorPosition());
     return RobotMap.elevatorMotor.getSelectedSensorPosition();
   }
 

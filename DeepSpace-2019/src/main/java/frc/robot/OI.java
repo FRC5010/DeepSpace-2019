@@ -20,6 +20,7 @@ import frc.robot.commands.commands_auto.FieldMovement;
 import frc.robot.subsystems.Wrist;
 import frc.robot.subsystems.Elevator.Position;
 
+
 /**
  * This class is the glue that binds the controls on the physical operator
  * interface to the commands and command groups that allow control of the robot.
@@ -87,7 +88,8 @@ public class OI {
   public Button driverBack = new JoystickButton(driver, 7);
   public Button driverStart = new JoystickButton(driver, 8);
   public Button driverJoyLB = new JoystickButton(driver, 9);
-  public Button driverJoyRB = new JoystickButton(driver, 10);  
+  public Button driverJoyRB = new JoystickButton(driver, 10);
+  public Button driverRightTrigger = new JoystickButton(driver, 3);
   public Button driverA = new JoystickButton(driver, 1);
   public Button driverB = new JoystickButton(driver, 2);
   public Button driverY = new JoystickButton(driver, 4);
@@ -101,6 +103,7 @@ public class OI {
 
   public JoystickAxis driveTrainForward;
   public JoystickAxis driveTrainTurn;
+
   public JoystickAxis elevatorLiftControl;
   public JoystickAxis ballIntake;
   public JoystickAxis ballOuttake;
@@ -112,15 +115,15 @@ public class OI {
     driverBack.whenPressed(new FieldMovement());
     driverLB.whenPressed(new BeakOpen());
     driverRB.whenPressed(new BeakClose());
-    // driverY.whenPressed(new WristMM(Wrist.CARGO_HIGH));
-    // driverB.whenPressed(new WristMM(Wrist.CARGO_MIDDLE));
-    // driverA.whenPressed(new WristMM(Wrist.CARGO_LOW));
+
+     driverY.whenPressed(new WristMM(Wrist.CARGO_HIGH));
+    driverB.whenPressed(new WristMM(Wrist.CARGO_MIDDLE));
+    driverA.whenPressed(new WristMM(Wrist.CARGO_LOW));
 
     coDriverA.whenPressed(new ElevatorMM(Position.LOW));
     coDriverB.whenPressed(new ElevatorMM(Position.MIDDLE));
     coDriverY.whenPressed(new ElevatorMM(Position.HIGH));
 
-    // TODO: make sure axis number is correct!
     driveTrainForward = new JoystickAxis(driver, 1);
     driveTrainTurn = new JoystickAxis(driver, 4);
     elevatorLiftControl = new JoystickAxis(coDriver, 1);
