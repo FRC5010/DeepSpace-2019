@@ -32,8 +32,8 @@ public class RaiseElevator extends Command {
     moveUp = Robot.oi.elevatorLiftControl.getValue();
 
     // Read and output this to get screen feedback
-    RobotMap.elevator.ballState = Robot.oi.coDriverLB.get();
-    SmartDashboard.putBoolean("Elevator MM Ball", RobotMap.elevator.ballState);
+    RobotMap.elevator.isCargoGamePiece = Robot.oi.elevatorGamePieceSelector.get();
+    SmartDashboard.putBoolean("Elevator MM Cargo GP", RobotMap.elevator.isCargoGamePiece);
 
     RobotMap.elevator.raiseElevator(moveUp);
     SmartDashboard.putNumber("Elevator power", moveUp);

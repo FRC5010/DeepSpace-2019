@@ -19,6 +19,7 @@ import frc.robot.commands.WristMM;
 import frc.robot.commands.commands_auto.FieldMovement;
 import frc.robot.dynasty.JoystickAxis;
 import frc.robot.subsystems.Elevator.Position;
+import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Wrist;
 
 /**
@@ -48,6 +49,8 @@ public class OI {
   public Button coDriverLB = new JoystickButton(coDriver, 5);
   public Button coDriverRB = new JoystickButton(coDriver, 6);
 
+  public Button elevatorGamePieceSelector;
+
   public JoystickAxis driveTrainForward;
   public JoystickAxis driveTrainTurn;
 
@@ -57,25 +60,21 @@ public class OI {
   public JoystickAxis wristControl;
 
   public OI() {
-    driverJoyLB.whenPressed(new ShiftDown());
-    driverJoyRB.whenPressed(new ShiftUp());
     driverBack.whenPressed(new FieldMovement());
     driverLB.whenPressed(new BeakOpen());
     driverRB.whenPressed(new BeakClose());
 
-    driverY.whenPressed(new WristMM(Wrist.CARGO_HIGH));
-    driverB.whenPressed(new WristMM(Wrist.CARGO_MIDDLE));
-    driverA.whenPressed(new WristMM(Wrist.CARGO_LOW));
+    driveTrainForward = new JoystickAxis(driver, 1, true, 0.7);
+    driveTrainTurn = new JoystickAxis(driver, 4, 0.5);
+    driverJoyLB.whenPressed(new ShiftDown());
+    driverJoyRB.whenPressed(new ShiftUp());
 
+    elevatorLiftControl = new JoystickAxis(coDriver, 1, true, Elevator.MAX_FWD_OUT);
+    elevatorLiftControl.setLowerLimit(Elevator.MAX_REV_OUT);
+    elevatorGamePieceSelector = coDriverLB;
     coDriverA.whenPressed(new ElevatorMM(Position.LOW));
     coDriverB.whenPressed(new ElevatorMM(Position.MIDDLE));
     coDriverY.whenPressed(new ElevatorMM(Position.HIGH));
-
-    driveTrainForward = new JoystickAxis(driver, 1, true, 0.7);
-    driveTrainTurn = new JoystickAxis(driver, 4, 0.5);
-
-    elevatorLiftControl = new JoystickAxis(coDriver, 1, true);
-    elevatorLiftControl.setLowerLimit(-0.5);
 
     ballIntake = new JoystickAxis(coDriver, 2, 0.3);
     ballIntake.setLowerLimit(0);
@@ -84,5 +83,8 @@ public class OI {
 
     wristControl = new JoystickAxis(coDriver, 5, true, Wrist.MAX_FWD_OUT);
     wristControl.setLowerLimit(Wrist.MAX_REV_OUT);
+    driverY.whenPressed(new WristMM(Wrist.CARGO_HIGH));
+    driverB.whenPressed(new WristMM(Wrist.CARGO_MIDDLE));
+    driverA.whenPressed(new WristMM(Wrist.CARGO_LOW));
   }
 }

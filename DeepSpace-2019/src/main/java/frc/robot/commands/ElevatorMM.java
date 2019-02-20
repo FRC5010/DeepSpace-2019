@@ -27,7 +27,7 @@ public class ElevatorMM extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    if (RobotMap.elevator.ballState) {
+    if (RobotMap.elevator.isCargoGamePiece) {
       switch (position) {
       case LOW: {
         setPoint = Elevator.CARGO_LOW;

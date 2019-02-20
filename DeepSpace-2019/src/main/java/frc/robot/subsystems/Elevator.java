@@ -17,7 +17,6 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.RobotMap;
 import frc.robot.commands.RaiseElevator;
 import frc.robot.util.Constants;
 
@@ -34,12 +33,14 @@ public class Elevator extends Subsystem {
   public static double CARGO_MIDDLE = 12900;
   public static double CARGO_HIGH = 19500;
   public static double CARGO_SHIP = 9100;
+  public static double MAX_FWD_OUT = 1;
+  public static double MAX_REV_OUT = -0.5;
 
   public static enum Position {
     LOW, MIDDLE, HIGH
   }
 
-  public boolean ballState = false;
+  public boolean isCargoGamePiece = false;
   private long lastPosition = 0;
   private int numTimesAtLastPosition = 0;
   private WPI_TalonSRX elevMotor;
@@ -63,8 +64,8 @@ public class Elevator extends Subsystem {
     // configing outputs
     elevatorMotor.configNominalOutputForward(0, Constants.kTimeoutMs);
     elevatorMotor.configNominalOutputReverse(0, Constants.kTimeoutMs);
-    elevatorMotor.configPeakOutputForward(1, Constants.kTimeoutMs);
-    elevatorMotor.configPeakOutputReverse(-1, Constants.kTimeoutMs);
+    elevatorMotor.configPeakOutputForward(MAX_FWD_OUT, Constants.kTimeoutMs);
+    elevatorMotor.configPeakOutputReverse(MAX_REV_OUT, Constants.kTimeoutMs);
 
     SmartDashboard.putNumber("Elevator P", Constants.kGains.kP);
     SmartDashboard.putNumber("Elevator I", Constants.kGains.kI);
@@ -76,7 +77,7 @@ public class Elevator extends Subsystem {
     elevatorMotor.config_kD(Constants.kSlotIdx, Constants.kGains.kD, Constants.kTimeoutMs);
     elevatorMotor.configAllowableClosedloopError(Constants.kSlotIdx, 10, Constants.kTimeoutMs);
     elevatorMotor.config_IntegralZone(Constants.kSlotIdx, 100, Constants.kTimeoutMs);
-    elevatorMotor.configClosedLoopPeakOutput(Constants.kSlotIdx, 1, Constants.kTimeoutMs);
+    elevatorMotor.configClosedLoopPeakOutput(Constants.kSlotIdx, MAX_FWD_OUT, Constants.kTimeoutMs);
 
     elevatorMotor.config_kF(Constants.kSlotDown, Constants.kGains.kF, Constants.kTimeoutMs);
     elevatorMotor.config_kP(Constants.kSlotDown, Constants.kGains.kP, Constants.kTimeoutMs);
@@ -84,7 +85,7 @@ public class Elevator extends Subsystem {
     elevatorMotor.config_kD(Constants.kSlotDown, Constants.kGains.kD, Constants.kTimeoutMs);
     elevatorMotor.configAllowableClosedloopError(Constants.kSlotDown, 10, Constants.kTimeoutMs);
     elevatorMotor.config_IntegralZone(Constants.kSlotDown, 100, Constants.kTimeoutMs);
-    elevatorMotor.configClosedLoopPeakOutput(Constants.kSlotDown, 1, Constants.kTimeoutMs);
+    elevatorMotor.configClosedLoopPeakOutput(Constants.kSlotDown, MAX_REV_OUT, Constants.kTimeoutMs);
 
     elevatorMotor.configClosedLoopPeriod(0, 1, Constants.kTimeoutMs);
     elevatorMotor.configClosedLoopPeriod(1, 1, Constants.kTimeoutMs);
@@ -108,7 +109,7 @@ public class Elevator extends Subsystem {
   /** Don't drive the motor past a point where it can't move for too long */
   public boolean motorStuck() {
     long curPose = getCurrentPosition();
-    if (lastPosition / 100 == curPose / 100) {
+    if (lastPosition / 10 == curPose / 10) {
       ++numTimesAtLastPosition;
     } else {
       numTimesAtLastPosition = 0;
