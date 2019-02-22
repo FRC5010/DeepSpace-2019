@@ -75,6 +75,8 @@ public class RobotMap {
   public static Wrist wrist;
   public static BallIntake ballIntake;
   public static BeakIntake beakIntake;
+  public static boolean checkMotorSafety = true;
+  
   // For example to map the left and right motors, you could define the
   // following variables to use with your drivetrain subsystem.
   // public static int leftMotor = 1;

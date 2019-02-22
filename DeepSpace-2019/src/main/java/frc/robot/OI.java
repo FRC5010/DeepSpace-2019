@@ -15,6 +15,7 @@ import frc.robot.commands.BeakOpen;
 import frc.robot.commands.ElevatorMM;
 import frc.robot.commands.ShiftDown;
 import frc.robot.commands.ShiftUp;
+import frc.robot.commands.ToggleMotorSafety;
 import frc.robot.commands.WristMM;
 import frc.robot.commands.commands_auto.FieldMovement;
 import frc.robot.dynasty.JoystickAxis;
@@ -48,6 +49,8 @@ public class OI {
   public Button coDriverY = new JoystickButton(coDriver, 4);
   public Button coDriverLB = new JoystickButton(coDriver, 5);
   public Button coDriverRB = new JoystickButton(coDriver, 6);
+  public Button coDriverJoyLB = new JoystickButton(coDriver, 9);
+  public Button coDriverJoyRB = new JoystickButton(coDriver, 10);
 
   public Button elevatorGamePieceSelector;
 
@@ -86,5 +89,7 @@ public class OI {
     driverY.whenPressed(new WristMM(Wrist.CARGO_HIGH));
     driverB.whenPressed(new WristMM(Wrist.CARGO_MIDDLE));
     driverA.whenPressed(new WristMM(Wrist.CARGO_LOW));
+
+    coDriverJoyLB.whenPressed(new ToggleMotorSafety());
   }
 }

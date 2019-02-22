@@ -78,7 +78,9 @@ public class ElevatorMM extends Command {
     double pos = RobotMap.elevator.getCurrentPosition();
     double err = Math.abs(setPoint - pos);
     SmartDashboard.putNumber("Elevator MM err", err);
-    return err < 50 || RobotMap.elevator.motorStuck() || 0 != manualPower;
+    return err < 50 // this means we're close enough to the target
+      || RobotMap.elevator.isSomethingStuck(RobotMap.elevatorMotor.getMotorOutputPercent()) 
+      || 0 != manualPower; // Moving the joystick will abort MM
   }
 
   // Called once after isFinished returns true

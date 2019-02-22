@@ -116,25 +116,26 @@ public class Wrist extends Subsystem {
   }
 
   /** Don't drive the motor past a point where it can't move for too long */
-  public boolean motorStuck() {
-    long curPose = getCurrentPosition();
-    if (lastPosition / 100 == curPose / 100) {
-      ++numTimesAtLastPosition;
+  public boolean isSomethingStuck(double power) {
+    if (RobotMap.checkMotorSafety && 0.25 < power) {
+      long curPose = getCurrentPosition();
+      if (lastPosition / 100 == curPose / 100) {
+        ++numTimesAtLastPosition;
+      } else {
+        numTimesAtLastPosition = 0;
+      }
+      lastPosition = curPose;
+      return 3 <= numTimesAtLastPosition;
     } else {
       numTimesAtLastPosition = 0;
+      return false;
     }
-    lastPosition = curPose;
-    return 3 <= numTimesAtLastPosition;
   }
 
   public void moveWrist(double power) {
-    if (motorStuck()) {
+    if (isSomethingStuck(power)) {
       power = 0;
-    } else {
-      if (power == 0) {
-        numTimesAtLastPosition = 0;
-      }
-    }
+    } 
     SmartDashboard.putNumber("Wrist power", power);
     wristMotor.set(ControlMode.PercentOutput, power, DemandType.ArbitraryFeedForward, calculateFeedForward());
   }
