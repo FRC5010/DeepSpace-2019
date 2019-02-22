@@ -36,8 +36,8 @@ public class Wrist extends Subsystem {
   public static double CARGO_MIDDLE = 0;
   public static double CARGO_HIGH = 70;
   public static double CARGO_SHIP = 0;
-  public static double MAX_FWD_OUT = 0.35;
-  public static double MAX_REV_OUT = -0.15;
+  public static double MAX_FWD_OUT = 0.75;
+  public static double MAX_REV_OUT = -0.25;
   private long lastPosition = 0;
   private int numTimesAtLastPosition = 0;
 
@@ -102,7 +102,9 @@ public class Wrist extends Subsystem {
     // Set the default command for a subsystem here.
     // setDefaultCommand(new MySpecialCommand());
   }
-
+  public void reset(){
+    RobotMap.wristMotor.setSelectedSensorPosition(0);
+  }
   private double calculateFeedForward() {
     long tics = getCurrentPosition();
     SmartDashboard.putNumber("Wrist position", tics);

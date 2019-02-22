@@ -106,6 +106,9 @@ public class Elevator extends Subsystem {
     // Set the default command for a subsystem here.
     // setDefaultCommand(new MySpecialCommand());
   }
+  public void reset(){
+    elevMotor.setSelectedSensorPosition(0);
+  }
 
   /** Don't drive the motor past a point where it can't move for too long */
   public boolean isSomethingStuck(double power) {
