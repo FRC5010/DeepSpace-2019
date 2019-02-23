@@ -36,8 +36,8 @@ public class Wrist extends Subsystem {
   public static double CARGO_MIDDLE = 0;
   public static double CARGO_HIGH = 70;
   public static double CARGO_SHIP = 0;
-  public static double MAX_FWD_OUT = 0.35;
-  public static double MAX_REV_OUT = -0.15;
+  public static double MAX_FWD_OUT = 0.75;
+  public static double MAX_REV_OUT = -0.25;
   private long lastPosition = 0;
   private int numTimesAtLastPosition = 0;
 
@@ -102,7 +102,9 @@ public class Wrist extends Subsystem {
     // Set the default command for a subsystem here.
     // setDefaultCommand(new MySpecialCommand());
   }
-
+  public void reset(){
+    RobotMap.wristMotor.setSelectedSensorPosition(0);
+  }
   private double calculateFeedForward() {
     long tics = getCurrentPosition();
     SmartDashboard.putNumber("Wrist position", tics);
@@ -116,25 +118,26 @@ public class Wrist extends Subsystem {
   }
 
   /** Don't drive the motor past a point where it can't move for too long */
-  public boolean motorStuck() {
-    long curPose = getCurrentPosition();
-    if (lastPosition / 100 == curPose / 100) {
-      ++numTimesAtLastPosition;
+  public boolean isSomethingStuck(double power) {
+    if (RobotMap.checkMotorSafety && 0.25 < power) {
+      long curPose = getCurrentPosition();
+      if (lastPosition / 100 == curPose / 100) {
+        ++numTimesAtLastPosition;
+      } else {
+        numTimesAtLastPosition = 0;
+      }
+      lastPosition = curPose;
+      return 3 <= numTimesAtLastPosition;
     } else {
       numTimesAtLastPosition = 0;
+      return false;
     }
-    lastPosition = curPose;
-    return 3 <= numTimesAtLastPosition;
   }
 
   public void moveWrist(double power) {
-    if (motorStuck()) {
+    if (isSomethingStuck(power)) {
       power = 0;
-    } else {
-      if (power == 0) {
-        numTimesAtLastPosition = 0;
-      }
-    }
+    } 
     SmartDashboard.putNumber("Wrist power", power);
     wristMotor.set(ControlMode.PercentOutput, power, DemandType.ArbitraryFeedForward, calculateFeedForward());
   }

@@ -17,6 +17,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.RobotMap;
 import frc.robot.commands.RaiseElevator;
 import frc.robot.util.Constants;
 
@@ -105,26 +106,30 @@ public class Elevator extends Subsystem {
     // Set the default command for a subsystem here.
     // setDefaultCommand(new MySpecialCommand());
   }
+  public void reset(){
+    elevMotor.setSelectedSensorPosition(0);
+  }
 
   /** Don't drive the motor past a point where it can't move for too long */
-  public boolean motorStuck() {
+  public boolean isSomethingStuck(double power) {
     long curPose = getCurrentPosition();
-    if (lastPosition / 10 == curPose / 10) {
-      ++numTimesAtLastPosition;
+    if (RobotMap.checkMotorSafety && 0.25 < power) {
+      if (lastPosition / 10 == curPose / 10) {
+        ++numTimesAtLastPosition;
+      } else {
+        numTimesAtLastPosition = 0;
+      }
+      lastPosition = curPose;
+      return 3 <= numTimesAtLastPosition;
     } else {
       numTimesAtLastPosition = 0;
+      return false;
     }
-    lastPosition = curPose;
-    return 3 <= numTimesAtLastPosition;
   }
 
   public void raiseElevator(double power) {
-    if (motorStuck()) {
+    if (isSomethingStuck(power)) {
       power = 0;
-    } else {
-      if (power == 0) {
-        numTimesAtLastPosition = 0;
-      }
     }
     double feedForward = SmartDashboard.getNumber("Elevator Feed Forward", this.feedForward);
     elevMotor.set(ControlMode.PercentOutput, power, DemandType.ArbitraryFeedForward, feedForward);

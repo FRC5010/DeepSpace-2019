@@ -13,13 +13,16 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import frc.robot.commands.BeakClose;
 import frc.robot.commands.BeakOpen;
 import frc.robot.commands.ElevatorMM;
+import frc.robot.commands.ElevatorReset;
 import frc.robot.commands.ShiftDown;
 import frc.robot.commands.ShiftUp;
+import frc.robot.commands.ToggleMotorSafety;
 import frc.robot.commands.WristMM;
+import frc.robot.commands.WristReset;
 import frc.robot.commands.commands_auto.FieldMovement;
 import frc.robot.dynasty.JoystickAxis;
-import frc.robot.subsystems.Elevator.Position;
 import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Elevator.Position;
 import frc.robot.subsystems.Wrist;
 
 /**
@@ -48,6 +51,10 @@ public class OI {
   public Button coDriverY = new JoystickButton(coDriver, 4);
   public Button coDriverLB = new JoystickButton(coDriver, 5);
   public Button coDriverRB = new JoystickButton(coDriver, 6);
+  public Button coDriverBack = new JoystickButton(coDriver, 7);
+  public Button coDriverStart = new JoystickButton(coDriver,8);
+  public Button coDriverJoyLB = new JoystickButton(coDriver, 9);
+  public Button coDriverJoyRB = new JoystickButton(coDriver, 10);
 
   public Button elevatorGamePieceSelector;
 
@@ -86,5 +93,9 @@ public class OI {
     driverY.whenPressed(new WristMM(Wrist.CARGO_HIGH));
     driverB.whenPressed(new WristMM(Wrist.CARGO_MIDDLE));
     driverA.whenPressed(new WristMM(Wrist.CARGO_LOW));
+
+    coDriverJoyLB.whenPressed(new ToggleMotorSafety());
+    coDriverBack.whenPressed(new WristReset());
+    coDriverStart.whenPressed(new ElevatorReset());
   }
 }
