@@ -96,7 +96,7 @@ public class RobotMap {
 
   public static void initPractice() {
     SmartDashboard.putString("Robot", "Practice");
-    // RobotMap_Paths.init();
+    RobotMap_Paths.init();
     initRobotComponents();
     initMotorsPrac();
     initSubsystems();

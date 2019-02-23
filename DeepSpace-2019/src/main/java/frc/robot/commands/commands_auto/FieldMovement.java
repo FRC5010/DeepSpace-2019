@@ -18,25 +18,38 @@ public class FieldMovement extends CommandGroup {
    */
   public FieldMovement() {
     // Basic Test paths
-    //addSequential(new PathFollower5010(RobotMap_Paths.testL,RobotMap_Paths.testL, PathFollower5010.kReverse));
-    addSequential(new PathFollower5010(RobotMap_Paths.testL,RobotMap_Paths.testR, PathFollower5010.kForward));
+    //addSequential(new PathFollower5010(RobotMap_Paths.testL,RobotMap_Paths.testR, PathFollower5010.kReverse));
+    //addSequential(new PathFollower5010(RobotMap_Paths.testL,RobotMap_Paths.testR, PathFollower5010.kForward));
     
     // addSequential(new PathFollower5010(RobotMap_Paths.drive1L,RobotMap_Paths.drive1R, PathFollower5010.kForward));
     // addSequential(new PathFollower5010(RobotMap_Paths.revL,RobotMap_Paths.revR, PathFollower5010.kReverse));
     // addSequential(new PathFollower5010(RobotMap_Paths.drive2L, RobotMap_Paths.drive2R, PathFollower5010.kForward));
     // encoder testing
-    addSequential(new DriveForDistance(50));
+    //addSequential(new DriveForDistance(50));
 
     // Basic test paths
     //addSequential(new PathForward(RobotMap_Paths.testL,RobotMap_Paths.testR));
     //addSequential(new PathReverse(RobotMap_Paths.testL,RobotMap_Paths.testR));
 
     // Actual routines
-   //addSequential(new PathForward(RobotMap_Paths.drive1L,RobotMap_Paths.drive1R));
-//     addSequential(new PathReverse(RobotMap_Paths.revL,RobotMap_Paths.revR));
-//    addSequential(new PathForward(RobotMap_Paths.drive2L,RobotMap_Paths.drive2R));
-    //  addSequential(new PathReverse(RobotMap_Paths.drive3L,RobotMap_Paths.drive3R));
-    // addSequential(new PathForward(RobotMap_Paths.driveFinL,RobotMap_Paths.driveFinR));
+    //addSequential(new PathFollower5010(RobotMap_Paths.mid_ship_to_1R_left, RobotMap_Paths.mid_ship_to_1R_right, PathFollower5010.kForward));
+    //addSequential(new PathFollower5010(RobotMap_Paths.mid_ship_to_1L_left, RobotMap_Paths.mid_ship_to_1L_right, PathFollower5010.kForward));
+    //addSequential(new PathFollower5010(RobotMap_Paths.right_ship_to_1R_left, RobotMap_Paths.right_ship_to_1R_right, PathFollower5010.kForward));
+    //addSequential(new PathFollower5010(RobotMap_Paths.right_ship_to_2R_left, RobotMap_Paths.right_ship_to_2R_right, PathFollower5010.kForward));
+    //addSequential(new PathFollower5010(RobotMap_Paths.left_ship_to_1L_left, RobotMap_Paths.left_ship_to_1L_right, PathFollower5010.kForward));
+    //addSequential(new PathFollower5010(RobotMap_Paths.exit_level_two_left, RobotMap_Paths.exit_level_two_right, PathFollower5010.kForward));
+    //addSequential(new PathFollower5010(RobotMap_Paths.backUp_ship_1L_left, RobotMap_Paths.backUp_ship_1L_right, PathFollower5010.kReverse));
+   // addSequential(new PathFollower5010(RobotMap_Paths.backUp_ship_1R_left, RobotMap_Paths.backUp_ship_1R_right, PathFollower5010.kReverse));
+    //addSequential(new PathFollower5010(RobotMap_Paths.backUp_ship_2L_left, RobotMap_Paths.backUp_ship_2L_right, PathFollower5010.kReverse));
+    //ddSequential(new PathFollower5010(RobotMap_Paths.backUp_ship_2R_left, RobotMap_Paths.backUp_ship_1R_right, PathFollower5010.kReverse));
+    //addSequential(new PathFollower5010(RobotMap_Paths.R1_to_lsR_left,RobotMap_Paths.R1_to_lsR_right,PathFollower5010.kForward));
+    addSequential(new PathFollower5010(RobotMap_Paths.lsR_to_Right_2R_left,RobotMap_Paths.lsR_to_Right_2R_right,PathFollower5010.kReverse));
+    //addSequential(new PathForward(RobotMap_Paths.drive1L,RobotMap_Paths.drive1R));
+    //addSequential(new PathReverse(RobotMap_Paths.revLeftL,RobotMap_Paths.revLeftR));
+    //addSequential(new PathReverse(RobotMap_Paths.revRightL,RobotMap_Paths.revRightR));
+    //addSequential(new PathForward(RobotMap_Paths.drive2L,RobotMap_Paths.drive2R));
+    //addSequential(new PathReverse(RobotMap_Paths.drive3L,RobotMap_Paths.drive3R));
+    //addSequential(new PathForward(RobotMap_Paths.driveFinL,RobotMap_Paths.driveFinR));
     //addSequential(new TurnToAngle(90));
     // // Add Commands here:
     // e.g. addSequential(new Command1());

@@ -14,6 +14,7 @@ import frc.robot.commands.BeakClose;
 import frc.robot.commands.BeakOpen;
 import frc.robot.commands.ElevatorMM;
 import frc.robot.commands.ElevatorReset;
+import frc.robot.commands.ResetGyro;
 import frc.robot.commands.ShiftDown;
 import frc.robot.commands.ShiftUp;
 import frc.robot.commands.ToggleMotorSafety;
@@ -68,6 +69,7 @@ public class OI {
 
   public OI() {
     driverBack.whenPressed(new FieldMovement());
+    driverStart.whenPressed(new ResetGyro());
     driverLB.whenPressed(new BeakOpen());
     driverRB.whenPressed(new BeakClose());
 
