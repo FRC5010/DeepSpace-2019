@@ -18,10 +18,11 @@ import frc.robot.commands.ResetGyro;
 import frc.robot.commands.ShiftDown;
 import frc.robot.commands.ShiftUp;
 import frc.robot.commands.ToggleMotorSafety;
-import frc.robot.commands.VADDriveUntilDistance;
+import frc.robot.commands.VADriveUntilDistance;
 import frc.robot.commands.WristMM;
 import frc.robot.commands.WristReset;
 import frc.robot.commands.commands_auto.FieldMovement;
+import frc.robot.commands.groups.VisionGrabHatch;
 import frc.robot.dynasty.JoystickAxis;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Elevator.Position;
@@ -70,25 +71,38 @@ public class OI {
   public JoystickAxis wristControl;
 
   public OI() {
-    driverBack.whenPressed(new FieldMovement());
+    /** Driver controls */
     driverStart.whenPressed(new ResetGyro());
-    driverLB.whenPressed(new BeakOpen());
-    driverRB.whenPressed(new BeakClose());
+    driverBack.whenPressed(new FieldMovement());
 
-    driveTrainForward = new JoystickAxis(driver, 1, true, 0.7);
-    driveTrainTurn = new JoystickAxis(driver, 4, 0.5);
     driverJoyLB.whenPressed(new ShiftDown());
     driverJoyRB.whenPressed(new ShiftUp());
-
-    visionActivation = new JoystickAxis(driver, 3);
-    driverX.whileHeld(new VADDriveUntilDistance());
     
-    elevatorLiftControl = new JoystickAxis(coDriver, 1, true, Elevator.MAX_FWD_OUT);
-    elevatorLiftControl.setLowerLimit(Elevator.MAX_REV_OUT);
-    elevatorGamePieceSelector = coDriverLB;
+    driverLB.whenPressed(new BeakOpen());
+    driverRB.whenPressed(new BeakClose());
+    
+    driverA.whenPressed(new WristMM(Wrist.CARGO_LOW));
+    driverB.whenPressed(new WristMM(Wrist.CARGO_MIDDLE));
+
+    driverX.whenPressed(new VisionGrabHatch());
+    driverY.whenPressed(new VADriveUntilDistance());
+    
+    driveTrainForward = new JoystickAxis(driver, 1, true, 0.7);
+    visionActivation = new JoystickAxis(driver, 3);
+    driveTrainTurn = new JoystickAxis(driver, 4, 0.5);
+    
+    /** Co-Driver controls */
+    coDriverStart.whenPressed(new ElevatorReset());
+    coDriverBack.whenPressed(new WristReset());
+    coDriverJoyLB.whenPressed(new ToggleMotorSafety());
+
     coDriverA.whenPressed(new ElevatorMM(Position.LOW));
     coDriverB.whenPressed(new ElevatorMM(Position.MIDDLE));
     coDriverY.whenPressed(new ElevatorMM(Position.HIGH));
+
+    elevatorLiftControl = new JoystickAxis(coDriver, 1, true, Elevator.MAX_FWD_OUT);
+    elevatorLiftControl.setLowerLimit(Elevator.MAX_REV_OUT);
+    elevatorGamePieceSelector = coDriverLB;
 
     ballIntake = new JoystickAxis(coDriver, 2, 0.3);
     ballIntake.setLowerLimit(0);
@@ -97,12 +111,5 @@ public class OI {
 
     wristControl = new JoystickAxis(coDriver, 5, true, Wrist.MAX_FWD_OUT);
     wristControl.setLowerLimit(Wrist.MAX_REV_OUT);
-    driverY.whenPressed(new WristMM(Wrist.CARGO_HIGH));
-    driverB.whenPressed(new WristMM(Wrist.CARGO_MIDDLE));
-    driverA.whenPressed(new WristMM(Wrist.CARGO_LOW));
-
-    coDriverJoyLB.whenPressed(new ToggleMotorSafety());
-    coDriverBack.whenPressed(new WristReset());
-    coDriverStart.whenPressed(new ElevatorReset());
   }
 }

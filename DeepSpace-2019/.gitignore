@@ -162,3 +162,4 @@ bin/
 !pathfinder.dll
 !pathfinderjni.dll
 !halsim_ds_socketd.dll
+deploy/

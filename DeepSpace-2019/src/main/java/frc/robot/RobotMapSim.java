@@ -30,6 +30,7 @@ import frc.robot.util.Constants;
 public class RobotMapSim {
 
     public static void initSim() {
+        RobotMap_Paths.init();
         initMotors();
         RobotMap.rightEncoder = new Encoder(0, 1);
         RobotMap.leftEncoder = new Encoder(2,3);
