@@ -120,6 +120,12 @@ public class RobotMap {
 
     leftMotor1 = new WPI_TalonSRX(2);
     leftMotor2 = new WPI_TalonSRX(5);
+
+    rightMotor1.configFactoryDefault();
+    rightMotor2.configFactoryDefault();
+    leftMotor1.configFactoryDefault();
+    leftMotor2.configFactoryDefault();
+
     rightMotor1.setInverted(true);
     rightMotor2.setInverted(true);
 
@@ -141,9 +147,14 @@ public class RobotMap {
 
     leftMotor1 = new WPI_TalonSRX(2);
     leftMotor2 = new WPI_TalonSRX(5);
+
+    rightMotor1.configFactoryDefault();
+    rightMotor2.configFactoryDefault();
+    leftMotor1.configFactoryDefault();
+    leftMotor2.configFactoryDefault();
+
     rightMotor1.setInverted(true);
     rightMotor2.setInverted(true);
-
     rightMotor2.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 4);
     leftMotor2.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 2);
 

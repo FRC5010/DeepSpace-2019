@@ -14,7 +14,6 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.commands_auto.FieldMovement;
-import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Pose;
 import frc.robot.util.Instrum;
 
@@ -26,7 +25,6 @@ import frc.robot.util.Instrum;
  * project.
  */
 public class Robot extends TimedRobot {
-  public static ExampleSubsystem m_subsystem = new ExampleSubsystem();
   public static OI oi;
 
   Command m_autonomousCommand;
