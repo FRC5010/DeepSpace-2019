@@ -177,7 +177,7 @@ public class RobotMap {
   public static void init() {
     // The init function for different robots. Change based on functions above.
     File fieldMapFile = new File(Filesystem.getOperatingDirectory().toPath() + "/robot.txt");
-    String data = "COMP";
+    String data = "";
     try {
       BufferedReader reader = new BufferedReader(new FileReader(fieldMapFile));
       while (reader.ready()) {

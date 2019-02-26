@@ -7,6 +7,8 @@
 
 package frc.robot.subsystems;
 
+import frc.robot.RobotMap;
+
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -15,7 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class VisionAssistedDrive extends Subsystem {
 
-  class GearVariables {
+  public static class GearVariables {
     public final double steerKp, moveKp, moveMin;
 
     public GearVariables(double psteerKp, double pmoveKp, double pmoveMin) {
@@ -26,8 +28,8 @@ public class VisionAssistedDrive extends Subsystem {
   }
 
   // two different sets of Kp values for different gears
-  GearVariables lowGear = new GearVariables(0.02, 0.015, 0.07);
-  GearVariables highGear = new GearVariables(0.02, 0.015, 0.07);
+  public static GearVariables lowGear = new GearVariables(0.0075, 0.08, 0.07);
+  public static GearVariables highGear = new GearVariables(0.01, 0.08, 0.07);
 
   double minRotationDistance = 40;
 
@@ -52,7 +54,25 @@ public class VisionAssistedDrive extends Subsystem {
     return steerAmt;
   }
 
+  public static double moveTowardsTarget() {
+    double moveAmt = 0;
+    if (Pose.getCurrentPose().limeLight.tValid) {
+      double tY = Pose.getCurrentPose().limeLight.tY;
+      moveAmt = (Shifter.isLowGear ? lowGear.moveKp : highGear.moveKp) * tY;
+
+      double moveMin = Shifter.isLowGear ? lowGear.moveMin : highGear.moveMin;
+      moveAmt = Math.max(moveMin, Math.abs(moveAmt)) * Math.signum(moveAmt);
+      // if (tY < 1.0) {
+      //   moveAmt += Shifter.isLowGear ? lowGear.moveMin : highGear.moveMin;
+      // } else if (Math.signum(tY) == -1 && tY > -1.0) {
+      //   moveAmt -= Shifter.isLowGear ? lowGear.moveMin : highGear.moveMin;
+      // }
+    }
+    return moveAmt;
+  }
+
   // returns a motor output that will move the robot towards target
+  /*
   public double moveTowardsTarget() {
     double moveAmt = 0;
 
@@ -71,6 +91,7 @@ public class VisionAssistedDrive extends Subsystem {
     }
     return 0;
   }
+  */
 
   // arc towards target
   public double arcTowardsTarget() {

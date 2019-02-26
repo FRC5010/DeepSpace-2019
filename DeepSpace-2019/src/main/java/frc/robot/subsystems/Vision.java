@@ -139,7 +139,7 @@ public class Vision extends Subsystem {
   private static double[] cornXc;
   private static double[] cornYc;
 
-  private static Values current = new Values(0.0);
+  public static Values current = new Values(0.0);
   private static Values smoothed = new Values(0.0);
 
   private static long lastValid = 0;
@@ -193,9 +193,10 @@ public class Vision extends Subsystem {
 
   public void update(long timestamp) {
     table = NetworkTableInstance.getDefault().getTable("limelight");
+    SmartDashboard.putNumber("Timestamp", timestamp);
     current.tValid = table.getEntry("tv").getDouble(0.0) == 0.0 ? false : true;
 
-    if (current.tValid) {
+  if (current.tValid) {
       // get the raw values from the camera
       current.tX = table.getEntry("tx").getDouble(0.0);
       current.tY = table.getEntry("ty").getDouble(0.0);
@@ -217,6 +218,7 @@ public class Vision extends Subsystem {
         // If tValids was false, our previous saved position data is also bad (we set to
         // NaN), reset to our first raw values.
         smoothed = new Values(current);
+        smoothed.tValid = true;
       } else {
         //smoothValues();
         smoothMultipleValues(5);
@@ -225,7 +227,7 @@ public class Vision extends Subsystem {
       lastValid = timestamp;
     } else {     
       // If target is invalid for more that 0.5 seconds, it is likely off screen
-      if (smoothed.tValid && (lastValid + 500) > timestamp) {
+      if (smoothed.tValid && (lastValid + 500) < timestamp) {
         // Don't need to run this code if tValids is already false
         smoothed = new Values(Double.NaN);
       } else if (smoothed.tValid) {
@@ -253,6 +255,7 @@ public class Vision extends Subsystem {
   void printValues() {
     SmartDashboard.putBoolean("Valid Target c", current.tValid);
     SmartDashboard.putBoolean("Valid Target s", smoothed.tValid);
+    SmartDashboard.putNumber("lastValid TS", lastValid);
 
     // outputting all current/raw values
     SmartDashboard.putNumber("Target X raw", Double.isNaN(current.tX) ? 0.0 : current.tX);
@@ -501,11 +504,11 @@ public class Vision extends Subsystem {
     pipelineNumber = ppipelineNumber;
     if (ppipelineNumber != -1) {
       table.getEntry("camMode").setNumber(0);
-      table.getEntry("stream").setNumber(1);
+      //table.getEntry("stream").setNumber(0);
       table.getEntry("pipeline").setNumber(ppipelineNumber);
     } else {
-      table.getEntry("camMode").setNumber(1);
-      table.getEntry("stream").setNumber(2);
+      table.getEntry("camMode").setNumber(0);
+      table.getEntry("stream").setNumber(0);
       return;
     }
   }

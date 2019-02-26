@@ -31,17 +31,13 @@ public class TeleopDefault extends Command {
   @Override
   protected void execute() {
 
-    if (false) {
-      System.out.println("right trigger pressed");
-      // temporarily disabled due to bugs
-      // scaleInputs(Robot.oi.driver.getRawAxis(3)) >= 0 &&
-      // Pose.getCurrentPose().limeLight.tValid
-      // RobotMap.vision.changePipeline(Robot.oi.driverRB.get() ? 0 : 1);
-      // steerAmt = RobotMap.visionDrive.turnTowardsTarget();
-      // moveAmt = RobotMap.visionDrive.moveTowardsTarget();
+    if (Robot.oi.visionActivation.getValue() != 0 && Pose.getCurrentPose().limeLight.tValid) {
+      steerAmt = RobotMap.visionDrive.turnTowardsTarget();
+      moveAmt = RobotMap.visionDrive.moveTowardsTarget();
       // RobotMap.driveTrain.drive(steerAmt + moveAmt, -steerAmt + moveAmt);
+      RobotMap.driveTrain.drive(steerAmt + moveAmt, -steerAmt + moveAmt);
     } else {
-      RobotMap.vision.changePipeline(-1);
+      //RobotMap.vision.changePipeline(-1);
       moveAmt = Robot.oi.driveTrainForward.getValue();
       steerAmt = Robot.oi.driveTrainTurn.getValue();
       RobotMap.driveTrain.drive(moveAmt + steerAmt, moveAmt - steerAmt);

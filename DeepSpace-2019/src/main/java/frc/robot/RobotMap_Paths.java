@@ -7,6 +7,8 @@
 
 package frc.robot;
 
+import java.io.IOException;
+
 //import com.ctre.phoenix.motion.TrajectoryPoint;
 
 //import java.nio.file.DirectoryStream;
@@ -63,7 +65,7 @@ public class RobotMap_Paths {
 
 
      public static void init() {
-
+          try {
           mid_ship_to_1L_left = PathfinderFRC.getTrajectory("mid_ship_to_1L.left");
           System.out.println("mid_ship_to_1L_left"+ mid_ship_to_1L_left.toString());
           mid_ship_to_1L_right = PathfinderFRC.getTrajectory("mid_ship_to_1L.right");
@@ -142,5 +144,8 @@ public class RobotMap_Paths {
           // driveFinR = PathfinderFRC.getTrajectory("backUp2.right");
           // driveFinL = PathfinderFRC.getTrajectory("backUp2.left");
 
+          } catch (IOException e) {
+               System.err.println("There was a problem loading paths, fix it! " + e.getMessage());
+          }
      }
 }

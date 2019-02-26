@@ -18,6 +18,7 @@ import frc.robot.commands.ResetGyro;
 import frc.robot.commands.ShiftDown;
 import frc.robot.commands.ShiftUp;
 import frc.robot.commands.ToggleMotorSafety;
+import frc.robot.commands.VADDriveUntilDistance;
 import frc.robot.commands.WristMM;
 import frc.robot.commands.WristReset;
 import frc.robot.commands.commands_auto.FieldMovement;
@@ -41,9 +42,9 @@ public class OI {
   public Button driverStart = new JoystickButton(driver, 8);
   public Button driverJoyLB = new JoystickButton(driver, 9);
   public Button driverJoyRB = new JoystickButton(driver, 10);
-  public Button driverRightTrigger = new JoystickButton(driver, 3);
   public Button driverA = new JoystickButton(driver, 1);
   public Button driverB = new JoystickButton(driver, 2);
+  public Button driverX = new JoystickButton(driver, 3);
   public Button driverY = new JoystickButton(driver, 4);
 
   public Button coDriverA = new JoystickButton(coDriver, 1);
@@ -62,6 +63,7 @@ public class OI {
   public JoystickAxis driveTrainForward;
   public JoystickAxis driveTrainTurn;
 
+  public JoystickAxis visionActivation;
   public JoystickAxis elevatorLiftControl;
   public JoystickAxis ballIntake;
   public JoystickAxis ballOuttake;
@@ -78,6 +80,9 @@ public class OI {
     driverJoyLB.whenPressed(new ShiftDown());
     driverJoyRB.whenPressed(new ShiftUp());
 
+    visionActivation = new JoystickAxis(driver, 3);
+    driverX.whileHeld(new VADDriveUntilDistance());
+    
     elevatorLiftControl = new JoystickAxis(coDriver, 1, true, Elevator.MAX_FWD_OUT);
     elevatorLiftControl.setLowerLimit(Elevator.MAX_REV_OUT);
     elevatorGamePieceSelector = coDriverLB;
