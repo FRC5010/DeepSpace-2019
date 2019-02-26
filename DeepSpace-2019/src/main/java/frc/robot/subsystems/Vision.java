@@ -19,6 +19,7 @@ import org.opencv.core.Point;
 import org.opencv.core.Point3;
 
 import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -500,6 +501,16 @@ public class Vision extends Subsystem {
   public void toggleLimelight(boolean forceOn) {
     lightOn = forceOn;
     table.getEntry("ledMode").setNumber(forceOn ? 3 : 1);
+  }
+
+  public void toggleCamMode() {
+    NetworkTableEntry camMode = table.getEntry("camMode");
+    double current = camMode.getDouble(0);
+    camMode.setDouble((0.0 == current) ? 1 : 0);
+  }
+
+  public double getPipeline() {
+    return table.getEntry("getpipe").getDouble(0.0);
   }
 
   // if pipelineNumber = -1, switch to driver's camera
