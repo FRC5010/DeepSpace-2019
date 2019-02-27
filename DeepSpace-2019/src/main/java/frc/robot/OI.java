@@ -87,7 +87,7 @@ public class OI {
     driverX.whenPressed(new VisionGrabHatch());
     //driverY.whenPressed(new VADriveUntilDistance());
     
-    driveTrainForward = new JoystickAxis(driver, 1, true, 1);
+    driveTrainForward = new JoystickAxis(driver, 1, true, 0.7);
     visionActivation = new JoystickAxis(driver, 3);
     driveTrainTurn = new JoystickAxis(driver, 4, 0.5);
     

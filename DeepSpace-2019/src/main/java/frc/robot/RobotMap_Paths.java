@@ -25,20 +25,13 @@ public class RobotMap_Paths {
      
      public static Trajectory testL;
      public static Trajectory testR;
-     public static Trajectory drive1R;
-     public static Trajectory drive1L;
-     public static Trajectory revLeftR;
-     public static Trajectory revLeftL;
-     public static Trajectory revRightR;
-     public static Trajectory revRightL;
-     public static Trajectory drive2R;
-     public static Trajectory drive2L;
-     public static Trajectory drive3R;
-     public static Trajectory drive3L;
-     public static Trajectory driveFinR;
-     public static Trajectory driveFinL;
      public static Trajectory exit_level_two_left;
      public static Trajectory exit_level_two_right;
+
+     public static Trajectory LStoShip2L_left;
+     public static Trajectory LStoShip2L_right;
+     public static Trajectory Ship2LtoLP_right;
+     public static Trajectory Ship2LtoLP_left;
      public static Trajectory mid_ship_to_1R_left;
      public static Trajectory mid_ship_to_1R_right;
      public static Trajectory mid_ship_to_1L_left;
@@ -57,8 +50,8 @@ public class RobotMap_Paths {
      public static Trajectory backUp_ship_2L_right;
      public static Trajectory backUp_ship_2R_left;
      public static Trajectory backUp_ship_2R_right;
-     public static Trajectory R1_to_lsR_right;
-     public static Trajectory R1_to_lsR_left;
+     public static Trajectory Ship1RtoRP_right;
+     public static Trajectory Ship1RtoRP_left;
      public static Trajectory lsR_to_Right_2R_right;
      public static Trajectory lsR_to_Right_2R_left;
 
@@ -92,10 +85,10 @@ public class RobotMap_Paths {
           System.out.println("backUp_ship_1R_right"+ backUp_ship_1R_right.toString());
 
 
-           R1_to_lsR_left= PathfinderFRC.getTrajectory("1R_to_lsR.left");
-          System.out.println("R1_to_lsR_left"+ backUp_ship_1R_left.toString());
-          R1_to_lsR_right = PathfinderFRC.getTrajectory("1R_to_lsR.right");
-          System.out.println("R1_to_lsR_right"+ backUp_ship_1R_right.toString());
+          Ship1RtoRP_left= PathfinderFRC.getTrajectory("Ship1RtoRP.left");
+          System.out.println("Ship1RtoRP.left "+ Ship1RtoRP_left.toString());
+          Ship1RtoRP_right = PathfinderFRC.getTrajectory("Ship1RtoRP.right");
+          System.out.println("Ship1RtoRP.right "+ Ship1RtoRP_right.toString());
 
           backUp_ship_2L_left = PathfinderFRC.getTrajectory("backUp_ship_2L.left");
           System.out.println("backUp_ship_2L_left"+ backUp_ship_2L_left.toString());
@@ -135,10 +128,10 @@ public class RobotMap_Paths {
           // revL = PathfinderFRC.getTrajectory("testPath.left");
           // revR = PathfinderFRC.getTrajectory("testPath.right");
 
-          drive1L = PathfinderFRC.getTrajectory("drive1.left");
-          drive1R = PathfinderFRC.getTrajectory("drive1.right");
-          drive2R = PathfinderFRC.getTrajectory("HatchGrab.right");
-          drive2L = PathfinderFRC.getTrajectory("HatchGrab.left");
+          LStoShip2L_left = PathfinderFRC.getTrajectory("LStoShip2L.left");
+          LStoShip2L_left = PathfinderFRC.getTrajectory("LStoShip2L.right");
+          Ship2LtoLP_right = PathfinderFRC.getTrajectory("Ship2LtoLP.right");
+          Ship2LtoLP_left = PathfinderFRC.getTrajectory("Ship2LtoLP.left");
           // drive3L = PathfinderFRC.getTrajectory("return.left");
           // drive3R = PathfinderFRC.getTrajectory("return.right");
           // driveFinR = PathfinderFRC.getTrajectory("backUp2.right");
