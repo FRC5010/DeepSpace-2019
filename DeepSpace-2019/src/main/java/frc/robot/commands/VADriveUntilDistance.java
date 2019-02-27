@@ -68,22 +68,22 @@ public class VADriveUntilDistance extends Command {
 
   private double getMoveKp() {
     double kP = (Shifter.isLowGear ? VisionAssistedDrive.lowGear.moveKp : VisionAssistedDrive.highGear.moveKp);
-    kP = SmartDashboard.getNumber("moveKp", kP);
+    //kP = SmartDashboard.getNumber("moveKp", kP);
     return kP;
   }
   private double getMoveKd() {
     double kD = (Shifter.isLowGear ? VisionAssistedDrive.lowGear.moveKd : VisionAssistedDrive.highGear.moveKd);
-    kD = SmartDashboard.getNumber("moveKd", kD);
+    //kD = SmartDashboard.getNumber("moveKd", kD);
     return kD;
   }
   private double getSteerKp() {
     double kP = (Shifter.isLowGear ? VisionAssistedDrive.lowGear.steerKp : VisionAssistedDrive.highGear.steerKp);
-    kP = SmartDashboard.getNumber("steerKp", kP);
+    //kP = SmartDashboard.getNumber("steerKp", kP);
     return kP;
   }
   private double getSteerKd() {
     double kD = (Shifter.isLowGear ? VisionAssistedDrive.lowGear.steerKd : VisionAssistedDrive.highGear.steerKd);
-    kD = SmartDashboard.getNumber("steerKd", kD);
+    //kD = SmartDashboard.getNumber("steerKd", kD);
     return kD;
   }
 

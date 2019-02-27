@@ -135,9 +135,9 @@ public class Wrist extends Subsystem {
   }
 
   public void moveWrist(double power) {
-    if (isSomethingStuck(power)) {
-      power = 0;
-    } 
+     if (isSomethingStuck(power)) {
+       power = 0;
+     } 
     SmartDashboard.putNumber("Wrist power", power);
     wristMotor.set(ControlMode.PercentOutput, power, DemandType.ArbitraryFeedForward, calculateFeedForward());
   }
