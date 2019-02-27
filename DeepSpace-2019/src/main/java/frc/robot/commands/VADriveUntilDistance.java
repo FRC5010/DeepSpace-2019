@@ -9,7 +9,6 @@ package frc.robot.commands;
 
 import java.sql.Struct;
 
-import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
@@ -20,7 +19,7 @@ import frc.robot.subsystems.Shifter;
 import frc.robot.subsystems.VisionAssistedDrive;
 
 public class VADriveUntilDistance extends Command {
-  private double last_heading_error = 0;
+  private double lastHeadingError = 0;
   private double lastError = 0;
   private double setpoint = 0;
 
@@ -90,8 +89,8 @@ public class VADriveUntilDistance extends Command {
   double turnTowards() {
     double heading = Pose.getCurrentPose().limeLight.tX;
     double heading_error = DirectionSensor.boundHalfDegrees(0 - heading);
-    double heading_delta = heading_error - last_heading_error;
-    last_heading_error = heading_error;
+    double heading_delta = heading_error - lastHeadingError;
+    lastHeadingError = heading_error;
 
     double steerKp = getSteerKp();
     double steerKd = getSteerKd();
@@ -124,5 +123,6 @@ public class VADriveUntilDistance extends Command {
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
+    end();
   }
 }
