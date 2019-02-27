@@ -40,7 +40,7 @@ public class BallControl extends Command {
     } else if (rightTrigger != 0) {
       move = rightTrigger;
     } else {
-      move = -.10;
+      move = -.05;
     }
 
     RobotMap.ballIntake.ballControl(move);

@@ -18,18 +18,34 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class VisionAssistedDrive extends Subsystem {
 
   public static class GearVariables {
-    public final double steerKp, moveKp, moveMin;
+    public final double steerKp, steerKd, moveKp, moveKd, moveMin;
 
-    public GearVariables(double psteerKp, double pmoveKp, double pmoveMin) {
+    public GearVariables(double psteerKp, double pmoveKp, double pmoveMin, double psteerKd, double pmoveKd) {
       steerKp = psteerKp;
       moveKp = pmoveKp;
       moveMin = pmoveMin;
+      steerKd = psteerKd;
+      moveKd = pmoveKd;
+    }
+  }
+
+  class PIDValues {
+    public double kp;
+    public double ki;
+    public double kd;
+    public double moveMin;
+
+    public PIDValues(double kp, double ki, double kd, double moveMin) {
+      this.kp = kp;
+      this.ki = ki;
+      this.kd = kd;
+      this.moveMin = moveMin;
     }
   }
 
   // two different sets of Kp values for different gears
-  public static GearVariables lowGear = new GearVariables(0.0075, 0.08, 0.07);
-  public static GearVariables highGear = new GearVariables(0.01, 0.08, 0.07);
+  public static GearVariables lowGear = new GearVariables(0.008, 0.095, 0.08, 0, 0);
+  public static GearVariables highGear = new GearVariables(0.0125, 0.625, 0.04, 0, .2);
 
   double minRotationDistance = 40;
 
@@ -45,11 +61,8 @@ public class VisionAssistedDrive extends Subsystem {
     if (Pose.getCurrentPose().limeLight.tValid) {
       steerAmt = (Shifter.isLowGear ? lowGear.steerKp : highGear.steerKp) * Pose.getCurrentPose().limeLight.tX;
       
-      if (Pose.getCurrentPose().limeLight.tX > 1.0) {
-        steerAmt += Shifter.isLowGear ? lowGear.moveMin : highGear.moveMin;
-      } else if (Pose.getCurrentPose().limeLight.tX < 1.0) {
-        steerAmt -= Shifter.isLowGear ? lowGear.moveMin : highGear.moveMin;
-      }
+      double moveMin = Shifter.isLowGear ? lowGear.moveMin : highGear.moveMin;
+      steerAmt = Math.max(moveMin, Math.abs(steerAmt)) * Math.signum(steerAmt);
     }
     return steerAmt;
   }
@@ -62,11 +75,6 @@ public class VisionAssistedDrive extends Subsystem {
 
       double moveMin = Shifter.isLowGear ? lowGear.moveMin : highGear.moveMin;
       moveAmt = Math.max(moveMin, Math.abs(moveAmt)) * Math.signum(moveAmt);
-      // if (tY < 1.0) {
-      //   moveAmt += Shifter.isLowGear ? lowGear.moveMin : highGear.moveMin;
-      // } else if (Math.signum(tY) == -1 && tY > -1.0) {
-      //   moveAmt -= Shifter.isLowGear ? lowGear.moveMin : highGear.moveMin;
-      // }
     }
     return moveAmt;
   }

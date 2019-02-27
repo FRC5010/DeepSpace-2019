@@ -96,11 +96,11 @@ public class RobotMap {
 
   public static void initPractice() {
     SmartDashboard.putString("Robot", "Practice");
-    RobotMap_Paths.init();
     initRobotComponents();
     initMotorsPrac();
     initSubsystems();
     initCommands();
+    RobotMap_Paths.init();
   }
 
   public static void initRobotComponents() {
