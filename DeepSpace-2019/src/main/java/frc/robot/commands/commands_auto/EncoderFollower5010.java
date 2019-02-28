@@ -2,6 +2,7 @@ package frc.robot.commands.commands_auto;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
+import frc.robot.commands.commands_auto.PathFollower5010.Direction;
 import frc.robot.subsystems.DirectionSensor;
 import jaci.pathfinder.Pathfinder;
 import jaci.pathfinder.Trajectory;
@@ -16,7 +17,7 @@ import jaci.pathfinder.Trajectory;
  */
 public class EncoderFollower5010 {
 
-    boolean isRight; boolean isFwd;
+    boolean isRight; PathFollower5010.Direction isFwd;
     int encoder_offset, encoder_tick_count, last_segment_max, last_segment_count = 0;
     double wheel_circumference;
 
@@ -33,7 +34,7 @@ public class EncoderFollower5010 {
     * @param isFwd                 Boolean, false = reverse, true = forward
     * @param isRight               Boolean, false = left, true = right
     */
-    public EncoderFollower5010(Trajectory traj, boolean isRight, boolean isFwd) {
+    public EncoderFollower5010(Trajectory traj, boolean isRight, PathFollower5010.Direction isFwd) {
         this.trajectory = traj;
         this.isFwd = isFwd;
         this.isRight = isRight;
@@ -106,7 +107,7 @@ public class EncoderFollower5010 {
      */
     public double calculate(int encoder_tick, double gyro_heading) {
         // Number of Revolutions * Wheel Circumference
-        if (!isFwd) { encoder_tick = -encoder_tick; }
+        if (isFwd != Direction.kForward) { encoder_tick = -encoder_tick; }
         double distance_covered = ((double)(encoder_tick - encoder_offset) / encoder_tick_count)
                 * wheel_circumference;
         if (segment < trajectory.length()) {
@@ -123,11 +124,13 @@ public class EncoderFollower5010 {
             
             heading = next_segment.heading;
             double desired_heading = Pathfinder.r2d(heading);
-            if (isFwd) {
+            if (isFwd == Direction.kForward) {
                 // This moves to the else when PF fixed
                 desired_heading = -desired_heading;
-            } else {
+            } else if (isFwd == Direction.kRevNormal) {
                 gyro_heading = -gyro_heading;
+            } else if (isFwd == Direction.kRevFlipped) {
+                gyro_heading = 180 - gyro_heading;
             }
             double last_heading_error = DirectionSensor.boundHalfDegrees(desired_heading - gyro_heading);
             double turn = 0.8 * (-1.0 / 80.0) * last_heading_error;
@@ -146,7 +149,7 @@ public class EncoderFollower5010 {
             } else {
                 calculated_value = Math.max(Math.abs(calculated_value), RobotMap.moveMin) * Math.signum(calculated_value);
             }
-            if (!isFwd) {
+            if (isFwd != Direction.kForward) {
                 calculated_value = -calculated_value;
             }
 

@@ -5,34 +5,25 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.commands_auto;
+package frc.robot.commands.groups;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.robot.RobotMap;
 import frc.robot.RobotMap_Paths;
-import frc.robot.commands.TurnToAngle;
+import frc.robot.commands.commands_auto.PathFollower5010;
 import frc.robot.commands.commands_auto.PathFollower5010.Direction;
 
-public class FieldMovement extends CommandGroup {
+public class RightShipSideX2 extends CommandGroup {
   /**
    * Add your docs here.
    */
-  public FieldMovement() {
-    // Basic Test paths
-    addSequential(new PathFollower5010(RobotMap_Paths.testL,RobotMap_Paths.testR, Direction.kForward));
-    //addSequential(new PathFollower5010(RobotMap_Paths.testL,RobotMap_Paths.testR, PathFollower5010.kReverse));
-    //addSequential(new PathForward(RobotMap_Paths.testL,RobotMap_Paths.testR));
-    //addSequential(new PathReverse(RobotMap_Paths.testL,RobotMap_Paths.testR));
+  public RightShipSideX2() {
+    addSequential(new Preload());
+
+    // Right start to Ship right-side first bay
+    addSequential(new PathFollower5010(RobotMap_Paths.right_ship_to_2R_left, RobotMap_Paths.right_ship_to_2R_right, Direction.kForward));
+    addSequential(new PathFollower5010(RobotMap_Paths.backUp_ship_2R_left, RobotMap_Paths.backUp_ship_2R_right, Direction.kRevNormal));
     
-    // encoder testing
-    //addSequential(new DriveForDistance(50));
-
-    // Basic test paths
-
-    // Actual routines
-    // addSequential(new PathFollower5010(RobotMap_Paths.exit_level_two_left, RobotMap_Paths.exit_level_two_right, Direction.kForward));
-
-    // // Add Commands here:
+    // Add Commands here:
     // e.g. addSequential(new Command1());
     // addSequential(new Command2());
     // these will run in order.

@@ -17,11 +17,10 @@ import jaci.pathfinder.Trajectory;
 public class PathFollower5010 extends Command {
 
 	EncoderFollower5010 left, right;
-	public static final boolean kForward = true;
-	public static final boolean kReverse = false;
-	private boolean isFwd = true;
+	public enum Direction { kForward, kRevNormal, kRevFlipped }
+	private Direction isFwd = Direction.kForward;
 
-	public PathFollower5010(Trajectory lTraj, Trajectory rTraj, boolean isFwd) {
+	public PathFollower5010(Trajectory lTraj, Trajectory rTraj, Direction isFwd) {
 		requires(RobotMap.driveTrain);
 		requires(RobotMap.direction);
 		requires(RobotMap.distance);
@@ -29,7 +28,7 @@ public class PathFollower5010 extends Command {
 		// Swapped because of Pathweaver issues for the time being.
 		// TODO: REVERSED WHEN FIXED!!!!!!!!!!!!
 		// The isRight parameter can be determined relative to the isFwd parameter
-		if(isFwd) {
+		if(isFwd == Direction.kForward) {
 			left = new EncoderFollower5010(rTraj, false, isFwd);
 			right = new EncoderFollower5010(lTraj, true, isFwd);
 		} else {

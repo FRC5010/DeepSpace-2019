@@ -24,6 +24,12 @@ public class DirectionSensor extends Subsystem {
   // this is to reset the gyro so it can detect the next angle
   public DirectionSensor(AHRS gyro) {
     this.gyro = gyro;
+    while(null != gyro && gyro.isCalibrating()) { 
+      try { 
+        Thread.sleep(10); 
+      } catch(InterruptedException ex) {}
+    }
+
     if (null != gyro) {
       gyro.reset();
     }
