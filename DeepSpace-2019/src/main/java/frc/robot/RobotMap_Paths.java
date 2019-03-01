@@ -31,11 +31,13 @@ import jaci.pathfinder.Trajectory;
 public class RobotMap_Paths {
      public static final double max_velocity = 17.89;
      public static final double wheel_diameter = 0.5;
-     public static Map<String, Trajectory> leftTrajectories;
-     public static Map<String, Trajectory> rightTrajectories;
+     public static Map<MotionProfiles, Trajectory> leftTrajectories;
+     public static Map<MotionProfiles, Trajectory> rightTrajectories;
 
-     // TODO: Change all Trajectories to Strings with just the base name
-     public static String MStoShip1L = "MStoShip1L";
+     // TODO: Change all Trajectories to enums with just the base name
+     public static enum MotionProfiles {
+          MStoShip1L
+     }
 
      public static Trajectory testL;
      public static Trajectory testR;
@@ -70,15 +72,15 @@ public class RobotMap_Paths {
      private static boolean errorLoadingPaths = false;
 
      public static void init() {
-          List<String> trajectories = new ArrayList<>();
+          List<MotionProfiles> trajectories = new ArrayList<>();
           leftTrajectories = new HashMap<>();
           rightTrajectories = new HashMap<>();
 
           // TODO: Add the trajectory basename String to the list
-          trajectories.add(MStoShip1L);
+          trajectories.add(MotionProfiles.MStoShip1L);
 
           try {
-               for (String trajectory : trajectories) {
+               for (MotionProfiles trajectory : trajectories) {
                     loadTrajectories(trajectory);
                }
           
@@ -194,7 +196,7 @@ public class RobotMap_Paths {
           }
      }
 
-     private static void loadTrajectories(String basePathName) {
+     private static void loadTrajectories(MotionProfiles basePathName) {
           String absolutePath = Filesystem.getDeployDirectory().getAbsolutePath();
           String leftPath = absolutePath + "\\paths\\" + basePathName + ".left.pf1.csv";
           String rightPath = absolutePath + "\\paths\\" + basePathName + ".right.pf1.csv";

@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 import frc.robot.RobotMap_Paths;
+import frc.robot.RobotMap_Paths.MotionProfiles;
 import jaci.pathfinder.Pathfinder;
 import jaci.pathfinder.Trajectory;
 
@@ -20,7 +21,7 @@ public class PathFollower5010 extends Command {
 	public enum Direction { kForward, kRevNormal, kRevFlipped }
 	private Direction isFwd = Direction.kForward;
 
-	public PathFollower5010(String trajectory, Direction isFwd) {
+	public PathFollower5010(MotionProfiles trajectory, Direction isFwd) {
 		load(RobotMap_Paths.leftTrajectories.get(trajectory), RobotMap_Paths.rightTrajectories.get(trajectory), isFwd);
 	}
 	
