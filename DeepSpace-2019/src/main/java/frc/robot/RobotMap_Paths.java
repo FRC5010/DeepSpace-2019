@@ -7,7 +7,16 @@
 
 package frc.robot;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import jaci.pathfinder.Pathfinder;
 
 //import com.ctre.phoenix.motion.TrajectoryPoint;
 
@@ -22,7 +31,12 @@ import jaci.pathfinder.Trajectory;
 public class RobotMap_Paths {
      public static final double max_velocity = 17.89;
      public static final double wheel_diameter = 0.5;
-     
+     public static Map<String, Trajectory> leftTrajectories;
+     public static Map<String, Trajectory> rightTrajectories;
+
+     // TODO: Change all Trajectories to Strings with just the base name
+     public static String MStoShip1L = "MStoShip1L";
+
      public static Trajectory testL;
      public static Trajectory testR;
      public static Trajectory exit_level_two_left;
@@ -34,8 +48,6 @@ public class RobotMap_Paths {
      public static Trajectory Ship2LtoLP_left;
      public static Trajectory MStoShip1R_left;
      public static Trajectory MStoShip1R_right;
-     public static Trajectory MStoShip1L_left;
-     public static Trajectory MStoShip1L_right;
      public static Trajectory RStoShip1R_left;
      public static Trajectory RStoShip1R_right;
      public static Trajectory left_ship_to_1L_left;
@@ -55,18 +67,23 @@ public class RobotMap_Paths {
      public static Trajectory lsR_to_Right_2R_right;
      public static Trajectory lsR_to_Right_2R_left;
 
+     private static boolean errorLoadingPaths = false;
 
      public static void init() {
+          List<String> trajectories = new ArrayList<>();
+          leftTrajectories = new HashMap<>();
+          rightTrajectories = new HashMap<>();
+
+          // TODO: Add the trajectory basename String to the list
+          trajectories.add(MStoShip1L);
+
           try {
-          // MiddleShipLeft
-          System.gc();
-          MStoShip1L_left = PathfinderFRC.getTrajectory("MStoShip1L.left");
-          System.gc();
-          System.out.println("MStoShip1L.left: "+ MStoShip1L_left.length());
-          MStoShip1L_right = PathfinderFRC.getTrajectory("MStoShip1L.right");
-          System.gc();
-          System.out.println("MStoShip1L.right: "+ MStoShip1L_right.length());
+               for (String trajectory : trajectories) {
+                    loadTrajectories(trajectory);
+               }
           
+          // TODO: REMOVE the old Trajectory loading code.
+
           // MiddleShipRight
           MStoShip1R_left = PathfinderFRC.getTrajectory("MStoShip1R.left");
           System.gc();
@@ -174,6 +191,29 @@ public class RobotMap_Paths {
 
           } catch (IOException e) {
                System.err.println("There was a problem loading paths, fix it! " + e.getMessage());
+          }
+     }
+
+     private static void loadTrajectories(String basePathName) {
+          String absolutePath = Filesystem.getDeployDirectory().getAbsolutePath();
+          String leftPath = absolutePath + "\\paths\\" + basePathName + ".left.pf1.csv";
+          String rightPath = absolutePath + "\\paths\\" + basePathName + ".right.pf1.csv";
+          File leftFile = new File(leftPath);
+          File rightFile = new File(rightPath);
+          if (!errorLoadingPaths) {
+               SmartDashboard.putString("Motion Profile Path Status", "YEET!");
+          }
+          try {
+               leftTrajectories.put(basePathName, Pathfinder.readFromCSV(leftFile));
+               System.out.println(leftPath + ": " + leftTrajectories.get(basePathName).length());
+               rightTrajectories.put(basePathName, Pathfinder.readFromCSV(rightFile));
+               System.out.println(rightPath + ": " + rightTrajectories.get(basePathName).length());
+          } catch (IOException e) {
+               errorLoadingPaths = true;
+               System.err.println("******************* AAAAAAAAAAAAAAAAAAAAAAAAAHHHHHHHH!!!!!!!!!!!!! *****************");
+               System.err.println("***   " + e.getMessage());
+               System.err.println("******************* AAAAAAAAAAAAAAAAAAAAAAAAAHHHHHHHH!!!!!!!!!!!!! *****************");
+               SmartDashboard.putString("Motion Profile Path Status", e.getMessage());
           }
      }
 }

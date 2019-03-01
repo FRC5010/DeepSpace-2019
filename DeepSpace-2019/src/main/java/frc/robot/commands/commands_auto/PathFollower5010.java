@@ -20,7 +20,15 @@ public class PathFollower5010 extends Command {
 	public enum Direction { kForward, kRevNormal, kRevFlipped }
 	private Direction isFwd = Direction.kForward;
 
+	public PathFollower5010(String trajectory, Direction isFwd) {
+		load(RobotMap_Paths.leftTrajectories.get(trajectory), RobotMap_Paths.rightTrajectories.get(trajectory), isFwd);
+	}
+	
 	public PathFollower5010(Trajectory lTraj, Trajectory rTraj, Direction isFwd) {
+		load(lTraj, rTraj, isFwd);
+	}
+
+	public void load(Trajectory lTraj, Trajectory rTraj, Direction isFwd) {
 		requires(RobotMap.driveTrain);
 		requires(RobotMap.direction);
 		requires(RobotMap.distance);
