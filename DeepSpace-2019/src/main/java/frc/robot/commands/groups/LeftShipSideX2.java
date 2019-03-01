@@ -8,7 +8,7 @@
 package frc.robot.commands.groups;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.robot.RobotMap_Paths;
+import frc.robot.RobotMap_Paths.MotionProfiles;
 import frc.robot.commands.commands_auto.PathFollower5010;
 import frc.robot.commands.commands_auto.PathFollower5010.Direction;
 
@@ -19,7 +19,7 @@ public class LeftShipSideX2 extends CommandGroup {
   public LeftShipSideX2() {
     addSequential(new Preload());
 
-    addSequential(new PathFollower5010(RobotMap_Paths.backUp_ship_2L_left, RobotMap_Paths.backUp_ship_2L_right, Direction.kRevNormal));
+    addSequential(new PathFollower5010(MotionProfiles.backUp_ship_2L, Direction.kRevNormal));
 
     // Add Commands here:
     // e.g. addSequential(new Command1());

@@ -8,7 +8,7 @@
 package frc.robot.commands.groups;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.robot.RobotMap_Paths;
+import frc.robot.RobotMap_Paths.MotionProfiles;
 import frc.robot.commands.commands_auto.PathFollower5010;
 import frc.robot.commands.commands_auto.PathFollower5010.Direction;
 
@@ -20,12 +20,12 @@ public class RightShipFrontAndSide extends CommandGroup {
     addSequential(new Preload());
 
     // Right start to Ship right-front bay then backup
-    addSequential(new PathFollower5010(RobotMap_Paths.RStoShip1R_left, RobotMap_Paths.RStoShip1R_right, Direction.kForward));
+    addSequential(new PathFollower5010(MotionProfiles.RStoShip1R, Direction.kForward));
     addSequential(new VisionReleaseHatch());
-    addSequential(new PathFollower5010(RobotMap_Paths.backUp_ship_1R_left, RobotMap_Paths.backUp_ship_1R_right, Direction.kRevNormal));
-    addSequential(new PathFollower5010(RobotMap_Paths.Ship1RtoRP_left, RobotMap_Paths.Ship1RtoRP_right, Direction.kForward));
+    addSequential(new PathFollower5010(MotionProfiles.backUp_ship_1R, Direction.kRevNormal));
+    addSequential(new PathFollower5010(MotionProfiles.Ship1RtoRP, Direction.kForward));
     addSequential(new VisionGrabHatch());
-    addSequential(new PathFollower5010(RobotMap_Paths.lsR_to_Right_2R_left,RobotMap_Paths.lsR_to_Right_2R_right,Direction.kRevFlipped));
+    addSequential(new PathFollower5010(MotionProfiles.lsR_to_Right_ship2R, Direction.kRevFlipped));
     //addSequentional(new PathFollower5010(RobotMap_Paths.finalShip2R));    
     //addSequential(new VisionReleaseHatch());
 
