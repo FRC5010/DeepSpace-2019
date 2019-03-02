@@ -26,23 +26,9 @@ public class VisionAssistedDrive extends Subsystem {
     }
   }
 
-  class PIDValues {
-    public double kp;
-    public double ki;
-    public double kd;
-    public double moveMin;
-
-    public PIDValues(double kp, double ki, double kd, double moveMin) {
-      this.kp = kp;
-      this.ki = ki;
-      this.kd = kd;
-      this.moveMin = moveMin;
-    }
-  }
-
   // two different sets of Kp values for different gears
   public static GearVariables lowGear = new GearVariables(0.008, 0.095, 0.08, 0, 0);
-  public static GearVariables highGear = new GearVariables(0.0125, 0.625, 0.04, 0, .2);
+  public static GearVariables highGear = new GearVariables(0.015, 0.06, 0.08 , 0, .2);
 
   double minRotationDistance = 40;
 

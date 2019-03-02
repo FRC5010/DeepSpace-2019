@@ -128,9 +128,9 @@ public class EncoderFollower5010 {
                 // This moves to the else when PF fixed
                 desired_heading = -desired_heading;
             } else if (isFwd == Direction.kRevNormal) {
-                gyro_heading = -gyro_heading;
-            } else if (isFwd == Direction.kRevFlipped) {
                 gyro_heading = 180 - gyro_heading;
+            } else if (isFwd == Direction.kRevFlipped) {
+                gyro_heading = - gyro_heading;
             }
             double last_heading_error = DirectionSensor.boundHalfDegrees(desired_heading - gyro_heading);
             double turn = 0.8 * (-1.0 / 80.0) * last_heading_error;

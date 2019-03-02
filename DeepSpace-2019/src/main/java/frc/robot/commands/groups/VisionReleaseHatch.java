@@ -8,7 +8,7 @@
 package frc.robot.commands.groups;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.robot.commands.BeakClose;
+import frc.robot.commands.BeakOpen;
 import frc.robot.commands.VADriveUntilDistance;
 
 public class VisionReleaseHatch extends CommandGroup {
@@ -33,6 +33,6 @@ public class VisionReleaseHatch extends CommandGroup {
     // a CommandGroup containing them would require both the chassis and the
     // arm.
     addSequential(new VADriveUntilDistance());
-    addSequential(new BeakClose());
+    addSequential(new BeakOpen());
   }
 }
