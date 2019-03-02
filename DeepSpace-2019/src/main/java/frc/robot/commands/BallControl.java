@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
+import frc.robot.subsystems.Wrist;
 
 public class BallControl extends Command {
   private double move;
@@ -39,7 +40,7 @@ public class BallControl extends Command {
       move = leftTrigger;
     } else if (rightTrigger != 0) {
       move = rightTrigger;
-    } else {
+    } else if (RobotMap.wristMotor.getSelectedSensorPosition() < 100000) {
       move = -.1;
     }
 
