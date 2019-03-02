@@ -60,8 +60,8 @@ public class RobotMap_Paths {
 
      private static void loadTrajectories(MotionProfiles basePathName) {
           String absolutePath = Filesystem.getDeployDirectory().getAbsolutePath();
-          String leftPath = absolutePath + "\\paths\\" + basePathName + ".left.pf1.csv";
-          String rightPath = absolutePath + "\\paths\\" + basePathName + ".right.pf1.csv";
+          String leftPath = absolutePath + "/paths/" + basePathName + ".left.pf1.csv";
+          String rightPath = absolutePath + "/paths/" + basePathName + ".right.pf1.csv";
           File leftFile = new File(leftPath);
           File rightFile = new File(rightPath);
           if (!errorLoadingPaths) {
