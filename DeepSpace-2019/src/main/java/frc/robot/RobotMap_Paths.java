@@ -31,18 +31,23 @@ public class RobotMap_Paths {
      public static final double wheel_diameter = 0.5;
      public static Map<MotionProfiles, Trajectory> leftTrajectories;
      public static Map<MotionProfiles, Trajectory> rightTrajectories;
+     public static String deployPath; 
 
      public static enum MotionProfiles {
           // Middle Start
           MStoShip1L, MStoShip1R,
+          // Left Rocket
+          LStoLRkt1, backupLRkt1, LRkt1toLP, LPtoLRkt2, finalLRkt2,
           // Left Start Side X2 
-          LStoShip2L, backUp_ship_2L, Ship2LtoLP,
+          LStoShip2L, backupShip2L, Ship2LtoLP, LPtoShip3L, finalShip3L,
           // Left Start Front & Side
-          left_ship_to_1L, backUp_ship_1L,
+          LStoShip1L, backupShip1L, Ship1LtoLP, LPtoShip2L, finalShip2L,
+          // Right Rocket
+          RStoRRkt1, backupRRkt1, RRkt1toRP, RPtoRRkt2, finalRRkt2,
           // Right Start Front & Side
-          RStoShip1R, backUp_ship_1R, Ship1RtoRP, lsR_to_Right_ship2R,
+          RStoShip1R, backupShip1R, Ship1RtoRP, RPtoShip2R, finalShip2R,
           // Right Start Side X2
-          right_ship_to_2R, backUp_ship_2R,
+          RStoShip2R, backupShip2R, Ship2RtoRP, RPtoShip3R, finalShip3R,
           // Test routines
           testPath, exit_level_two
      }
@@ -59,9 +64,8 @@ public class RobotMap_Paths {
      }
 
      private static void loadTrajectories(MotionProfiles basePathName) {
-          String absolutePath = Filesystem.getDeployDirectory().getAbsolutePath();
-          String leftPath = absolutePath + "/paths/" + basePathName + ".left.pf1.csv";
-          String rightPath = absolutePath + "/paths/" + basePathName + ".right.pf1.csv";
+          String leftPath = deployPath + basePathName + ".left.pf1.csv";
+          String rightPath = deployPath + basePathName + ".right.pf1.csv";
           File leftFile = new File(leftPath);
           File rightFile = new File(rightPath);
           if (!errorLoadingPaths) {

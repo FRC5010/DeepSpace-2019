@@ -20,8 +20,8 @@ public class LeftShipFrontAndSide extends CommandGroup {
     addSequential(new Preload());
 
     // Left start to Ship left-front bay, then backup, then to loading station, then to left side first bay
-    addSequential(new PathFollower5010(MotionProfiles.left_ship_to_1L, Direction.kForward));
-    addSequential(new PathFollower5010(MotionProfiles.backUp_ship_1L, Direction.kRevNormal));
+    addSequential(new PathFollower5010(MotionProfiles.LStoShip1L, Direction.kForward));
+    addSequential(new PathFollower5010(MotionProfiles.backupShip1L, Direction.kRevNormal));
 
     // Add Commands here:
     // e.g. addSequential(new Command1());

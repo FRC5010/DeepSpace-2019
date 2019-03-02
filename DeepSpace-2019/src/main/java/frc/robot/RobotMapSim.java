@@ -13,6 +13,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.Filesystem;
 import frc.robot.subsystems.BallIntake;
 import frc.robot.subsystems.BeakIntake;
 import frc.robot.subsystems.DirectionSensor;
@@ -30,6 +31,8 @@ import frc.robot.util.Constants;
 public class RobotMapSim {
 
     public static void initSim() {
+        RobotMap_Paths.deployPath = Filesystem.getOperatingDirectory().getAbsolutePath() + "/src/main/deploy/paths/";
+
         RobotMap_Paths.init();
         initMotors();
         RobotMap.rightEncoder = new Encoder(0, 1);

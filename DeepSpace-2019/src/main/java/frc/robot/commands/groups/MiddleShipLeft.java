@@ -23,7 +23,7 @@ public class MiddleShipLeft extends CommandGroup {
     // Middle start to Ship left-front bay
     addSequential(new PathFollower5010(RobotMap_Paths.MotionProfiles.MStoShip1L, Direction.kForward));
     addSequential(new VisionReleaseHatch());
-    addSequential(new PathFollower5010(MotionProfiles.backUp_ship_1L, Direction.kRevNormal));
+    addSequential(new PathFollower5010(MotionProfiles.backupShip1L, Direction.kRevNormal));
 
     // Add Commands here:
     // e.g. addSequential(new Command1());

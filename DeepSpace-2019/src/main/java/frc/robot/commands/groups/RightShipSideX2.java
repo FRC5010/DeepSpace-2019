@@ -20,8 +20,8 @@ public class RightShipSideX2 extends CommandGroup {
     addSequential(new Preload());
 
     // Right start to Ship right-side first bay
-    addSequential(new PathFollower5010(MotionProfiles.right_ship_to_2R, Direction.kForward));
-    addSequential(new PathFollower5010(MotionProfiles.backUp_ship_2R, Direction.kRevNormal));
+    addSequential(new PathFollower5010(MotionProfiles.RStoShip2R, Direction.kForward));
+    addSequential(new PathFollower5010(MotionProfiles.backupShip2R, Direction.kRevNormal));
     
     // Add Commands here:
     // e.g. addSequential(new Command1());
