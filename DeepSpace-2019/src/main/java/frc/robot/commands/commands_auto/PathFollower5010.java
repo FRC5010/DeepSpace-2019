@@ -20,8 +20,9 @@ public class PathFollower5010 extends Command {
 	EncoderFollower5010 left, right;
 	public enum Direction { kForward, kRevNormal, kRevFlipped }
 	private Direction isFwd = Direction.kForward;
-
+	String path; 
 	public PathFollower5010(MotionProfiles trajectory, Direction isFwd) {
+		path = trajectory.name();
 		load(RobotMap_Paths.leftTrajectories.get(trajectory), RobotMap_Paths.rightTrajectories.get(trajectory), isFwd);
 	}
 	
@@ -49,7 +50,7 @@ public class PathFollower5010 extends Command {
 	// Called just before this Command runs the first time
 	@Override
 	protected void initialize() {
-		SmartDashboard.putBoolean("Running", true);
+		SmartDashboard.putString("Command", path);
 
 		// Encoder Position is the current, cumulative position of your encoder. If
 		// you're using an SRX, this will be the
