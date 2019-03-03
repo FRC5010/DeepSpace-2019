@@ -104,12 +104,20 @@ public class VADriveUntilDistance extends Command {
   }
 
   // Make this return true when this Command no longer needs to run execute()
+  private static double prevError;
+  private static int timesAtPrevError;
   @Override
   protected boolean isFinished() {
     double manualOverride = Robot.oi.driveTrainForward.getValue();
     double steerOverride = Robot.oi.driveTrainTurn.getValue();
+    if ( ((int)lastError)/1 == ((int)prevError)/1 ) {
+      timesAtPrevError++;
+    } else {
+      timesAtPrevError = 0;
+    }
+    prevError = lastError;
     return 0 != manualOverride || 0 != steerOverride || 
-    Math.abs(lastError) < .6;
+      Math.abs(lastError) < .6 || timesAtPrevError > 50;
   }
 
   // Called once after isFinished returns true

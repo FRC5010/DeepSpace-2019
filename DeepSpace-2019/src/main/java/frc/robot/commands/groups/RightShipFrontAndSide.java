@@ -20,8 +20,8 @@ public class RightShipFrontAndSide extends CommandGroup {
     addSequential(new Preload());
 
     // Right start to Ship right-front bay then backup
-    // addSequential(new PathFollower5010(MotionProfiles.RStoShip1R, Direction.kForward));
-    // addSequential(new VisionReleaseHatch());
+    addSequential(new PathFollower5010(MotionProfiles.RStoShip1R, Direction.kForward));
+    addSequential(new VisionReleaseHatch());
     addSequential(new PathFollower5010(MotionProfiles.backupShip1R, Direction.kRevNormal));
     addSequential(new PathFollower5010(MotionProfiles.Ship1RtoRP, Direction.kForward));
     addSequential(new VisionGrabHatch());

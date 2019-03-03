@@ -40,6 +40,9 @@ public class Wrist extends Subsystem {
   public static double MAX_REV_OUT = -0.3;
   private long lastPosition = 0;
   private int numTimesAtLastPosition = 0;
+  public static enum Position {
+    LOW, MIDDLE, HIGH
+  }
 
   public Wrist() {
     wristMotor.configFactoryDefault();

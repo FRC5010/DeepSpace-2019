@@ -9,6 +9,7 @@ package frc.robot.commands.commands_auto;
 
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.RobotMap_Paths;
 import frc.robot.RobotMap_Paths.MotionProfiles;
@@ -132,7 +133,9 @@ public class PathFollower5010 extends Command {
 	// Make this return true when this Command no longer needs to run execute()
 	@Override
 	protected boolean isFinished() {
-		return left.isFinished() || right.isFinished();
+		return left.isFinished() || right.isFinished() 
+		|| Robot.oi.driveTrainForward.getValue() != 0
+		|| Robot.oi.driveTrainTurn.getValue() != 0;
 	}
 
 	// Called once after isFinished retu0rns true

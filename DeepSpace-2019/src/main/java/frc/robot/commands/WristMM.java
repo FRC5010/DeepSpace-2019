@@ -10,21 +10,42 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
+import frc.robot.subsystems.Wrist;
+import frc.robot.subsystems.Wrist.Position;
 import frc.robot.Robot;
 
 public class WristMM extends Command {
   private double setPoint = 0;
-
-  public WristMM(double setPoint) {
-    this.setPoint = RobotMap.wrist.angleToTics(setPoint);
+  private Wrist.Position position = Wrist.Position.LOW;
+  public WristMM( Wrist.Position Position) {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
+    this.position = Position;
     requires(RobotMap.wrist);
   }
-
+  double err = Math.abs(setPoint - RobotMap.wrist.getCurrentPosition());
+  double lastError = err;
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+   
+      switch (position) {
+      case LOW: {
+        setPoint = Wrist.CARGO_LOW;
+        break;
+      }
+      case MIDDLE: {
+        setPoint = Wrist.CARGO_MIDDLE;
+        break;
+      }
+      case HIGH: {
+        setPoint = Wrist.CARGO_HIGH;
+        break;
+      }
+      }
+    
+
+
     SmartDashboard.putString("Wrist MM", "Initialized");
     SmartDashboard.putNumber("Wrist MM Setpoint", setPoint);
 
@@ -39,17 +60,32 @@ public class WristMM extends Command {
   }
 
   // Make this return true when this Command no longer needs to run execute()
+  double timesAtPrevError;
+  double prevError;
   @Override
   protected boolean isFinished() {
     double manualPower = Robot.oi.wristControl.getValue();
-    double pos = RobotMap.wrist.getCurrentPosition();
-    double err = Math.abs(setPoint - pos);
+
+    //Counts how long the wrist is at the same sensor position
+    if ( ((int)lastError)/1 == ((int)prevError)/1 ) {
+      timesAtPrevError++;
+    } else {
+      timesAtPrevError = 0;
+    }
+    prevError=lastError;
+//if it gets stuck down make that sensor value 0 or if its stuck up make it go down
+    if(position==Position.LOW &&timesAtPrevError>50){
+      RobotMap.wristMotor.setSelectedSensorPosition(0);
+    }else if(position==Position.HIGH &&timesAtPrevError>50){
+      RobotMap.wrist.moveToPosition(Wrist.CARGO_LOW);
+    }
     SmartDashboard.putNumber("Wrist MM err", err);
     return manualPower != 0 // moving the joystick will abort MM
       || RobotMap.wrist.isSomethingStuck(RobotMap.wristMotor.getMotorOutputPercent())
-      || err < 2000; // This means we're close enough
+      || err < 2000
+      || timesAtPrevError>50; // This means we're close enough
   }
-
+   
   // Called once after isFinished returns true
   @Override
   protected void end() {
