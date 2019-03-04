@@ -16,11 +16,13 @@ import frc.robot.Robot;
 
 public class WristMM extends Command {
   private double setPoint = 0;
-  private Wrist.Position position = Wrist.Position.LOW;
+  private Wrist.Position position;
   public WristMM( Wrist.Position Position) {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
     this.position = Position;
+    //SmartDashboard.putString("wrist pos", position);
+    System.out.println("Wrist Position: "+ position);
     requires(RobotMap.wrist);
   }
 
@@ -30,11 +32,12 @@ public class WristMM extends Command {
    
       switch (position) {
       case LOW: {
+      
         setPoint = Wrist.CARGO_LOW;
         break;
       }
       case MIDDLE: {
-        setPoint = Wrist.CARGO_MIDDLE;
+        setPoint = Wrist.CARGO_LOW;
         break;
       }
       case HIGH: {

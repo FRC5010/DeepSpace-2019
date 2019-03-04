@@ -19,15 +19,15 @@ import frc.robot.subsystems.Shifter;
 import frc.robot.subsystems.VisionAssistedDrive;
 
 public class VADriveUntilDistance extends Command {
+  VisionAssistedDrive vad;
+
   private double lastHeadingError = 0;
   private double lastError = 0;
   private double setpoint = 0;
 
   public VADriveUntilDistance () {
-    SmartDashboard.putNumber("moveKp", getMoveKp());
-    SmartDashboard.putNumber("moveKd", getMoveKd());
-    SmartDashboard.putNumber("steerKp", getSteerKp());
-    SmartDashboard.putNumber("steerKd", getSteerKd());
+    vad = RobotMap.visionDrive;
+    vad.printPIDValues();
   }
 
   // Called just before this Command runs the first time
@@ -51,40 +51,18 @@ public class VADriveUntilDistance extends Command {
 
     RobotMap.driveTrain.drive(output - turn, output + turn);
     //SmartDashboard.putNumber("VADDriveUntilDistance Drive", output);
-    //System.out.println("VADDriveUntilDistance: " + output);
   }
   public double moveTowardsTarget(double error, double lastError) {
     double moveAmt = 0;
     if (Pose.getCurrentPose().limeLight.tValid) {
       double tY = Pose.getCurrentPose().limeLight.tY;
       double error_delta = error - lastError;
-      moveAmt = getMoveKp() * tY +  getMoveKd() * error_delta;
+      moveAmt = vad.getMoveKp() * tY +  vad.getMoveKd() * error_delta;
 
-      double moveMin = Shifter.isLowGear ? VisionAssistedDrive.lowGear.moveMin : VisionAssistedDrive.highGear.moveMin;
+      double moveMin = vad.getMoveMin();
       moveAmt = Math.max(moveMin, Math.abs(moveAmt)) * Math.signum(moveAmt);
     }
     return moveAmt;
-  }
-
-  private double getMoveKp() {
-    double kP = (Shifter.isLowGear ? VisionAssistedDrive.lowGear.moveKp : VisionAssistedDrive.highGear.moveKp);
-    kP = SmartDashboard.getNumber("moveKp", kP);
-    return kP;
-  }
-  private double getMoveKd() {
-    double kD = (Shifter.isLowGear ? VisionAssistedDrive.lowGear.moveKd : VisionAssistedDrive.highGear.moveKd);
-    kD = SmartDashboard.getNumber("moveKd", kD);
-    return kD;
-  }
-  private double getSteerKp() {
-    double kP = (Shifter.isLowGear ? VisionAssistedDrive.lowGear.steerKp : VisionAssistedDrive.highGear.steerKp);
-    kP = SmartDashboard.getNumber("steerKp", kP);
-    return kP;
-  }
-  private double getSteerKd() {
-    double kD = (Shifter.isLowGear ? VisionAssistedDrive.lowGear.steerKd : VisionAssistedDrive.highGear.steerKd);
-    kD = SmartDashboard.getNumber("steerKd", kD);
-    return kD;
   }
 
   double turnTowards() {
@@ -93,12 +71,12 @@ public class VADriveUntilDistance extends Command {
     double heading_delta = heading_error - lastHeadingError;
     lastHeadingError = heading_error;
 
-    double steerKp = getSteerKp();
-    double steerKd = getSteerKd();
+    double steerKp = vad.getSteerKp();
+    double steerKd = vad.getSteerKd();
 
     double turnAmt = steerKp * heading_error + (steerKd * heading_delta);
-    double moveMin = Shifter.isLowGear ? VisionAssistedDrive.lowGear.moveMin : VisionAssistedDrive.highGear.moveMin;
-    turnAmt = Math.max(moveMin, Math.abs(turnAmt)) * Math.signum(turnAmt);
+    double steerMin = vad.getSteerMin();
+    turnAmt = Math.max(steerMin, Math.abs(turnAmt)) * Math.signum(turnAmt);
     SmartDashboard.putNumber("VADDriveUntilDistance Steer", turnAmt);
     return turnAmt;
   }

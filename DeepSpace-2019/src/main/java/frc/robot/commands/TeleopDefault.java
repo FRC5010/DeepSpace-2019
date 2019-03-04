@@ -31,17 +31,9 @@ public class TeleopDefault extends Command {
   @Override
   protected void execute() {
 
-    if (Robot.oi.visionActivation.getValue() != 0 && Pose.getCurrentPose().limeLight.tValid) {
-      steerAmt = RobotMap.visionDrive.turnTowardsTarget();
-      moveAmt = RobotMap.visionDrive.moveTowardsTarget();
-      // RobotMap.driveTrain.drive(steerAmt + moveAmt, -steerAmt + moveAmt);
-      RobotMap.driveTrain.drive(steerAmt + moveAmt, -steerAmt + moveAmt);
-    } else {
-      //RobotMap.vision.changePipeline(-1);
-      moveAmt = Robot.oi.driveTrainForward.getValue();
-      steerAmt = Robot.oi.driveTrainTurn.getValue();
-      RobotMap.driveTrain.drive(moveAmt + steerAmt, moveAmt - steerAmt);
-    }
+    moveAmt = Robot.oi.driveTrainForward.getValue();
+    steerAmt = Robot.oi.driveTrainTurn.getValue();
+    RobotMap.driveTrain.drive(moveAmt + steerAmt, moveAmt - steerAmt);
 
     if (Robot.oi.driverStart.get()) {
       RobotMap.vision.toggleLimelight();

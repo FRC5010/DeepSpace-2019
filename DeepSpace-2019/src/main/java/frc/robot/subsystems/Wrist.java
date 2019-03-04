@@ -145,7 +145,7 @@ public class Wrist extends Subsystem {
     wristMotor.set(ControlMode.PercentOutput, power, DemandType.ArbitraryFeedForward, calculateFeedForward());
   }
 
-  public void moveToPosition(double setPoint) {
+  public void  moveToPosition(double setPoint) {
     double kP = SmartDashboard.getNumber("Wrist P", 4);
     double kI = SmartDashboard.getNumber("Wrist I", 0);
     double kD = SmartDashboard.getNumber("Wrist D", 4);
