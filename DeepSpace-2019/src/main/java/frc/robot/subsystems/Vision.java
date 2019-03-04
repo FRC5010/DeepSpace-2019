@@ -317,17 +317,17 @@ public class Vision extends Subsystem {
     }
   }
 
-  double LIMELIGHT_SKEW_CLOCKWISE_MAX = -60;
-  double LIMELIGHT_SKEW_CLOCKWISE_MIN = -90;
-  double LIMELIGHT_SKEW_COUNTERCLOCKWISE_MAX = 0;
-  double LIMELIGHT_SKEW_COUNTERCLOCKWISE_MIN = -35;
-  public boolean isRightOfTarget() {
+  static double LIMELIGHT_SKEW_CLOCKWISE_MAX = -60;
+  static double LIMELIGHT_SKEW_CLOCKWISE_MIN = -90;
+  static double LIMELIGHT_SKEW_COUNTERCLOCKWISE_MAX = 0;
+  static double LIMELIGHT_SKEW_COUNTERCLOCKWISE_MIN = -35;
+  public static boolean isRightOfTarget() {
     double ts = Pose.getCurrentPose().limeLight.tSkew;
     return (ts <= LIMELIGHT_SKEW_CLOCKWISE_MAX &&
       ts >= LIMELIGHT_SKEW_CLOCKWISE_MIN) ;
   }
   
-  public boolean isLeftOfTarget() {
+  public static boolean isLeftOfTarget() {
     double ts = Pose.getCurrentPose().limeLight.tSkew;
     return ts <= LIMELIGHT_SKEW_COUNTERCLOCKWISE_MAX &&
       ts >= LIMELIGHT_SKEW_COUNTERCLOCKWISE_MIN;

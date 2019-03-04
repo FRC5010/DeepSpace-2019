@@ -47,7 +47,7 @@ public class VADriveUntilDistance extends Command {
     // Uncomment this to tune steering
    // output = 0;
 
-    double turn = turnTowards();
+    double turn = VisionAssistedDrive.arcTowardsTarget(); //turnTowards();
 
     RobotMap.driveTrain.drive(output - turn, output + turn);
     //SmartDashboard.putNumber("VADDriveUntilDistance Drive", output);

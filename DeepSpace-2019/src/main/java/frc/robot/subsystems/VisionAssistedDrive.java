@@ -30,7 +30,7 @@ public class VisionAssistedDrive extends Subsystem {
   public static GearVariables lowGear = new GearVariables(0.008, 0.095, 0.08, 0, 0);
   public static GearVariables highGear = new GearVariables(0.015, 0.06, 0.08 , 0, .2);
 
-  double minRotationDistance = 40;
+  static double minRotationDistance = 40;
 
   @Override
   public void initDefaultCommand() {
@@ -92,19 +92,23 @@ public class VisionAssistedDrive extends Subsystem {
       System.out.println("-------");
       double rotationAngle = currentPose.limeLight.tX;
       System.out.println("Angle: " + rotationAngle);
-      double errorDistance = distance; // - minRotationDistance;
+      double errorDistance = distance - minRotationDistance;
       System.out.println("ErrorDistance: " + errorDistance);
-      double approachAngle = /*Math.signum(currentPose.limeLight.aspectApproachAngle) */ 
-        (errorDistance > 0 ? errorDistance / 3.0 : 0.0);
+      double approachAngle = 0;
+      if (Vision.isLeftOfTarget()) {
+        approachAngle = (errorDistance > 0 ? -errorDistance / 3.0 : 0.0);
+      } else if (Vision.isRightOfTarget()) {
+        approachAngle = (errorDistance > 0 ? errorDistance / 3.0 : 0.0);
+      }
       System.out.println("DesAngle: " + approachAngle);
       
-      double error = /*(currentPose.limeLight.aspectApproachAngle < approachAngle) ? 0.0 :*/ approachAngle - rotationAngle;
-      System.out.println("Error: " + error);
-      double steerAmt = (Shifter.isLowGear ? lowGear.steerKp : highGear.steerKp) * error;
+      double error = approachAngle - rotationAngle;
+      System.out.println("Arc Error: " + error);
+      double steerAmt = 0.01 * error; //(Shifter.isLowGear ? lowGear.steerKp : highGear.steerKp)
       System.out.println("SteerAmt: " + steerAmt);
 
-      double moveMin = Shifter.isLowGear ? lowGear.moveMin : highGear.moveMin;
-      steerAmt = Math.signum(steerAmt) * Math.max(Math.abs(steerAmt), moveMin);
+      // double moveMin = Shifter.isLowGear ? lowGear.moveMin : highGear.moveMin;
+      // steerAmt = Math.signum(steerAmt) * Math.max(Math.abs(steerAmt), moveMin);
 
       return -steerAmt;
     }
