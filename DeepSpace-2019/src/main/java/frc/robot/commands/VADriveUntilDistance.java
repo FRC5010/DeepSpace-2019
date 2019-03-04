@@ -23,7 +23,8 @@ public class VADriveUntilDistance extends Command {
   private double lastError = 0;
   private double setpoint = 0;
 
-  public VADriveUntilDistance () {
+  public VADriveUntilDistance (double setpoint) {
+    this.setpoint = setpoint;
     SmartDashboard.putNumber("moveKp", getMoveKp());
     SmartDashboard.putNumber("moveKd", getMoveKd());
     SmartDashboard.putNumber("steerKp", getSteerKp());
@@ -56,7 +57,7 @@ public class VADriveUntilDistance extends Command {
   public double moveTowardsTarget(double error, double lastError) {
     double moveAmt = 0;
     if (Pose.getCurrentPose().limeLight.tValid) {
-      double tY = Pose.getCurrentPose().limeLight.tY;
+      double tY = Pose.getCurrentPose().limeLight.tDistance;
       double error_delta = error - lastError;
       moveAmt = getMoveKp() * tY +  getMoveKd() * error_delta;
 
