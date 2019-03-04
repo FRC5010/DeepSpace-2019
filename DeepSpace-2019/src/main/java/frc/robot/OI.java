@@ -81,8 +81,8 @@ public class OI {
     driverLB.whenPressed(new BeakOpen());
     driverRB.whenPressed(new BeakClose());
     
-    driverA.whenPressed(new WristMM(Wrist.CARGO_LOW));
-    driverB.whenPressed(new WristMM(Wrist.CARGO_MIDDLE));
+    driverA.whenPressed(new WristMM(Wrist.Position.LOW));
+    driverB.whenPressed(new WristMM(Wrist.Position.LOW));
 
     driverX.whenPressed(new VisionGrabHatch());
     //driverY.whenPressed(new VADriveUntilDistance());

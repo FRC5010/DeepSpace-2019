@@ -23,8 +23,7 @@ public class WristMM extends Command {
     this.position = Position;
     requires(RobotMap.wrist);
   }
-  double err = Math.abs(setPoint - RobotMap.wrist.getCurrentPosition());
-  double lastError = err;
+
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
@@ -64,6 +63,8 @@ public class WristMM extends Command {
   double prevError;
   @Override
   protected boolean isFinished() {
+    double err = Math.abs(setPoint - RobotMap.wrist.getCurrentPosition());
+    double lastError = err;
     double manualPower = Robot.oi.wristControl.getValue();
 
     //Counts how long the wrist is at the same sensor position
