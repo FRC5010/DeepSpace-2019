@@ -145,8 +145,8 @@ public class Vision extends Subsystem {
 
   private static long lastValid = 0;
 
-  public static final double LIME_LIGHT_HEIGHT = 32.75; // Measured on Comp Bot
-  public static final double targetHeight = 23; //29.25;
+  public static final double LIME_LIGHT_HEIGHT = 33.5; // Measured on Comp Bot
+  public static final double targetHeight = 21;
 
   // The largest possible ratio from the front
   private double originalRatio = 77.0 / 35.0; // TODO: figure out the correct ratio when facing directly in front
@@ -456,9 +456,9 @@ public class Vision extends Subsystem {
     double distance = Double.NaN;
     if (current.tValid) {
       double yInRadians = Math.toRadians(current.tY);
-      distance = Math.abs((LIME_LIGHT_HEIGHT - targetHeight) / Math.tan(yInRadians));
+      distance = (LIME_LIGHT_HEIGHT - targetHeight) / Math.tan(yInRadians);
     }
-    return distance;
+    return Math.abs(distance);
   }
 
   public double getDistance() {
