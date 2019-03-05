@@ -15,21 +15,10 @@ public class DistanceSensor extends Subsystem {
 		RobotMap.rightEncoder.reset();
 		RobotMap.leftEncoder.reset();
 		
-		double dpp = RobotMap.rightEncoder.getDistancePerPulse();
-		SmartDashboard.getNumber("Distance per pulse", dpp);
-		
-		
-		
 		RobotMap.rightEncoder.setDistancePerPulse(rightDPP);
 		RobotMap.leftEncoder.setDistancePerPulse(rightDPP);
 		
-		dpp = RobotMap.rightEncoder.getDistancePerPulse();
-		RobotMap.rightEncoder.setReverseDirection(true);
-		SmartDashboard.getNumber("Distance per pulse r", dpp);
-		
-		dpp = RobotMap.leftEncoder.getDistancePerPulse();
-		SmartDashboard.getNumber("Distance per pulse l", dpp);
-		
+		RobotMap.rightEncoder.setReverseDirection(true);		
 	}
 
 	public DistanceSensor(String name) {
@@ -39,7 +28,6 @@ public class DistanceSensor extends Subsystem {
 		SmartDashboard.putNumber("right encoder getRaw", RobotMap.rightEncoder.getRaw());
 		
 		SmartDashboard.putNumber("left encoder getRaw", RobotMap.leftEncoder.getRaw());
-		SmartDashboard.putNumber("distance",RobotMap.rightEncoder.getDistance());
 		return RobotMap.rightEncoder.getDistance();
 	}
 	

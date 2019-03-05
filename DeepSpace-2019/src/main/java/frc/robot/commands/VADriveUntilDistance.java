@@ -55,7 +55,6 @@ public class VADriveUntilDistance extends Command {
     // output = 0;
     double turn = VisionAssistedDrive.arcTowardsTarget();
     //    double turn = turnTowards();
-    SmartDashboard.putNumber("VADDriveUntilDistance Drive", output);
 
     RobotMap.driveTrain.drive(output - turn, output + turn);
   }
@@ -67,20 +66,12 @@ public class VADriveUntilDistance extends Command {
       double error =  distance - setpoint;
       double errorDelta = error - lastError;
 
-      SmartDashboard.putBoolean("VADDriveUntilDistance Called", true);
       SmartDashboard.putNumber("VADDriveUntilDistance distance", distance);
-      SmartDashboard.putNumber("VADDriveUntilDistance setpoint", setpoint);
-      SmartDashboard.putNumber("VADDriveUntilDistance vad.getMoveKp()", vad.getMoveKp());
-      SmartDashboard.putNumber("VADDriveUntilDistance error", error);
-      SmartDashboard.putNumber("VADDriveUntilDistance vad.getMoveKd()", vad.getMoveKd());
-      SmartDashboard.putNumber("VADDriveUntilDistance errorDelta", errorDelta);
       moveAmt = vad.getMoveKp() * error + vad.getMoveKd() * errorDelta;
 
       double moveMin = vad.getMoveMin();
       moveAmt = Math.max(moveMin, Math.abs(moveAmt)) * Math.signum(moveAmt);
       lastError = error;
-    } else {
-      SmartDashboard.putBoolean("VADDriveUntilDistance Called", false);
     }
     return moveAmt;
   }
