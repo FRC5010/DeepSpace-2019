@@ -27,7 +27,7 @@ public class ElevatorMM extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-		SmartDashboard.putString("Command", ElevatorMM.class.getName());
+		SmartDashboard.putString("Command", this.getClass().getSimpleName());
     if (RobotMap.elevator.isCargoGamePiece) {
       switch (position) {
       case LOW: {

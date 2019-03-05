@@ -10,6 +10,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 import frc.robot.commands.TeleopDefault;
 
@@ -35,6 +36,9 @@ public class DriveTrain extends Subsystem {
   }
   
   public void drive(double leftPower, double rightPower){
+    SmartDashboard.putNumber("Drive left power", leftPower);
+    SmartDashboard.putNumber("Drive right power", rightPower);
+
     leftMotors.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, leftPower);
     rightMotors.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, rightPower);
   }
