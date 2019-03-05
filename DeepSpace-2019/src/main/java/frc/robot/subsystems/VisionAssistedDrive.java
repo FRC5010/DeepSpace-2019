@@ -45,7 +45,7 @@ public class VisionAssistedDrive extends Subsystem {
     }
   }
 
-  public GearPID lowGear = new GearPID(new PIDValues(0.008, 0, 0, 0.08), new PIDValues(0.095, 0, 0, 0.08));
+  public GearPID lowGear = new GearPID(new PIDValues(0.008, 0, 0, 0.08), new PIDValues(0.007, 0, 0, 0.08));
   public GearPID highGear = new GearPID(new PIDValues(0.015, 0, 0, 0.08), new PIDValues(0.06, 0, 0.2, 0.08));
 
   public double getSteerKp() {
@@ -135,7 +135,6 @@ public class VisionAssistedDrive extends Subsystem {
   public static GearVariables highGear = new GearVariables(0.015, 0.06, 0.08 , 0, .2);
 */
 
-  static double minRotationDistance = 40;
 
   @Override
   public void initDefaultCommand() {
@@ -170,6 +169,7 @@ public class VisionAssistedDrive extends Subsystem {
 */
 
   // arc towards target
+  static double minRotationDistance = 40;
   public static double arcTowardsTarget() {
     Pose currentPose = Pose.getCurrentPose();
     if (currentPose.limeLight.tValid) {

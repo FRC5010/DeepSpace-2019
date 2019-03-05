@@ -120,18 +120,18 @@ public class Vision extends Subsystem {
     public Values(Values one, Values two, double ts1, double ts2, double ts3) {
       tX = linearFwdInterpolation(ts1, one.tX, ts2, two.tX, ts3);
       tY = linearFwdInterpolation(ts1, one.tY, ts2, two.tY, ts3);
-      tA = linearFwdInterpolation(ts1, one.tA, ts2, two.tA, ts3);
-      matrixDistance = linearFwdInterpolation(ts1, one.matrixDistance, ts2, two.matrixDistance, ts3);
-      matrixRotationAngle = linearFwdInterpolation(ts1, one.matrixRotationAngle, ts2, two.matrixRotationAngle, ts3);
-      matrixApproachAngle = linearFwdInterpolation(ts1, one.matrixApproachAngle, ts2, two.matrixApproachAngle, ts3);
+      // tA = linearFwdInterpolation(ts1, one.tA, ts2, two.tA, ts3);
+      // matrixDistance = linearFwdInterpolation(ts1, one.matrixDistance, ts2, two.matrixDistance, ts3);
+      // matrixRotationAngle = linearFwdInterpolation(ts1, one.matrixRotationAngle, ts2, two.matrixRotationAngle, ts3);
+      // matrixApproachAngle = linearFwdInterpolation(ts1, one.matrixApproachAngle, ts2, two.matrixApproachAngle, ts3);
       tDistance = linearFwdInterpolation(ts1, one.tDistance, ts2, two.tDistance, ts3);
-      leftRightRatio = linearFwdInterpolation(ts1, one.leftRightRatio, ts2, two.leftRightRatio, ts3);
+      // leftRightRatio = linearFwdInterpolation(ts1, one.leftRightRatio, ts2, two.leftRightRatio, ts3);
       tSkew = linearFwdInterpolation(ts1, one.tSkew, ts2, two.tSkew, ts3);
-      tShort = linearFwdInterpolation(ts1, one.tShort, ts2, two.tShort, ts3);
-      tLong = linearFwdInterpolation(ts1, one.tLong, ts2, two.tLong, ts3);
-      tHor = linearFwdInterpolation(ts1, one.tHor, ts2, two.tHor, ts3);
-      tVert = linearFwdInterpolation(ts1, one.tVert, ts2, two.tVert, ts3);
-      aspectApproachAngle = linearFwdInterpolation(ts1, one.aspectApproachAngle, ts2, two.aspectApproachAngle, ts3);
+      // tShort = linearFwdInterpolation(ts1, one.tShort, ts2, two.tShort, ts3);
+      // tLong = linearFwdInterpolation(ts1, one.tLong, ts2, two.tLong, ts3);
+      // tHor = linearFwdInterpolation(ts1, one.tHor, ts2, two.tHor, ts3);
+      // tVert = linearFwdInterpolation(ts1, one.tVert, ts2, two.tVert, ts3);
+      // aspectApproachAngle = linearFwdInterpolation(ts1, one.aspectApproachAngle, ts2, two.aspectApproachAngle, ts3);
       latency = 0.0;
       tValid = true;
     }
@@ -146,7 +146,7 @@ public class Vision extends Subsystem {
   private static long lastValid = 0;
 
   public static final double LIME_LIGHT_HEIGHT = 32.75; // Measured on Comp Bot
-  public static final double targetHeight = 24;
+  public static final double targetHeight = 23; //29.25;
 
   // The largest possible ratio from the front
   private double originalRatio = 77.0 / 35.0; // TODO: figure out the correct ratio when facing directly in front
@@ -212,7 +212,7 @@ public class Vision extends Subsystem {
       cornYc = table.getEntry("tcorny").getDoubleArray(new double[0]);
 
       //calculateAspectRatio();
-      matrixMathOnCorners();
+      //matrixMathOnCorners();
 
       if (!smoothed.tValid) {
         // If tValids was false, our previous saved position data is also bad (we set to
@@ -457,14 +457,12 @@ public class Vision extends Subsystem {
     if (current.tValid) {
       double yInRadians = Math.toRadians(current.tY);
       distance = Math.abs((LIME_LIGHT_HEIGHT - targetHeight) / Math.tan(yInRadians));
-    } else {
-      distance = Double.NaN;
     }
     return distance;
   }
 
   public double getDistance() {
-    return smoothed.tDistance;
+    return current.tDistance;
   }
 
   public double getSkew() {

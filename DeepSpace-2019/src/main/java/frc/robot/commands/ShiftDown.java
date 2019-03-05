@@ -8,6 +8,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 
 public class ShiftDown extends Command {
@@ -20,6 +21,7 @@ public class ShiftDown extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+		SmartDashboard.putString("Command", this.getClass().getSimpleName());
     RobotMap.shifter.shiftDown();
   }
 

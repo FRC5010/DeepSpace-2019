@@ -72,8 +72,8 @@ public class OI {
 
   public OI() {
     /** Driver controls */
-    driverStart.whenPressed(new ResetGyro());
-    driverBack.whenPressed(new FieldMovement());
+    driverStart.whenPressed(new WristReset());
+    driverBack.whenPressed(new ResetGyro());
 
     driverJoyLB.whenPressed(new ShiftDown());
     driverJoyRB.whenPressed(new ShiftUp());
@@ -85,7 +85,7 @@ public class OI {
     driverB.whenPressed(new WristMM(Wrist.Position.MIDDLE));
 
     driverX.whenPressed(new VisionGrabHatch());
-    //driverY.whenPressed(new VADriveUntilDistance());
+    driverY.whenPressed(new VADriveUntilDistance(25));
     
     driveTrainForward = new JoystickAxis(driver, 1, true, 0.7);
     visionActivation = new JoystickAxis(driver, 3);

@@ -27,6 +27,7 @@ public class BallControl extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+		SmartDashboard.putString("Command", this.getClass().getSimpleName());
   }
 
   // Called repeatedly when this Command is scheduled to run

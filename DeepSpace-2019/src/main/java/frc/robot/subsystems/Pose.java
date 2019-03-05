@@ -37,8 +37,8 @@ public class Pose {
         limeLight.tX = RobotMap.vision.getX();
         limeLight.tY = RobotMap.vision.getY();
         // limeLight.tA = RobotMap.vision.getA();
-        // limeLight.tDistance = RobotMap.vision.getDistance();
-        // limeLight.tSkew = RobotMap.vision.getSkew();
+        limeLight.tDistance = RobotMap.vision.getDistance();
+        limeLight.tSkew = RobotMap.vision.getSkew();
         // limeLight.tShort = RobotMap.vision.getShort();
         // limeLight.tLong = RobotMap.vision.getLong();
         // limeLight.tHor = RobotMap.vision.getHor();

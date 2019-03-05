@@ -146,24 +146,26 @@ public class Wrist extends Subsystem {
   }
 
   public void  moveToPosition(double setPoint) {
+
+    setPoint = angleToTics(setPoint);
     double kP = SmartDashboard.getNumber("Wrist P", 4);
     double kI = SmartDashboard.getNumber("Wrist I", 0);
     double kD = SmartDashboard.getNumber("Wrist D", 4);
     double kF = SmartDashboard.getNumber("Wrist F", 0.2);
     double curPose = getCurrentPosition();
-    if (curPose < setPoint) {
+//    if (curPose < setPoint) {
       wristMotor.selectProfileSlot(Constants.kSlotIdx, Constants.kPIDLoopIdx);
       wristMotor.config_kF(Constants.kSlotIdx, kF, Constants.kTimeoutMs);
       wristMotor.config_kP(Constants.kSlotIdx, kP, Constants.kTimeoutMs);
       wristMotor.config_kI(Constants.kSlotIdx, kI, Constants.kTimeoutMs);
       wristMotor.config_kD(Constants.kSlotIdx, kD, Constants.kTimeoutMs);
-    } else {
-      wristMotor.selectProfileSlot(Constants.kSlotDown, Constants.kPIDLoopIdx);
-      wristMotor.config_kF(Constants.kSlotDown, kF / 100, Constants.kTimeoutMs);
-      wristMotor.config_kP(Constants.kSlotDown, kP / 100, Constants.kTimeoutMs);
-      wristMotor.config_kI(Constants.kSlotDown, kI, Constants.kTimeoutMs);
-      wristMotor.config_kD(Constants.kSlotDown, kD, Constants.kTimeoutMs);
-    }
+    // } else {
+    //   wristMotor.selectProfileSlot(Constants.kSlotDown, Constants.kPIDLoopIdx);
+    //   wristMotor.config_kF(Constants.kSlotDown, kF / 100, Constants.kTimeoutMs);
+    //   wristMotor.config_kP(Constants.kSlotDown, kP / 100, Constants.kTimeoutMs);
+    //   wristMotor.config_kI(Constants.kSlotDown, kI, Constants.kTimeoutMs);
+    //   wristMotor.config_kD(Constants.kSlotDown, kD, Constants.kTimeoutMs);
+    // }
     wristMotor.set(ControlMode.MotionMagic, setPoint, DemandType.ArbitraryFeedForward, calculateFeedForward());
     SmartDashboard.putNumber("Wrist Vel", wristMotor.getActiveTrajectoryVelocity());
   }
