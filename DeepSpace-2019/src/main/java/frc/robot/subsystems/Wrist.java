@@ -169,7 +169,7 @@ public class Wrist extends Subsystem {
   }
 
   public int getCurrentPosition() {
-    return wristMotor.getSelectedSensorPosition();
+    return ticsToAngle(wristMotor.getSelectedSensorPosition());
   }
 
   public void returnToManualControl() {
@@ -189,7 +189,8 @@ public class Wrist extends Subsystem {
     return (angle + lowestAngle) * 1100;
   }
 
-  public double ticsToAngle(double tics) {
-    return (tics / 1100) - lowestAngle;
+  public int ticsToAngle(double tics) {
+    
+    return ((int)Math.floor((tics / 1100) - lowestAngle));
   }
 }

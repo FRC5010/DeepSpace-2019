@@ -22,7 +22,7 @@ public class WristMM extends Command {
     // eg. requires(chassis);
     this.position = Position;
     //SmartDashboard.putString("wrist pos", position);
-    System.out.println("Wrist Position: "+ position);
+    //System.out.println("Wrist Position: "+ position);
     requires(RobotMap.wrist);
   }
 
@@ -86,7 +86,7 @@ public class WristMM extends Command {
     SmartDashboard.putNumber("Wrist MM err", err);
     return manualPower != 0 // moving the joystick will abort MM
       || RobotMap.wrist.isSomethingStuck(RobotMap.wristMotor.getMotorOutputPercent())
-      || err < 2000
+      || err < 2
       || timesAtPrevError>50; // This means we're close enough
   }
    
