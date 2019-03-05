@@ -85,14 +85,9 @@ public class WristMM extends Command {
     }
     SmartDashboard.putNumber("Wrist MM err", err);
     return manualPower != 0 // moving the joystick will abort MM
-<<<<<<< HEAD
       || RobotMap.wrist.isSomethingStuck(RobotMap.wristMotor.getMotorOutputPercent())
       || err < 2
       || timesAtPrevError>50; // This means we're close enough
-=======
-        || RobotMap.wrist.isSomethingStuck(RobotMap.wristMotor.getMotorOutputPercent()) || err < 2000
-        || timesAtPrevError > 50; // This means we're close enough
->>>>>>> f0696178cfa8b73d67ebc702f628570561c68576
   }
 
   // Called once after isFinished returns true

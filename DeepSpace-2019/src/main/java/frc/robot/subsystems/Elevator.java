@@ -146,11 +146,11 @@ public class Elevator extends Subsystem {
     // elevMotor.config_kD(Constants.kSlotIdx,kD, Constants.kTimeoutMs);
     double feedForward = SmartDashboard.getNumber("Elevator Feed Forward", this.feedForward);
     double curPose = getCurrentPosition();
-    if (curPose < setPoint) {
+//    if (curPose < setPoint) {
       elevMotor.selectProfileSlot(Constants.kSlotIdx, Constants.kPIDLoopIdx);
-    } else {
-      elevMotor.selectProfileSlot(Constants.kSlotDown, Constants.kPIDLoopIdx);
-    }
+    // } else {
+    //   elevMotor.selectProfileSlot(Constants.kSlotDown, Constants.kPIDLoopIdx);
+    // }
     elevMotor.set(ControlMode.MotionMagic, setPoint, DemandType.ArbitraryFeedForward, feedForward);
   }
 
