@@ -22,13 +22,8 @@ public class WristMM extends Command {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
     this.position = Position;
-<<<<<<< HEAD
     //SmartDashboard.putString("wrist pos", position);
     //System.out.println("Wrist Position: "+ position);
-=======
-    // SmartDashboard.putString("wrist pos", position);
-    System.out.println("Wrist Position: " + position);
->>>>>>> f0696178cfa8b73d67ebc702f628570561c68576
     requires(RobotMap.wrist);
 
     switch (position) {
