@@ -189,13 +189,14 @@ public class VisionAssistedDrive extends Subsystem {
       
       double error = approachAngle - rotationAngle;
       System.out.println("Arc Error: " + error);
-      double steerAmt = 0.01 * error; //(Shifter.isLowGear ? lowGear.steerKp : highGear.steerKp)
+      double steerAmt = -0.01 * error; //(Shifter.isLowGear ? lowGear.steerKp : highGear.steerKp)
       System.out.println("SteerAmt: " + steerAmt);
 
       // double moveMin = Shifter.isLowGear ? lowGear.moveMin : highGear.moveMin;
       // steerAmt = Math.signum(steerAmt) * Math.max(Math.abs(steerAmt), moveMin);
+      SmartDashboard.putNumber("VADDriveUntilDistance Steer", steerAmt);
 
-      return -steerAmt;
+      return steerAmt;
     }
     return 0.0;
   }

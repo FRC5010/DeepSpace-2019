@@ -57,54 +57,54 @@ public class Vision extends Subsystem {
     public Values(Values other) {
       tX = other.tX;
       tY = other.tY;
-      tA = other.tA;
-      matrixDistance = other.matrixDistance;
-      matrixRotationAngle = other.matrixRotationAngle;
-      matrixApproachAngle = other.matrixApproachAngle;
+      // tA = other.tA;
+      // matrixDistance = other.matrixDistance;
+      // matrixRotationAngle = other.matrixRotationAngle;
+      // matrixApproachAngle = other.matrixApproachAngle;
       tDistance = other.tDistance;
-      leftRightRatio = other.leftRightRatio;
+      // leftRightRatio = other.leftRightRatio;
       tSkew = other.tSkew;
-      tShort = other.tShort;
-      tLong = other.tLong;
-      tHor = other.tHor;
-      tVert = other.tVert;
-      aspectApproachAngle = other.aspectApproachAngle;
-      latency = other.latency;
+      // tShort = other.tShort;
+      // tLong = other.tLong;
+      // tHor = other.tHor;
+      // tVert = other.tVert;
+      // aspectApproachAngle = other.aspectApproachAngle;
+      // latency = other.latency;
       tValid = other.tValid;
     }
 
     public void sum(Values other) {
       tX += other.tX;
       tY += other.tY;
-      tA += other.tA;
-      matrixDistance += other.matrixDistance;
-      matrixRotationAngle += other.matrixRotationAngle;
-      matrixApproachAngle += other.matrixApproachAngle;
-      tDistance += other.tDistance;
-      leftRightRatio += other.leftRightRatio;
+      // tA += other.tA;
+      // matrixDistance += other.matrixDistance;
+      // matrixRotationAngle += other.matrixRotationAngle;
+      // matrixApproachAngle += other.matrixApproachAngle;
+      // tDistance += other.tDistance;
+      // leftRightRatio += other.leftRightRatio;
       tSkew += other.tSkew;
-      tShort += other.tShort;
-      tLong += other.tLong;
-      tHor += other.tHor;
-      tVert += other.tVert;
-      aspectApproachAngle += other.aspectApproachAngle;
+      // tShort += other.tShort;
+      // tLong += other.tLong;
+      // tHor += other.tHor;
+      // tVert += other.tVert;
+      // aspectApproachAngle += other.aspectApproachAngle;
     }
 
     public void averageOf(double denonminator) {
       tX /= denonminator;
       tY /= denonminator;
-      tA /= denonminator;
-      matrixDistance /= denonminator;
-      matrixRotationAngle /= denonminator;
-      matrixApproachAngle /= denonminator;
-      tDistance /= denonminator;
-      leftRightRatio /= denonminator;
+      // tA /= denonminator;
+      // matrixDistance /= denonminator;
+      // matrixRotationAngle /= denonminator;
+      // matrixApproachAngle /= denonminator;
+      // tDistance /= denonminator;
+      // leftRightRatio /= denonminator;
       tSkew /= denonminator;
-      tShort /= denonminator;
-      tLong /= denonminator;
-      tHor /= denonminator;
-      tVert /= denonminator;
-      aspectApproachAngle /= denonminator;
+      // tShort /= denonminator;
+      // tLong /= denonminator;
+      // tHor /= denonminator;
+      // tVert /= denonminator;
+      // aspectApproachAngle /= denonminator;
     }
 
     /** Project what the next value might be */
@@ -124,7 +124,7 @@ public class Vision extends Subsystem {
       // matrixDistance = linearFwdInterpolation(ts1, one.matrixDistance, ts2, two.matrixDistance, ts3);
       // matrixRotationAngle = linearFwdInterpolation(ts1, one.matrixRotationAngle, ts2, two.matrixRotationAngle, ts3);
       // matrixApproachAngle = linearFwdInterpolation(ts1, one.matrixApproachAngle, ts2, two.matrixApproachAngle, ts3);
-      tDistance = linearFwdInterpolation(ts1, one.tDistance, ts2, two.tDistance, ts3);
+      tDistance = calculateDistance(tY, targetHeight);
       // leftRightRatio = linearFwdInterpolation(ts1, one.leftRightRatio, ts2, two.leftRightRatio, ts3);
       tSkew = linearFwdInterpolation(ts1, one.tSkew, ts2, two.tSkew, ts3);
       // tShort = linearFwdInterpolation(ts1, one.tShort, ts2, two.tShort, ts3);
@@ -201,15 +201,15 @@ public class Vision extends Subsystem {
       current.tX = table.getEntry("tx").getDouble(0.0);
       current.tY = table.getEntry("ty").getDouble(0.0);
       // current.tA = table.getEntry("ta").getDouble(0.0);
-      current.tDistance = calculateDistance();
+      current.tDistance = calculateDistance(current.tY, targetHeight);
       current.tSkew = table.getEntry("ts").getDouble(0.0);
       // current.tShort = table.getEntry("tshort").getDouble(0.0);
       // current.tLong = table.getEntry("tlong").getDouble(0.0);
       // current.tHor = table.getEntry("thor").getDouble(0.0);
       // current.tVert = table.getEntry("tvert").getDouble(0.0);
       // current.latency = table.getEntry("tl").getDouble(0.0);
-      cornXc = table.getEntry("tcornx").getDoubleArray(new double[0]);
-      cornYc = table.getEntry("tcorny").getDoubleArray(new double[0]);
+      // cornXc = table.getEntry("tcornx").getDoubleArray(new double[0]);
+      // cornYc = table.getEntry("tcorny").getDoubleArray(new double[0]);
 
       //calculateAspectRatio();
       //matrixMathOnCorners();
@@ -220,7 +220,6 @@ public class Vision extends Subsystem {
         smoothed = new Values(current);
         smoothed.tValid = true;
       } else {
-        //smoothValues();
         smoothMultipleValues(5);
       }
 
@@ -267,16 +266,16 @@ public class Vision extends Subsystem {
     // SmartDashboard.putNumber("Target Long raw", Double.isNaN(current.tLong) ? 0.0 : current.tLong);
     // SmartDashboard.putNumber("Target Horizontal raw", Double.isNaN(current.tHor) ? 0.0 : current.tHor);
     // SmartDashboard.putNumber("Target Vertical raw", Double.isNaN(current.tVert) ? 0.0 : current.tVert);
-    SmartDashboard.putNumber("Target Matrix Rotation Angle raw", Double.isNaN(current.matrixRotationAngle) ? 0.0 : current.matrixRotationAngle);
-    SmartDashboard.putNumber("Target Matrix Approach Angle raw ", Double.isNaN(current.matrixApproachAngle) ? 0.0 : current.matrixApproachAngle);
-    SmartDashboard.putNumber("Target Matrix Distance raw", Double.isNaN(current.matrixDistance) ? 0.0 : current.matrixDistance);
+    // SmartDashboard.putNumber("Target Matrix Rotation Angle raw", Double.isNaN(current.matrixRotationAngle) ? 0.0 : current.matrixRotationAngle);
+    // SmartDashboard.putNumber("Target Matrix Approach Angle raw ", Double.isNaN(current.matrixApproachAngle) ? 0.0 : current.matrixApproachAngle);
+    // SmartDashboard.putNumber("Target Matrix Distance raw", Double.isNaN(current.matrixDistance) ? 0.0 : current.matrixDistance);
     // SmartDashboard.putNumber("Target Left/Right Ratio raw", Double.isNaN(current.leftRightRatio) ? 0.0 : current.leftRightRatio);
     // SmartDashboard.putNumber("Target Aspect Approach Angle raw", Double.isNaN(current.aspectApproachAngle) ? 0.0 : current.aspectApproachAngle);
     // SmartDashboard.putNumber("Limelight Latency raw", Double.isNaN(current.latency) ? 0.0 : current.latency);
-    SmartDashboard.putNumber("Limelight CrossHair-A X", table.getEntry("cx0").getDouble(0));
-    SmartDashboard.putNumber("Limelight CrossHair-A Y", table.getEntry("cy0").getDouble(0));
-    SmartDashboard.putNumber("Limelight CrossHair-B X", table.getEntry("cx1").getDouble(0));
-    SmartDashboard.putNumber("Limelight CrossHair-B Y", table.getEntry("cy1").getDouble(0));
+    // SmartDashboard.putNumber("Limelight CrossHair-A X", table.getEntry("cx0").getDouble(0));
+    // SmartDashboard.putNumber("Limelight CrossHair-A Y", table.getEntry("cy0").getDouble(0));
+    // SmartDashboard.putNumber("Limelight CrossHair-B X", table.getEntry("cx1").getDouble(0));
+    // SmartDashboard.putNumber("Limelight CrossHair-B Y", table.getEntry("cy1").getDouble(0));
     // outputing all smoothed values
     SmartDashboard.putNumber("Target X smoothed", Double.isNaN(smoothed.tX) ? 0.0 : smoothed.tX);
     SmartDashboard.putNumber("Target Y smoothed", Double.isNaN(smoothed.tY) ? 0.0 : smoothed.tY);
@@ -289,9 +288,9 @@ public class Vision extends Subsystem {
     // SmartDashboard.putNumber("Target Long smoothed", Double.isNaN(smoothed.tLong) ? 0.0 : smoothed.tLong);
     // SmartDashboard.putNumber("Target Horizontal smoothed", Double.isNaN(smoothed.tHor) ? 0.0 : smoothed.tHor);
     // SmartDashboard.putNumber("Target Vertical smoothed", Double.isNaN(smoothed.tVert) ? 0.0 : smoothed.tVert);
-    SmartDashboard.putNumber("Target Matrix Rotation Angle smoothed", Double.isNaN(smoothed.matrixRotationAngle) ? 0.0 : smoothed.matrixRotationAngle);
-    SmartDashboard.putNumber("Target Matrix Approach Angle smoothed ", Double.isNaN(smoothed.matrixApproachAngle) ? 0.0 : smoothed.matrixApproachAngle);
-    SmartDashboard.putNumber("Target Matrix Distance smoothed", Double.isNaN(smoothed.matrixDistance) ? 0.0 : smoothed.matrixDistance);
+    // SmartDashboard.putNumber("Target Matrix Rotation Angle smoothed", Double.isNaN(smoothed.matrixRotationAngle) ? 0.0 : smoothed.matrixRotationAngle);
+    // SmartDashboard.putNumber("Target Matrix Approach Angle smoothed ", Double.isNaN(smoothed.matrixApproachAngle) ? 0.0 : smoothed.matrixApproachAngle);
+    // SmartDashboard.putNumber("Target Matrix Distance smoothed", Double.isNaN(smoothed.matrixDistance) ? 0.0 : smoothed.matrixDistance);
     // SmartDashboard.putNumber("Target Left/Right Ratio smoothed", Double.isNaN(smoothed.leftRightRatio) ? 0.0 : smoothed.leftRightRatio);
     // SmartDashboard.putNumber("Target Aspect Approach Angle smoothed", Double.isNaN(smoothed.aspectApproachAngle) ? 0.0 : smoothed.aspectApproachAngle);
     // SmartDashboard.putNumber("Limelight Latency smoothed", Double.isNaN(smoothed.latency) ? 0.0 : smoothed.latency);
@@ -426,6 +425,7 @@ public class Vision extends Subsystem {
         }
       }
       acc.averageOf(denonminator);
+      acc.tDistance = calculateDistance(acc.tY, targetHeight);
       smoothed = acc;
       return true;
     }
@@ -452,17 +452,14 @@ public class Vision extends Subsystem {
     return smoothed.tValid;
   }
 
-  private double calculateDistance() {
-    double distance = Double.NaN;
-    if (current.tValid) {
-      double yInRadians = Math.toRadians(current.tY);
-      distance = (LIME_LIGHT_HEIGHT - targetHeight) / Math.tan(yInRadians);
-    }
-    return Math.abs(distance);
+  public static double calculateDistance(double tY, double targetHeight) {
+    double yInRadians = Math.toRadians(tY);
+    double distance = Math.abs((LIME_LIGHT_HEIGHT - targetHeight) / Math.tan(yInRadians));
+    return distance;
   }
 
   public double getDistance() {
-    return current.tDistance;
+    return smoothed.tDistance;
   }
 
   public double getSkew() {

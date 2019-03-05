@@ -22,8 +22,8 @@ public class WristMM extends Command {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
     this.position = Position;
-    // SmartDashboard.putString("wrist pos", position);
-    System.out.println("Wrist Position: " + position);
+    //SmartDashboard.putString("wrist pos", position);
+    //System.out.println("Wrist Position: "+ position);
     requires(RobotMap.wrist);
 
     switch (position) {
@@ -85,8 +85,9 @@ public class WristMM extends Command {
     }
     SmartDashboard.putNumber("Wrist MM err", err);
     return manualPower != 0 // moving the joystick will abort MM
-        || RobotMap.wrist.isSomethingStuck(RobotMap.wristMotor.getMotorOutputPercent()) || err < 2000
-        || timesAtPrevError > 50; // This means we're close enough
+      || RobotMap.wrist.isSomethingStuck(RobotMap.wristMotor.getMotorOutputPercent())
+      || err < 2
+      || timesAtPrevError>50; // This means we're close enough
   }
 
   // Called once after isFinished returns true
