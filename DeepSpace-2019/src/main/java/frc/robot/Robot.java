@@ -121,6 +121,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousPeriodic() {
+    if (oi.driveTrainForward.getValue() != 0 || oi.driveTrainTurn.getValue() != 0) {
+      m_autonomousCommand.cancel();
+    }
     Scheduler.getInstance().run();
   }
 

@@ -41,14 +41,14 @@ public class Pose {
         limeLight.tSkew = RobotMap.vision.getSkew();
         // limeLight.tShort = RobotMap.vision.getShort();
         // limeLight.tLong = RobotMap.vision.getLong();
-        // limeLight.tHor = RobotMap.vision.getHor();
-        // limeLight.tVert = RobotMap.vision.getVert();
+        limeLight.tHor = RobotMap.vision.getHor();
+        limeLight.tVert = RobotMap.vision.getVert();
         // limeLight.latency = RobotMap.vision.getLatency();
         // limeLight.matrixRotationAngle = RobotMap.vision.getMatrixRotationAngle();
         // limeLight.matrixApproachAngle = RobotMap.vision.getMatrixApproachAngle();
         // limeLight.matrixDistance = RobotMap.vision.getMatrixDistance();
         // limeLight.leftRightRatio = RobotMap.vision.getLeftRightRatio();
-        // limeLight.aspectApproachAngle = RobotMap.vision.getAspectApproachAngle();
+        limeLight.aspectApproachAngle = RobotMap.vision.getAspectApproachAngle();
         heading = RobotMap.direction.angle();
         driveTrainEncoderLeft = RobotMap.distance.getLeftRaw();
         driveTrainEncoderRight = RobotMap.distance.getRightRaw();

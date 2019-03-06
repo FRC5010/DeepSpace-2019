@@ -62,13 +62,13 @@ public class Vision extends Subsystem {
       // matrixRotationAngle = other.matrixRotationAngle;
       // matrixApproachAngle = other.matrixApproachAngle;
       tDistance = other.tDistance;
-      // leftRightRatio = other.leftRightRatio;
+      leftRightRatio = other.leftRightRatio;
       tSkew = other.tSkew;
       // tShort = other.tShort;
       // tLong = other.tLong;
-      // tHor = other.tHor;
-      // tVert = other.tVert;
-      // aspectApproachAngle = other.aspectApproachAngle;
+      tHor = other.tHor;
+      tVert = other.tVert;
+      aspectApproachAngle = other.aspectApproachAngle;
       // latency = other.latency;
       tValid = other.tValid;
     }
@@ -81,12 +81,12 @@ public class Vision extends Subsystem {
       // matrixRotationAngle += other.matrixRotationAngle;
       // matrixApproachAngle += other.matrixApproachAngle;
       // tDistance += other.tDistance;
-      // leftRightRatio += other.leftRightRatio;
+      leftRightRatio += other.leftRightRatio;
       tSkew += other.tSkew;
       // tShort += other.tShort;
       // tLong += other.tLong;
-      // tHor += other.tHor;
-      // tVert += other.tVert;
+      tHor += other.tHor;
+      tVert += other.tVert;
       // aspectApproachAngle += other.aspectApproachAngle;
     }
 
@@ -98,12 +98,12 @@ public class Vision extends Subsystem {
       // matrixRotationAngle /= denonminator;
       // matrixApproachAngle /= denonminator;
       // tDistance /= denonminator;
-      // leftRightRatio /= denonminator;
+      leftRightRatio /= denonminator;
       tSkew /= denonminator;
       // tShort /= denonminator;
       // tLong /= denonminator;
-      // tHor /= denonminator;
-      // tVert /= denonminator;
+      tHor /= denonminator;
+      tVert /= denonminator;
       // aspectApproachAngle /= denonminator;
     }
 
@@ -125,13 +125,13 @@ public class Vision extends Subsystem {
       // matrixRotationAngle = linearFwdInterpolation(ts1, one.matrixRotationAngle, ts2, two.matrixRotationAngle, ts3);
       // matrixApproachAngle = linearFwdInterpolation(ts1, one.matrixApproachAngle, ts2, two.matrixApproachAngle, ts3);
       tDistance = calculateDistance(tY, targetHeight);
-      // leftRightRatio = linearFwdInterpolation(ts1, one.leftRightRatio, ts2, two.leftRightRatio, ts3);
+      leftRightRatio = linearFwdInterpolation(ts1, one.leftRightRatio, ts2, two.leftRightRatio, ts3);
       tSkew = linearFwdInterpolation(ts1, one.tSkew, ts2, two.tSkew, ts3);
       // tShort = linearFwdInterpolation(ts1, one.tShort, ts2, two.tShort, ts3);
       // tLong = linearFwdInterpolation(ts1, one.tLong, ts2, two.tLong, ts3);
-      // tHor = linearFwdInterpolation(ts1, one.tHor, ts2, two.tHor, ts3);
-      // tVert = linearFwdInterpolation(ts1, one.tVert, ts2, two.tVert, ts3);
-      // aspectApproachAngle = linearFwdInterpolation(ts1, one.aspectApproachAngle, ts2, two.aspectApproachAngle, ts3);
+      tHor = linearFwdInterpolation(ts1, one.tHor, ts2, two.tHor, ts3);
+      tVert = linearFwdInterpolation(ts1, one.tVert, ts2, two.tVert, ts3);
+      aspectApproachAngle = calculateAspectRatio(tHor, tVert);
       latency = 0.0;
       tValid = true;
     }
@@ -149,7 +149,7 @@ public class Vision extends Subsystem {
   public static final double targetHeight = 23; //29.25;
 
   // The largest possible ratio from the front
-  private double originalRatio = 77.0 / 35.0; // TODO: figure out the correct ratio when facing directly in front
+  private static double originalRatio = 77.0 / 35.0; // TODO: figure out the correct ratio when facing directly in front
 
   // Matrix stuff
   private MatOfPoint3f mObjectPoints;
@@ -205,13 +205,16 @@ public class Vision extends Subsystem {
       current.tSkew = table.getEntry("ts").getDouble(0.0);
       // current.tShort = table.getEntry("tshort").getDouble(0.0);
       // current.tLong = table.getEntry("tlong").getDouble(0.0);
-      // current.tHor = table.getEntry("thor").getDouble(0.0);
-      // current.tVert = table.getEntry("tvert").getDouble(0.0);
+      current.tHor = table.getEntry("thor").getDouble(0.0);
+      current.tVert = table.getEntry("tvert").getDouble(0.0);
       // current.latency = table.getEntry("tl").getDouble(0.0);
       // cornXc = table.getEntry("tcornx").getDoubleArray(new double[0]);
       // cornYc = table.getEntry("tcorny").getDoubleArray(new double[0]);
 
-      //calculateAspectRatio();
+      current.aspectApproachAngle = calculateAspectRatio(current.tHor, current.tVert);
+      int left = (isLeftOfTarget()? -1 : 0);
+      int right = (isRightOfTarget()? 1 : 0);
+      current.leftRightRatio = left + right;
       //matrixMathOnCorners();
 
       if (!smoothed.tValid) {
@@ -264,13 +267,13 @@ public class Vision extends Subsystem {
     SmartDashboard.putNumber("Target Skew raw", Double.isNaN(current.tSkew) ? 0.0 : current.tSkew);
     // SmartDashboard.putNumber("Target Short raw", Double.isNaN(current.tShort) ? 0.0 : current.tShort);
     // SmartDashboard.putNumber("Target Long raw", Double.isNaN(current.tLong) ? 0.0 : current.tLong);
-    // SmartDashboard.putNumber("Target Horizontal raw", Double.isNaN(current.tHor) ? 0.0 : current.tHor);
-    // SmartDashboard.putNumber("Target Vertical raw", Double.isNaN(current.tVert) ? 0.0 : current.tVert);
+    SmartDashboard.putNumber("Target Horizontal raw", Double.isNaN(current.tHor) ? 0.0 : current.tHor);
+    SmartDashboard.putNumber("Target Vertical raw", Double.isNaN(current.tVert) ? 0.0 : current.tVert);
     // SmartDashboard.putNumber("Target Matrix Rotation Angle raw", Double.isNaN(current.matrixRotationAngle) ? 0.0 : current.matrixRotationAngle);
     // SmartDashboard.putNumber("Target Matrix Approach Angle raw ", Double.isNaN(current.matrixApproachAngle) ? 0.0 : current.matrixApproachAngle);
     // SmartDashboard.putNumber("Target Matrix Distance raw", Double.isNaN(current.matrixDistance) ? 0.0 : current.matrixDistance);
-    // SmartDashboard.putNumber("Target Left/Right Ratio raw", Double.isNaN(current.leftRightRatio) ? 0.0 : current.leftRightRatio);
-    // SmartDashboard.putNumber("Target Aspect Approach Angle raw", Double.isNaN(current.aspectApproachAngle) ? 0.0 : current.aspectApproachAngle);
+    SmartDashboard.putNumber("Target Left/Right Ratio raw", Double.isNaN(current.leftRightRatio) ? 0.0 : current.leftRightRatio);
+    SmartDashboard.putNumber("Target Aspect Approach Angle raw", Double.isNaN(current.aspectApproachAngle) ? 0.0 : current.aspectApproachAngle);
     // SmartDashboard.putNumber("Limelight Latency raw", Double.isNaN(current.latency) ? 0.0 : current.latency);
     // SmartDashboard.putNumber("Limelight CrossHair-A X", table.getEntry("cx0").getDouble(0));
     // SmartDashboard.putNumber("Limelight CrossHair-A Y", table.getEntry("cy0").getDouble(0));
@@ -286,13 +289,13 @@ public class Vision extends Subsystem {
     SmartDashboard.putBoolean("LeftOfTarget", isLeftOfTarget());
     // SmartDashboard.putNumber("Target Short smoothed", Double.isNaN(smoothed.tShort) ? 0.0 : smoothed.tShort);
     // SmartDashboard.putNumber("Target Long smoothed", Double.isNaN(smoothed.tLong) ? 0.0 : smoothed.tLong);
-    // SmartDashboard.putNumber("Target Horizontal smoothed", Double.isNaN(smoothed.tHor) ? 0.0 : smoothed.tHor);
-    // SmartDashboard.putNumber("Target Vertical smoothed", Double.isNaN(smoothed.tVert) ? 0.0 : smoothed.tVert);
+    SmartDashboard.putNumber("Target Horizontal smoothed", Double.isNaN(smoothed.tHor) ? 0.0 : smoothed.tHor);
+    SmartDashboard.putNumber("Target Vertical smoothed", Double.isNaN(smoothed.tVert) ? 0.0 : smoothed.tVert);
     // SmartDashboard.putNumber("Target Matrix Rotation Angle smoothed", Double.isNaN(smoothed.matrixRotationAngle) ? 0.0 : smoothed.matrixRotationAngle);
     // SmartDashboard.putNumber("Target Matrix Approach Angle smoothed ", Double.isNaN(smoothed.matrixApproachAngle) ? 0.0 : smoothed.matrixApproachAngle);
     // SmartDashboard.putNumber("Target Matrix Distance smoothed", Double.isNaN(smoothed.matrixDistance) ? 0.0 : smoothed.matrixDistance);
-    // SmartDashboard.putNumber("Target Left/Right Ratio smoothed", Double.isNaN(smoothed.leftRightRatio) ? 0.0 : smoothed.leftRightRatio);
-    // SmartDashboard.putNumber("Target Aspect Approach Angle smoothed", Double.isNaN(smoothed.aspectApproachAngle) ? 0.0 : smoothed.aspectApproachAngle);
+    SmartDashboard.putNumber("Target Left/Right Ratio smoothed", Double.isNaN(smoothed.leftRightRatio) ? 0.0 : smoothed.leftRightRatio);
+    SmartDashboard.putNumber("Target Aspect Approach Angle smoothed", Double.isNaN(smoothed.aspectApproachAngle) ? 0.0 : smoothed.aspectApproachAngle);
     // SmartDashboard.putNumber("Limelight Latency smoothed", Double.isNaN(smoothed.latency) ? 0.0 : smoothed.latency);
     // corner stuff
     if (cornXc != null ) {
@@ -388,17 +391,12 @@ public class Vision extends Subsystem {
     current.matrixApproachAngle = yawInDegrees;
   }
 
-  private void calculateAspectRatio() {
-    PointFinder pointFinder = new PointFinder(cornXc, cornYc);
-
-    current.leftRightRatio = pointFinder.getLeftLength() / pointFinder.getRightLength();
-    double leftRightSignum = current.leftRightRatio > 1 ? 1 : -1;
-
+  private static double calculateAspectRatio(double tHor, double tVert) {
     // Attempt to find angle between target perpendicular and camera
     // using a horizontal vs vertical ratio
-    double currentRatio = current.tHor / current.tVert;
+    double currentRatio = tHor / tVert;
     double ratio = Math.min(1, currentRatio / originalRatio); // finding acos of a value > 1 will give NaN
-    current.aspectApproachAngle = Math.toDegrees(Math.acos(ratio)) * leftRightSignum;
+    return Math.toDegrees(Math.acos(ratio));
   }
 
   private boolean smoothValues() {
