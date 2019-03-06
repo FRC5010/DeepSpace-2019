@@ -52,11 +52,14 @@ public class VADriveUntilDistance extends Command {
     SmartDashboard.putString("VADDriveUntilDistance", "working");
 
     double output = moveTowardsTarget();
-    // output = 0;
-    double turn = VisionAssistedDrive.arcTowardsTarget();
-    //    double turn = turnTowards();
+    //double turn = VisionAssistedDrive.arcTowardsTarget();
+    double turn = turnTowards();
 
     RobotMap.driveTrain.drive(output - turn, output + turn);
+
+    SmartDashboard.putNumber("Move error", lastError);
+    SmartDashboard.putNumber("Steer error", lastHeadingError);
+
   }
 
   double moveTowardsTarget() {
@@ -66,13 +69,13 @@ public class VADriveUntilDistance extends Command {
       double error =  distance - setpoint;
       double errorDelta = error - lastError;
 
-      SmartDashboard.putNumber("VADDriveUntilDistance distance", distance);
       moveAmt = vad.getMoveKp() * error + vad.getMoveKd() * errorDelta;
 
       double moveMin = vad.getMoveMin();
       moveAmt = Math.max(moveMin, Math.abs(moveAmt)) * Math.signum(moveAmt);
       lastError = error;
     }
+    SmartDashboard.putNumber("VADDriveUntilDistance moveAmt", moveAmt);
     return moveAmt;
   }
 
@@ -110,8 +113,7 @@ public class VADriveUntilDistance extends Command {
       timesAtPrevError = 0;
     }
     prevError = lastError;
-    return 0 != manualOverride || 0 != steerOverride || 
-      Math.abs(lastError) < 1 || timesAtPrevError > 50;
+    return 0 != manualOverride || 0 != steerOverride ||  (Math.abs(lastHeadingError) < 1 && Math.abs(lastError) < 1); // || timesAtPrevError > 50;
   }
 
   // Called once after isFinished returns true

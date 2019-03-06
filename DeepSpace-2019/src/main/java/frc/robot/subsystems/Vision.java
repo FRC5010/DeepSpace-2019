@@ -145,8 +145,8 @@ public class Vision extends Subsystem {
 
   private static long lastValid = 0;
 
-  public static final double LIME_LIGHT_HEIGHT = 33.5; // Measured on Comp Bot
-  public static final double targetHeight = 21;
+  public static final double LIME_LIGHT_HEIGHT = 33; // Measured on Comp Bot
+  public static final double targetHeight = 29;
 
   // The largest possible ratio from the front
   private double originalRatio = 77.0 / 35.0; // TODO: figure out the correct ratio when facing directly in front

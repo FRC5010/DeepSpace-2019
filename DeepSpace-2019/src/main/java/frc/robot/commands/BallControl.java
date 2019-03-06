@@ -42,7 +42,7 @@ public class BallControl extends Command {
     } else if (rightTrigger != 0) {
       move = rightTrigger;
     } else if (RobotMap.wristMotor.getSelectedSensorPosition() < 100000) {
-      move = -.1;
+      //move = 0-.1;
     }
 
     RobotMap.ballIntake.ballControl(move);

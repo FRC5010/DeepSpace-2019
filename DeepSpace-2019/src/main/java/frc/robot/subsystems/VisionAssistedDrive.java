@@ -45,7 +45,7 @@ public class VisionAssistedDrive extends Subsystem {
     }
   }
 
-  public GearPID lowGear = new GearPID(new PIDValues(0.008, 0, 0, 0.08), new PIDValues(0.007, 0, 0, 0.08));
+  public GearPID lowGear = new GearPID(new PIDValues(0.005, 0, 0.25, 0.09), new PIDValues(0.008, 0, 0, 0.08));
   public GearPID highGear = new GearPID(new PIDValues(0.015, 0, 0, 0.08), new PIDValues(0.06, 0, 0.2, 0.08));
 
   public double getSteerKp() {
@@ -181,15 +181,15 @@ public class VisionAssistedDrive extends Subsystem {
       System.out.println("ErrorDistance: " + errorDistance);
       double approachAngle = 0;
       if (Vision.isLeftOfTarget()) {
-        approachAngle = (errorDistance > 0 ? -errorDistance / 3.0 : 0.0);
-      } else if (Vision.isRightOfTarget()) {
         approachAngle = (errorDistance > 0 ? errorDistance / 3.0 : 0.0);
+      } else if (Vision.isRightOfTarget()) {
+        approachAngle = (errorDistance > 0 ? -errorDistance / 3.0 : 0.0);
       }
       System.out.println("DesAngle: " + approachAngle);
       
       double error = approachAngle - rotationAngle;
       System.out.println("Arc Error: " + error);
-      double steerAmt = -0.01 * error; //(Shifter.isLowGear ? lowGear.steerKp : highGear.steerKp)
+      double steerAmt = 0.01 * error; //(Shifter.isLowGear ? lowGear.steerKp : highGear.steerKp)
       System.out.println("SteerAmt: " + steerAmt);
 
       // double moveMin = Shifter.isLowGear ? lowGear.moveMin : highGear.moveMin;

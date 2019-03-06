@@ -85,7 +85,7 @@ public class OI {
     driverB.whenPressed(new WristMM(Wrist.Position.MIDDLE));
 
     driverX.whenPressed(new VisionGrabHatch());
-    driverY.whenPressed(new VADriveUntilDistance(25));
+    driverY.whenPressed(new VADriveUntilDistance(40));
     
     driveTrainForward = new JoystickAxis(driver, 1, true, 0.7);
     visionActivation = new JoystickAxis(driver, 3);
