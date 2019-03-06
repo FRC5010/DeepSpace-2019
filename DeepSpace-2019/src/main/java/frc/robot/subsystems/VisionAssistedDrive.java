@@ -45,7 +45,7 @@ public class VisionAssistedDrive extends Subsystem {
     }
   }
 
-  public GearPID lowGear = new GearPID(new PIDValues(0.008, 0, 0, 0.08), new PIDValues(0.007, 0, 0, 0.08));
+  public GearPID lowGear = new GearPID(new PIDValues(0.005, 0, 0.25, 0.09), new PIDValues(0.008, 0, 0, 0.08));
   public GearPID highGear = new GearPID(new PIDValues(0.015, 0, 0, 0.08), new PIDValues(0.06, 0, 0.2, 0.08));
 
   public double getSteerKp() {
