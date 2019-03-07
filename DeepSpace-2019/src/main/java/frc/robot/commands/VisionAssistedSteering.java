@@ -7,80 +7,46 @@
 
 package frc.robot.commands;
 
-import java.sql.Struct;
-
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.subsystems.VisionAssistedDrive;
 
-public class VADriveUntilDistance extends Command {
+public class VisionAssistedSteering extends Command {
   VisionAssistedDrive vad;
 
-  private double lastHeadingError = 0;
-  private double lastError = 0;
-  private double setpoint = 0;
-  private double prevError = 0;
-  private int timesAtPrevError = 0;
-
-  public VADriveUntilDistance (double setpoint) {
-    this.setpoint = setpoint;
+  public VisionAssistedSteering () {
+    requires(RobotMap.driveTrain);
     vad = RobotMap.visionDrive;
     vad.printPIDValues();
-    requires(RobotMap.driveTrain);
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
 		SmartDashboard.putString("Command", this.getClass().getSimpleName());
-    SmartDashboard.putString(this.getClass().getSimpleName(), "init");
-    lastError = 0;
-    lastHeadingError = 0;
-    prevError = 0;
-    timesAtPrevError = 0;
   }
  
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    SmartDashboard.putString(this.getClass().getSimpleName(), "working");
-
-    double output = vad.moveTowardsTarget(setpoint, lastError);
+    double output = Robot.oi.driveTrainForward.getValue();
     //double turn = VisionAssistedDrive.arcTowardsTarget();
-    double turn = vad.turnTowards(0, lastHeadingError);
+    double turn = vad.arcTowardsTarget();
 
     RobotMap.driveTrain.drive(output - turn, output + turn);
-
-    SmartDashboard.putNumber("Move error", lastError);
-    SmartDashboard.putNumber("Steer error", lastHeadingError);
   }
 
   // Make this return true when this Command no longer needs to run execute()
-
   @Override
   protected boolean isFinished() {
-    double manualOverride = Robot.oi.driveTrainForward.getValue();
-    double steerOverride = Robot.oi.driveTrainTurn.getValue();
-    if ( ((int)lastError)/1 == ((int)prevError)/1 ) {
-      timesAtPrevError++;
-    } else {
-      timesAtPrevError = 0;
-    }
-    prevError = lastError;
-    return 0 != manualOverride || 0 != steerOverride ||  (Math.abs(lastHeadingError) < 1 && Math.abs(lastError) < 1); // || timesAtPrevError > 50;
+    return true;
   }
 
   // Called once after isFinished returns true
   @Override
   protected void end() {
-    SmartDashboard.putString(this.getClass().getSimpleName(), "end");
-    RobotMap.driveTrain.stop();
-    lastError = 0;
-    lastHeadingError = 0;
-    prevError = 0;
-    timesAtPrevError = 0;
   }
 
   // Called when another command which requires one or more of the same

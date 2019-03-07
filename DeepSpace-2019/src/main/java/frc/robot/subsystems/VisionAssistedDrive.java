@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 /**
  * Add your docs here.
  */
-public class VisionAssistedDrive extends Subsystem {
+public class VisionAssistedDrive {
 
   class PIDValues {
     public double kp, ki, kd, min;
@@ -117,60 +117,45 @@ public class VisionAssistedDrive extends Subsystem {
     SmartDashboard.putNumber("highGear.move.kd", highGear.move.kd);
     SmartDashboard.putNumber("highGear.move.min", highGear.move.min);
   }
-/*
-  public static class GearVariables {
-    public final double steerKp, steerKd, moveKp, moveKd, moveMin;
 
-    public GearVariables(double psteerKp, double pmoveKp, double pmoveMin, double psteerKd, double pmoveKd) {
-      steerKp = psteerKp;
-      moveKp = pmoveKp;
-      moveMin = pmoveMin;
-      steerKd = psteerKd;
-      moveKd = pmoveKd;
-    }
-  }
-
-  // two different sets of Kp values for different gears
-  public static GearVariables lowGear = new GearVariables(0.008, 0.095, 0.08, 0, 0);
-  public static GearVariables highGear = new GearVariables(0.015, 0.06, 0.08 , 0, .2);
-*/
-
-
-  @Override
-  public void initDefaultCommand() {
-    // Set the default command for a subsystem here.
-    // setDefaultCommand(new MySpecialCommand());
-  }
-
-/*
-  // returns a steering motor output to turn robot towards target
-  public double turnTowardsTarget() {
-    double steerAmt = 0;
-    if (Pose.getCurrentPose().limeLight.tValid) {
-      steerAmt = (Shifter.isLowGear ? lowGear.steerKp : highGear.steerKp) * Pose.getCurrentPose().limeLight.tX;
-      
-      double moveMin = Shifter.isLowGear ? lowGear.moveMin : highGear.moveMin;
-      steerAmt = Math.max(moveMin, Math.abs(steerAmt)) * Math.signum(steerAmt);
-    }
-    return steerAmt;
-  }
-
-  public static double moveTowardsTarget() {
+  public double moveTowardsTarget(double setpoint, double lastError) {
     double moveAmt = 0;
     if (Pose.getCurrentPose().limeLight.tValid) {
-      double tY = Pose.getCurrentPose().limeLight.tY;
-      moveAmt = (Shifter.isLowGear ? lowGear.moveKp : highGear.moveKp) * tY;
+      double distance = Pose.getCurrentPose().limeLight.tDistance;
+      double error =  distance - setpoint;
+      double errorDelta = error - lastError;
 
-      double moveMin = Shifter.isLowGear ? lowGear.moveMin : highGear.moveMin;
+      moveAmt = getMoveKp() * error + getMoveKd() * errorDelta;
+
+      double moveMin = getMoveMin();
       moveAmt = Math.max(moveMin, Math.abs(moveAmt)) * Math.signum(moveAmt);
+      lastError = error;
     }
+    SmartDashboard.putNumber(this.getClass().getSimpleName() + " moveAmt", moveAmt);
     return moveAmt;
   }
-*/
+
+  public double turnTowards(double desiredHeading, double lastHeadingError) {
+    double turnAmt = 0;
+    if (Pose.getCurrentPose().limeLight.tValid) {
+      double heading = Pose.getCurrentPose().limeLight.tX;
+      double headingError = DirectionSensor.boundHalfDegrees(desiredHeading - heading);
+      double headingDelta = headingError - lastHeadingError;
+
+      turnAmt = getSteerKp() * headingError + getSteerKd() * headingDelta;
+
+      double steerMin = getSteerMin();
+      turnAmt = Math.max(steerMin, Math.abs(turnAmt)) * Math.signum(turnAmt);
+      lastHeadingError = headingError;
+    }
+    SmartDashboard.putNumber(this.getClass().getSimpleName() + " Steer", turnAmt);
+    return turnAmt;
+  }
+
 
   // arc towards target
   static double minRotationDistance = 40;
-  public static double arcTowardsTarget() {
+  public double arcTowardsTarget() {
     Pose currentPose = Pose.getCurrentPose();
     if (currentPose.limeLight.tValid) {
       double distance = currentPose.limeLight.tDistance;
@@ -193,7 +178,7 @@ public class VisionAssistedDrive extends Subsystem {
 
       // double moveMin = Shifter.isLowGear ? lowGear.moveMin : highGear.moveMin;
       // steerAmt = Math.signum(steerAmt) * Math.max(Math.abs(steerAmt), moveMin);
-      SmartDashboard.putNumber("VADDriveUntilDistance Steer", steerAmt);
+      SmartDashboard.putNumber(this.getClass().getSimpleName() + " Steer", steerAmt);
 
       return steerAmt;
     }
