@@ -138,9 +138,9 @@ public class Wrist extends Subsystem {
   }
 
   public void moveWrist(double power) {
-     if (isSomethingStuck(power)) {
-       power = 0;
-     } 
+    //  if (isSomethingStuck(power)) {
+    //    power = 0;
+    //  } 
     SmartDashboard.putNumber("Wrist power", power);
     wristMotor.set(ControlMode.PercentOutput, power, DemandType.ArbitraryFeedForward, calculateFeedForward());
   }
@@ -171,7 +171,7 @@ public class Wrist extends Subsystem {
   }
 
   public int getCurrentPosition() {
-    return ticsToAngle(wristMotor.getSelectedSensorPosition());
+    return wristMotor.getSelectedSensorPosition();
   }
 
   public void returnToManualControl() {
@@ -193,6 +193,6 @@ public class Wrist extends Subsystem {
 
   public int ticsToAngle(double tics) {
     
-    return ((int)Math.floor((tics / 1100) - lowestAngle));
+    return ((int)Math.floor((tics / 4) - lowestAngle));
   }
 }

@@ -64,7 +64,8 @@ public class OI {
   public JoystickAxis driveTrainForward;
   public JoystickAxis driveTrainTurn;
 
-  public JoystickAxis visionActivation;
+  public JoystickAxis driverRightTrigger;
+  public JoystickAxis speedReducerTrigger;
   public JoystickAxis elevatorLiftControl;
   public JoystickAxis ballIntake;
   public JoystickAxis ballOuttake;
@@ -88,8 +89,10 @@ public class OI {
     driverY.whenPressed(new VADriveUntilDistance(40));
     
     driveTrainForward = new JoystickAxis(driver, 1, true, 0.7);
-    visionActivation = new JoystickAxis(driver, 3);
     driveTrainTurn = new JoystickAxis(driver, 4, 0.5);
+
+    driverRightTrigger = new JoystickAxis(driver, 3);
+    speedReducerTrigger = new JoystickAxis(driver, 2);
     
     /** Co-Driver controls */
     coDriverStart.whenPressed(new ElevatorReset());
