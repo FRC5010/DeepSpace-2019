@@ -32,8 +32,8 @@ public class Wrist extends Subsystem {
   public static double HATCH_LOW = -lowestAngle + 5;
   public static double HATCH_MIDDLE = 0;
   public static double HATCH_HIGH = 0;
-  public static double CARGO_LOW = -lowestAngle + 5;
-  public static double CARGO_MIDDLE = 0;
+  public static double CARGO_LOW = -100;
+  public static double CARGO_MIDDLE = -1585;
   public static double CARGO_HIGH = 70;
   public static double CARGO_SHIP = 0;
   public static double MAX_FWD_OUT = 1;
@@ -48,7 +48,7 @@ public class Wrist extends Subsystem {
     wristMotor.configFactoryDefault();
     wristMotor.setNeutralMode(NeutralMode.Brake);
     wristMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
-    wristMotor.setSensorPhase(false);
+    wristMotor.setSensorPhase(true);
     wristMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, Constants.kTimeoutMs);
     wristMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, Constants.kTimeoutMs);
     wristMotor.configNeutralDeadband(Constants.kNeutralDeadband, Constants.kTimeoutMs);
@@ -73,10 +73,10 @@ public class Wrist extends Subsystem {
     wristMotor.config_kI(Constants.kSlotDown, Constants.wristDownGains.kI, Constants.kTimeoutMs);
     wristMotor.config_kD(Constants.kSlotDown, Constants.wristDownGains.kD, Constants.kTimeoutMs);
 
-    wristMotor.configAllowableClosedloopError(Constants.kSlotIdx, 5000, Constants.kTimeoutMs);
+    wristMotor.configAllowableClosedloopError(Constants.kSlotIdx, 100, Constants.kTimeoutMs);
     wristMotor.config_IntegralZone(Constants.kSlotIdx, 100, Constants.kTimeoutMs);
 
-    wristMotor.configAllowableClosedloopError(Constants.kSlotDown, 5000, Constants.kTimeoutMs);
+    wristMotor.configAllowableClosedloopError(Constants.kSlotDown, 100, Constants.kTimeoutMs);
     wristMotor.config_IntegralZone(Constants.kSlotDown, 100, Constants.kTimeoutMs);
 
     wristMotor.configClosedLoopPeakOutput(Constants.kSlotIdx, MAX_FWD_OUT, Constants.kTimeoutMs);
@@ -86,8 +86,8 @@ public class Wrist extends Subsystem {
     wristMotor.configClosedLoopPeriod(1, 1, Constants.kTimeoutMs);
 
     // cruise velocity
-    wristMotor.configMotionCruiseVelocity(9000, Constants.kTimeoutMs);
-    wristMotor.configMotionAcceleration(9000, Constants.kTimeoutMs);
+    wristMotor.configMotionCruiseVelocity(790, Constants.kTimeoutMs);
+    wristMotor.configMotionAcceleration(790, Constants.kTimeoutMs);
 
     // zeroing sensor
     wristMotor.setSelectedSensorPosition(0, Constants.kSlotIdx, Constants.kTimeoutMs);
@@ -147,7 +147,7 @@ public class Wrist extends Subsystem {
 
   public void  moveToPosition(double setPoint) {
 
-    setPoint = angleToTics(setPoint);
+    setPoint = -setPoint;
     double kP = SmartDashboard.getNumber("Wrist P", 4);
     double kI = SmartDashboard.getNumber("Wrist I", 0);
     double kD = SmartDashboard.getNumber("Wrist D", 4);
@@ -181,10 +181,10 @@ public class Wrist extends Subsystem {
   public void tuneWrist(double power) {
     wristMotor.set(ControlMode.PercentOutput, power);
     wristMotor.getFaults(faults);
-    // System.out.println("Sensor Vel: " + wristMotor.getSelectedSensorVelocity());
-    // System.out.println("Sensor Pos: " + wristMotor.getSelectedSensorPosition());
+     System.out.println("Sensor Vel: " + wristMotor.getSelectedSensorVelocity());
+     System.out.println("Sensor Pos: " + wristMotor.getSelectedSensorPosition());
     System.out.println("wrist Out %: " + wristMotor.getMotorOutputPercent());
-    // System.out.println("Out of Phs: " + faults.SensorOutOfPhase);
+     System.out.println("Out of Phs: " + faults.SensorOutOfPhase);
   }
 
   public double angleToTics(double angle) {
@@ -193,6 +193,6 @@ public class Wrist extends Subsystem {
 
   public int ticsToAngle(double tics) {
     
-    return ((int)Math.floor((tics / 4) - lowestAngle));
+    return ((int)Math.floor((tics / 5.33333333333) - lowestAngle));
   }
 }
