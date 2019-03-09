@@ -8,8 +8,9 @@
 package frc.robot.commands.groups;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.robot.RobotMap_Paths;
 import frc.robot.RobotMap_Paths.MotionProfiles;
+import frc.robot.commands.ShiftDown;
+import frc.robot.commands.ShiftUp;
 import frc.robot.commands.commands_auto.PathFollower5010;
 import frc.robot.commands.commands_auto.PathFollower5010.Direction;
 
@@ -21,8 +22,11 @@ public class MiddleShipLeft extends CommandGroup {
     addSequential(new Preload());
 
     // Middle start to Ship left-front bay
-    addSequential(new PathFollower5010(RobotMap_Paths.MotionProfiles.MStoShip1L, Direction.kForward));
+    addSequential(new ShiftUp());
+    addSequential(new PathFollower5010(MotionProfiles.MStoShip1L, Direction.kForward));
+    addSequential(new ShiftDown());
     addSequential(new VisionReleaseHatch());
+    addSequential(new ShiftUp());
     addSequential(new PathFollower5010(MotionProfiles.backupShip1L, Direction.kRevNormal));
 
     // Add Commands here:

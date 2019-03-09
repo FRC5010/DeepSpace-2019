@@ -118,40 +118,6 @@ public class VisionAssistedDrive {
     SmartDashboard.putNumber("highGear.move.min", highGear.move.min);
   }
 
-  public double moveTowardsTarget(double setpoint, double lastError) {
-    double moveAmt = 0;
-    if (Pose.getCurrentPose().limeLight.tValid) {
-      double distance = Pose.getCurrentPose().limeLight.tDistance;
-      double error =  distance - setpoint;
-      double errorDelta = error - lastError;
-
-      moveAmt = getMoveKp() * error + getMoveKd() * errorDelta;
-
-      double moveMin = getMoveMin();
-      moveAmt = Math.max(moveMin, Math.abs(moveAmt)) * Math.signum(moveAmt);
-      lastError = error;
-    }
-    SmartDashboard.putNumber(this.getClass().getSimpleName() + " moveAmt", moveAmt);
-    return moveAmt;
-  }
-
-  public double turnTowards(double desiredHeading, double lastHeadingError) {
-    double turnAmt = 0;
-    if (Pose.getCurrentPose().limeLight.tValid) {
-      double heading = Pose.getCurrentPose().limeLight.tX;
-      double headingError = DirectionSensor.boundHalfDegrees(desiredHeading - heading);
-      double headingDelta = headingError - lastHeadingError;
-
-      turnAmt = getSteerKp() * headingError + getSteerKd() * headingDelta;
-
-      double steerMin = getSteerMin();
-      turnAmt = Math.max(steerMin, Math.abs(turnAmt)) * Math.signum(turnAmt);
-      lastHeadingError = headingError;
-    }
-    SmartDashboard.putNumber(this.getClass().getSimpleName() + " Steer", turnAmt);
-    return turnAmt;
-  }
-
 
   // arc towards target
   static double minRotationDistance = 40;

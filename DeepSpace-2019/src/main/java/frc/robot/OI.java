@@ -22,6 +22,9 @@ import frc.robot.commands.VADriveUntilDistance;
 import frc.robot.commands.WristMM;
 import frc.robot.commands.WristReset;
 import frc.robot.commands.commands_auto.FieldMovement;
+import frc.robot.commands.groups.AllComeDown;
+import frc.robot.commands.groups.CargoHigh;
+import frc.robot.commands.groups.CargoMiddle;
 import frc.robot.commands.groups.VisionGrabHatch;
 import frc.robot.dynasty.JoystickAxis;
 import frc.robot.subsystems.Elevator;
@@ -88,7 +91,7 @@ public class OI {
     driverX.whenPressed(new VisionGrabHatch());
     driverY.whenPressed(new VADriveUntilDistance(40));
     
-    driveTrainForward = new JoystickAxis(driver, 1, true, 0.7);
+    driveTrainForward = new JoystickAxis(driver, 1, true, .8);
     driveTrainTurn = new JoystickAxis(driver, 4, 0.5);
 
     driverRightTrigger = new JoystickAxis(driver, 3);
@@ -99,10 +102,10 @@ public class OI {
     coDriverBack.whenPressed(new WristReset());
     coDriverJoyLB.whenPressed(new ToggleMotorSafety());
 
-    coDriverA.whenPressed(new ElevatorMM(Position.LOW));
-    coDriverB.whenPressed(new ElevatorMM(Position.MIDDLE));
-    coDriverY.whenPressed(new ElevatorMM(Position.HIGH));
-
+    coDriverA.whenPressed(new AllComeDown());
+    coDriverB.whenPressed(new CargoMiddle());
+    coDriverY.whenPressed(new CargoHigh());
+    
     elevatorLiftControl = new JoystickAxis(coDriver, 1, true, Elevator.MAX_FWD_OUT);
     elevatorLiftControl.setLowerLimit(Elevator.MAX_REV_OUT);
     elevatorGamePieceSelector = coDriverLB;

@@ -26,14 +26,16 @@ import frc.robot.util.Constants;
  * Add your docs here.
  */
 public class Wrist extends Subsystem {
-  public static double lowestAngle = 32;
-  public static final double feedForward = 0.195;
+  public static double lowestAngle = 35;
+  public static final double feedForward = 0.1;
+  public static final double angleConversion = 20;
   public static double ZERO = 1;
   public static double HATCH_LOW = -lowestAngle + 5;
   public static double HATCH_MIDDLE = 0;
   public static double HATCH_HIGH = 0;
-  public static double CARGO_LOW = -100;
-  public static double CARGO_MIDDLE = -1585;
+  public static double CARGO_LOW = -lowestAngle + 5;
+  public static double CARGO_MIDDLE = 60
+  ;
   public static double CARGO_HIGH = 70;
   public static double CARGO_SHIP = 0;
   public static double MAX_FWD_OUT = 1;
@@ -43,6 +45,7 @@ public class Wrist extends Subsystem {
   public static enum Position {
     LOW, MIDDLE, HIGH
   }
+  public static Position lastMMPosition = Position.LOW;
 
   public Wrist() {
     wristMotor.configFactoryDefault();
@@ -124,13 +127,13 @@ public class Wrist extends Subsystem {
   public boolean isSomethingStuck(double power) {
     if (RobotMap.checkMotorSafety && 0.25 < power) {
       long curPose = getCurrentPosition();
-      if (lastPosition / 100 == curPose / 100) {
+      if (((int)lastPosition / 10) == ((int)curPose  / 10)) {
         ++numTimesAtLastPosition;
       } else {
         numTimesAtLastPosition = 0;
       }
       lastPosition = curPose;
-      return 3 <= numTimesAtLastPosition;
+      return 20 <= numTimesAtLastPosition;
     } else {
       numTimesAtLastPosition = 0;
       return false;
@@ -138,16 +141,19 @@ public class Wrist extends Subsystem {
   }
 
   public void moveWrist(double power) {
-    //  if (isSomethingStuck(power)) {
-    //    power = 0;
-    //  } 
+    if (isSomethingStuck(power)) {
+        power = 0;
+    } 
+    double feedForward = calculateFeedForward();
+    if (100 > getCurrentPosition()) {
+      feedForward = 0;
+    }
     SmartDashboard.putNumber("Wrist power", power);
-    wristMotor.set(ControlMode.PercentOutput, power, DemandType.ArbitraryFeedForward, calculateFeedForward());
+    wristMotor.set(ControlMode.PercentOutput, power, DemandType.ArbitraryFeedForward, feedForward);
   }
 
   public void  moveToPosition(double setPoint) {
-
-    setPoint = -setPoint;
+    setPoint = angleToTics(setPoint);
     double kP = SmartDashboard.getNumber("Wrist P", 4);
     double kI = SmartDashboard.getNumber("Wrist I", 0);
     double kD = SmartDashboard.getNumber("Wrist D", 4);
@@ -188,11 +194,11 @@ public class Wrist extends Subsystem {
   }
 
   public double angleToTics(double angle) {
-    return (angle + lowestAngle) * 1100;
+    return (angle + lowestAngle) * angleConversion;
   }
 
   public int ticsToAngle(double tics) {
     
-    return ((int)Math.floor((tics / 5.33333333333) - lowestAngle));
+    return ((int)Math.floor((tics / angleConversion) - lowestAngle));
   }
 }

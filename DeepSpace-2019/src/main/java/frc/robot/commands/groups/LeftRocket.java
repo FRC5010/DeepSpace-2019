@@ -8,7 +8,13 @@
 package frc.robot.commands.groups;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.robot.commands.groups.Preload;
+import frc.robot.RobotMap_Paths.MotionProfiles;
+import frc.robot.commands.ShiftDown;
+import frc.robot.commands.ShiftUp;
+import frc.robot.commands.VADriveUntilDistance;
+import frc.robot.commands.commands_auto.PathFollower5010;
+import frc.robot.commands.commands_auto.PathFollower5010.Direction;
+import frc.robot.subsystems.VisionAssistedDrive;
 
 public class LeftRocket extends CommandGroup {
   /**
@@ -17,6 +23,11 @@ public class LeftRocket extends CommandGroup {
   public LeftRocket() {
     addSequential(new Preload());
 
+    addSequential(new PathFollower5010(MotionProfiles.LStoLRkt1, Direction.kForward));
+    addSequential(new ShiftDown());
+    addSequential(new VADriveUntilDistance(25));
+    addSequential(new ShiftUp());
+    //addSequential(new PathFollower5010(MotionProfiles.backupLRkt1, Direction.kRevNormal));
     // Add Commands here:
     // e.g. addSequential(new Command1());
     // addSequential(new Command2());

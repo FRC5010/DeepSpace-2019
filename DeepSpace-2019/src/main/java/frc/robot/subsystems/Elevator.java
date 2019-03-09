@@ -25,14 +25,14 @@ import frc.robot.util.Constants;
  * Add your docs here.
  */
 public class Elevator extends Subsystem {
-  private final double feedForward = 0.035;
+  private final double feedForward = 0.08;
   public static double ZERO = 1;
   public static double HATCH_LOW = 1;
-  public static double HATCH_MIDDLE = 7263;
+  public static double HATCH_MIDDLE = 7500;
   public static double HATCH_HIGH = 14857;
   public static double CARGO_LOW = 6000;
-  public static double CARGO_MIDDLE = 12900;
-  public static double CARGO_HIGH = 19500;
+  public static double CARGO_MIDDLE = 8000;
+  public static double CARGO_HIGH = 11500;
   public static double CARGO_SHIP = 9100;
   public static double MAX_FWD_OUT = 1;
   public static double MAX_REV_OUT = -0.5;
@@ -132,6 +132,12 @@ public class Elevator extends Subsystem {
       power = 0;
     }
     double feedForward = SmartDashboard.getNumber("Elevator Feed Forward", this.feedForward);
+    if (100 > getCurrentPosition()) {
+      feedForward = 0;
+    }
+    if (Pose.getCurrentPose().elevatorAmps > 65) {
+      power = Math.min(power, elevMotor.getMotorOutputPercent() - 0.1);
+    }
     elevMotor.set(ControlMode.PercentOutput, power, DemandType.ArbitraryFeedForward, feedForward);
   }
 

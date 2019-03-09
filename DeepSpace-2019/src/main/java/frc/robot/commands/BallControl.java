@@ -17,6 +17,7 @@ public class BallControl extends Command {
   private double move;
   private double leftTrigger;
   private double rightTrigger;
+  private boolean gripBall = false;
 
   public BallControl() {
     // Use requires() here to declare subsystem dependencies
@@ -39,13 +40,19 @@ public class BallControl extends Command {
     SmartDashboard.putNumber("rightTrigger: ", rightTrigger);
     if (leftTrigger != 0) {
       move = leftTrigger;
+      gripBall = false;
     } else if (rightTrigger != 0) {
       move = rightTrigger;
-    } else if (RobotMap.wristMotor.getSelectedSensorPosition() < 100000) {
-      //move = 0-.1;
+      gripBall = true;
+    } else if (RobotMap.wristMotor.getSelectedSensorPosition() < 2000) {
+      move = gripBall ? -.1 : 0;
     }
 
     RobotMap.ballIntake.ballControl(move);
+  }
+
+  public void setGripBall(boolean grip) {
+    gripBall = grip;
   }
 
   // Make this return true when this Command no longer needs to run execute()

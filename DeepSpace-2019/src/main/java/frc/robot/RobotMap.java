@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.SerialPort.Port;
 import edu.wpi.first.wpilibj.Solenoid;
@@ -76,7 +77,8 @@ public class RobotMap {
   public static BallIntake ballIntake;
   public static BeakIntake beakIntake;
   public static boolean checkMotorSafety = true;
-  
+  public static PowerDistributionPanel pdp;
+
   // For example to map the left and right motors, you could define the
   // following variables to use with your drivetrain subsystem.
   // public static int leftMotor = 1;
@@ -112,6 +114,7 @@ public class RobotMap {
     beakSolenoid = new DoubleSolenoid(2, 1);
     beakIntake = new BeakIntake();
     shiftSolenoid = new Solenoid(0);
+    pdp = new PowerDistributionPanel();
   }
 
   public static void initMotorsComp() {

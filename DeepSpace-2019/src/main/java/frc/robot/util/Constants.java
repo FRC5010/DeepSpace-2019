@@ -38,6 +38,6 @@ public class Constants {
      */
 	public static final Gains kGains = new Gains(4, 0.0, 8, 0.2775, 0, 1.0);
 	
-	public static final Gains wristGains = new Gains(.2,0,0,0.0,0,Wrist.MAX_FWD_OUT);
+	public static final Gains wristGains = new Gains(3.5,0,0,0.0,0,Wrist.MAX_FWD_OUT);
 	public static final Gains wristDownGains = new Gains(0.1,0,0,0.0,0,Wrist.MAX_REV_OUT);
 }

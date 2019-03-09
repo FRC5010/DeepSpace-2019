@@ -9,6 +9,8 @@ package frc.robot.commands.groups;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import frc.robot.RobotMap_Paths.MotionProfiles;
+import frc.robot.commands.ShiftDown;
+import frc.robot.commands.ShiftUp;
 import frc.robot.commands.commands_auto.PathFollower5010;
 import frc.robot.commands.commands_auto.PathFollower5010.Direction;
 
@@ -21,10 +23,12 @@ public class RightShipFrontAndSide extends CommandGroup {
 
     // Right start to Ship right-front bay then backup
     addSequential(new PathFollower5010(MotionProfiles.RStoShip1R, Direction.kForward));
+    addSequential(new ShiftDown());
     addSequential(new VisionReleaseHatch());
+    addSequential(new ShiftUp());
     addSequential(new PathFollower5010(MotionProfiles.backupShip1R, Direction.kRevNormal));
-    addSequential(new PathFollower5010(MotionProfiles.Ship1RtoRP, Direction.kForward));
-    addSequential(new VisionGrabHatch());
+    // addSequential(new PathFollower5010(MotionProfiles.Ship1RtoRP, Direction.kForward));
+    // addSequential(new VisionGrabHatch());
     //addSequential(new PathFollower5010(MotionProfiles.RPtoShip2R, Direction.kRevFlipped));
     //addSequentional(new PathFollower5010(RobotMap_Paths.finalShip2R));    
     //addSequential(new VisionReleaseHatch());

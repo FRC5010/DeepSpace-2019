@@ -10,6 +10,8 @@ package frc.robot.subsystems;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 import frc.robot.subsystems.Vision.Values;
 
@@ -24,6 +26,8 @@ public class Pose {
     public final long driveTrainEncoderRight;
     public final double heading;
     public final double elevatorEncoder;
+    public final double totalAmps;
+    public final double elevatorAmps;
 
     // public static final Map<Long, Pose> poseMap = new HashMap<Long, Pose>();
     public static final List<Pose> poseList = new ArrayList<Pose>();
@@ -53,6 +57,10 @@ public class Pose {
         driveTrainEncoderLeft = RobotMap.distance.getLeftRaw();
         driveTrainEncoderRight = RobotMap.distance.getRightRaw();
         elevatorEncoder = RobotMap.elevator.getCurrentPosition();
+        totalAmps = RobotMap.pdp.getTotalCurrent();
+        SmartDashboard.putNumber("Total Amps", totalAmps);
+        elevatorAmps = Math.max(RobotMap.pdp.getCurrent(14), RobotMap.pdp.getCurrent(12));
+        SmartDashboard.putNumber("Elevator Amps", elevatorAmps);
     }
 
     private Pose() {
@@ -62,6 +70,8 @@ public class Pose {
         driveTrainEncoderRight = 0;
         heading = 0.0;
         elevatorEncoder = 0.0;
+        totalAmps = 0;
+        elevatorAmps = 0.0;
     }
 
     public static Pose getCurrentPose() {

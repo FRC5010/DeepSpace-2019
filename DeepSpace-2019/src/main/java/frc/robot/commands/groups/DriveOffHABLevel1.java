@@ -14,6 +14,7 @@ public class DriveOffHABLevel1 extends CommandGroup {
    * Add your docs here.
    */
   public DriveOffHABLevel1() {
+    addSequential(new Preload());
     // Add Commands here:
     // e.g. addSequential(new Command1());
     // addSequential(new Command2());
