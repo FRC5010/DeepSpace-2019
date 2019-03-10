@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 import frc.robot.subsystems.Vision.Values;
@@ -57,10 +58,15 @@ public class Pose {
         driveTrainEncoderLeft = RobotMap.distance.getLeftRaw();
         driveTrainEncoderRight = RobotMap.distance.getRightRaw();
         elevatorEncoder = RobotMap.elevator.getCurrentPosition();
+        if (RobotBase.isReal()) {
         totalAmps = RobotMap.pdp.getTotalCurrent();
         SmartDashboard.putNumber("Total Amps", totalAmps);
         elevatorAmps = Math.max(RobotMap.pdp.getCurrent(14), RobotMap.pdp.getCurrent(12));
         SmartDashboard.putNumber("Elevator Amps", elevatorAmps);
+        } else {
+            totalAmps = 0;
+            elevatorAmps = 0;
+        }
     }
 
     private Pose() {

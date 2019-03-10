@@ -7,12 +7,15 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.DriverStation.MatchType;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.WristMM;
 import frc.robot.commands.groups.DriveOffHABLevel1;
 import frc.robot.commands.groups.LeftRocket;
 import frc.robot.commands.groups.LeftShipFrontAndSide;
@@ -23,6 +26,7 @@ import frc.robot.commands.groups.RightRocket;
 import frc.robot.commands.groups.RightShipFrontAndSide;
 import frc.robot.commands.groups.RightShipSideX2;
 import frc.robot.subsystems.Pose;
+import frc.robot.subsystems.Wrist.Position;
 import frc.robot.util.Instrum;
 
 /**
@@ -59,6 +63,10 @@ public class Robot extends TimedRobot {
 
     // chooser.addOption("My Auto", new MyAutoCommand());
     SmartDashboard.putData("Auto mode", m_chooser);
+
+    if (DriverStation.getInstance().getMatchType() != MatchType.None) {
+      new WristMM(Position.PRELOAD).start();;
+    }
   }
 
   /**

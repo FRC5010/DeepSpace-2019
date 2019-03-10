@@ -19,12 +19,14 @@ import frc.robot.commands.ShiftDown;
 import frc.robot.commands.ShiftUp;
 import frc.robot.commands.ToggleMotorSafety;
 import frc.robot.commands.VADriveUntilDistance;
+import frc.robot.commands.VisionAssistedSteering;
 import frc.robot.commands.WristMM;
 import frc.robot.commands.WristReset;
 import frc.robot.commands.commands_auto.FieldMovement;
 import frc.robot.commands.groups.AllComeDown;
-import frc.robot.commands.groups.CargoHigh;
-import frc.robot.commands.groups.CargoMiddle;
+import frc.robot.commands.groups.PlacementHigh;
+import frc.robot.commands.groups.PlacementMiddle;
+import frc.robot.commands.groups.Preload;
 import frc.robot.commands.groups.VisionGrabHatch;
 import frc.robot.dynasty.JoystickAxis;
 import frc.robot.subsystems.Elevator;
@@ -67,7 +69,7 @@ public class OI {
   public JoystickAxis driveTrainForward;
   public JoystickAxis driveTrainTurn;
 
-  public JoystickAxis driverRightTrigger;
+  public JoystickAxis driverHoldAutoRightTrigger;
   public JoystickAxis speedReducerTrigger;
   public JoystickAxis elevatorLiftControl;
   public JoystickAxis ballIntake;
@@ -85,16 +87,16 @@ public class OI {
     driverLB.whenPressed(new BeakOpen());
     driverRB.whenPressed(new BeakClose());
     
-    driverA.whenPressed(new WristMM(Wrist.Position.LOW));
-    driverB.whenPressed(new WristMM(Wrist.Position.MIDDLE));
+    driverA.whenPressed(new VisionAssistedSteering());
+    driverB.whenPressed(new VADriveUntilDistance(40));
 
-    driverX.whenPressed(new VisionGrabHatch());
-    driverY.whenPressed(new VADriveUntilDistance(40));
+    driverX.whileHeld(new Preload());
+    driverY.whenPressed(new WristMM(Wrist.Position.PRELOAD));
     
     driveTrainForward = new JoystickAxis(driver, 1, true, .8);
     driveTrainTurn = new JoystickAxis(driver, 4, 0.5);
 
-    driverRightTrigger = new JoystickAxis(driver, 3);
+    driverHoldAutoRightTrigger = new JoystickAxis(driver, 3);
     speedReducerTrigger = new JoystickAxis(driver, 2);
     
     /** Co-Driver controls */
@@ -103,8 +105,9 @@ public class OI {
     coDriverJoyLB.whenPressed(new ToggleMotorSafety());
 
     coDriverA.whenPressed(new AllComeDown());
-    coDriverB.whenPressed(new CargoMiddle());
-    coDriverY.whenPressed(new CargoHigh());
+    coDriverB.whenPressed(new PlacementMiddle());
+    coDriverY.whenPressed(new PlacementHigh());
+    coDriverX.whenPressed(new WristMM(Wrist.Position.PRELOAD));
     
     elevatorLiftControl = new JoystickAxis(coDriver, 1, true, Elevator.MAX_FWD_OUT);
     elevatorLiftControl.setLowerLimit(Elevator.MAX_REV_OUT);

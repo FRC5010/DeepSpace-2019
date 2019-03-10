@@ -34,16 +34,16 @@ public class Wrist extends Subsystem {
   public static double HATCH_MIDDLE = 0;
   public static double HATCH_HIGH = 0;
   public static double CARGO_LOW = -lowestAngle + 5;
-  public static double CARGO_MIDDLE = 60
-  ;
+  public static double CARGO_MIDDLE = 60;
   public static double CARGO_HIGH = 70;
   public static double CARGO_SHIP = 0;
+  public static double PRELOAD = 83;
   public static double MAX_FWD_OUT = 1;
   public static double MAX_REV_OUT = -0.3;
   private long lastPosition = 0;
   private int numTimesAtLastPosition = 0;
   public static enum Position {
-    LOW, MIDDLE, HIGH
+    LOW, MIDDLE, HIGH, PRELOAD
   }
   public static Position lastMMPosition = Position.LOW;
 
@@ -152,7 +152,7 @@ public class Wrist extends Subsystem {
     wristMotor.set(ControlMode.PercentOutput, power, DemandType.ArbitraryFeedForward, feedForward);
   }
 
-  public void  moveToPosition(double setPoint) {
+  public void moveToPosition(double setPoint) {
     setPoint = angleToTics(setPoint);
     double kP = SmartDashboard.getNumber("Wrist P", 4);
     double kI = SmartDashboard.getNumber("Wrist I", 0);
@@ -193,12 +193,11 @@ public class Wrist extends Subsystem {
      System.out.println("Out of Phs: " + faults.SensorOutOfPhase);
   }
 
-  public double angleToTics(double angle) {
-    return (angle + lowestAngle) * angleConversion;
+  public int angleToTics(double angle) {
+    return (int)Math.floor((angle + lowestAngle) * angleConversion);
   }
 
-  public int ticsToAngle(double tics) {
-    
-    return ((int)Math.floor((tics / angleConversion) - lowestAngle));
+  public double ticsToAngle(long tics) {
+    return (tics / angleConversion) - lowestAngle;
   }
 }

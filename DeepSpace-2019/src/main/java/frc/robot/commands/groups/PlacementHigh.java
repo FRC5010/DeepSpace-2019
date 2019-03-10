@@ -11,14 +11,15 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 import frc.robot.commands.ElevatorMM;
 import frc.robot.commands.WristMM;
 import frc.robot.subsystems.Elevator.Position;
+import frc.robot.subsystems.Wrist;
 
-public class CargoMiddle extends CommandGroup {
+public class PlacementHigh extends CommandGroup {
   /**
    * Add your docs here.
    */
-  public CargoMiddle() {
-    addParallel(new ElevatorMM(Position.MIDDLE));
-    addParallel(new WristMM(frc.robot.subsystems.Wrist.Position.MIDDLE));
+  public PlacementHigh() {
+    addParallel(new ElevatorMM(Position.HIGH));
+    addParallel(new WristMM(Wrist.Position.MIDDLE));
     // Add Commands here:
     // e.g. addSequential(new Command1());
     // addSequential(new Command2());

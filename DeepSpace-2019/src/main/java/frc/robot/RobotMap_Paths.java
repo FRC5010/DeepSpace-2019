@@ -37,17 +37,17 @@ public class RobotMap_Paths {
           // Middle Start
           MStoShip1L, MStoShip1R,
           // Left Rocket
-          LStoLRkt1, backupLRkt1, LRkt1toLP, LPtoLRkt2, finalLRkt2,
+          LStoLRkt1, //backupLRkt1, LRkt1toLP, LPtoLRkt2, finalLRkt2,
           // Left Start Side X2 
-          LStoShip2L, backupShip2L, Ship2LtoLP, LPtoShip3L, finalShip3L,
+          LStoShip2L, //backupShip2L, Ship2LtoLP, LPtoShip3L, finalShip3L,
           // Left Start Front & Side
-          LStoShip1L, backupShip1L, Ship1LtoLP, LPtoShip2L, finalShip2L,
+          LStoShip1L, backupShip1L, //Ship1LtoLP, LPtoShip2L, finalShip2L,
           // Right Rocket
-          RStoRRkt1, backupRRkt1, RRkt1toRP, RPtoRRkt2, finalRRkt2,
+          RStoRRkt1, //backupRRkt1, RRkt1toRP, RPtoRRkt2, finalRRkt2,
           // Right Start Front & Side
-          RStoShip1R, backupShip1R, Ship1RtoRP, RPtoShip2R, finalShip2R,
+          RStoShip1R, backupShip1R, //Ship1RtoRP, RPtoShip2R, finalShip2R,
           // Right Start Side X2
-          RStoShip2R, backupShip2R, Ship2RtoRP, RPtoShip3R, finalShip3R,
+          RStoShip2R, backupShip2R, //Ship2RtoRP, RPtoShip3R, finalShip3R,
           // Test routines
           testPath, exit_level_two
      }

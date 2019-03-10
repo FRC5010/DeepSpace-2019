@@ -44,7 +44,7 @@ public class BallControl extends Command {
     } else if (rightTrigger != 0) {
       move = rightTrigger;
       gripBall = true;
-    } else if (RobotMap.wristMotor.getSelectedSensorPosition() < 2000) {
+    } else if (RobotMap.wrist.getCurrentPosition() < 2000) {
       move = gripBall ? -.1 : 0;
     }
 

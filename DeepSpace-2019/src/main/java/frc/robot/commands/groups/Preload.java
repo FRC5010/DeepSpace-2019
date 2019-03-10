@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 import frc.robot.RobotMap;
 import frc.robot.commands.BeakClose;
 import frc.robot.commands.BeakOpen;
+import frc.robot.commands.HoldAndWait;
 import frc.robot.commands.ResetGyro;
 import frc.robot.commands.ShiftUp;
 import frc.robot.commands.WristMM;
@@ -24,10 +25,12 @@ public class Preload extends CommandGroup {
     addParallel(new ResetGyro());
     addParallel(new ShiftUp());
     RobotMap.vision.toggleLimelight(true);
-    // addParallel(new BeakOpen());
-    // RobotMap.wristMotor.setSelectedSensorPosition(2784);
-    // addSequential(new WristMM(Wrist.Position.MIDDLE));
+    addParallel(new BeakOpen());
+    RobotMap.wristMotor.setSelectedSensorPosition(2784);
+    addSequential(new WristMM(Wrist.Position.HIGH));
+    addSequential(new WristMM(Wrist.Position.MIDDLE));
     addSequential(new BeakClose());
-    // addParallel(new WristMM(Wrist.Position.LOW));
+    addParallel(new WristMM(Wrist.Position.LOW));
+    addSequential(new HoldAndWait());
   }
 }
