@@ -64,9 +64,9 @@ public class Robot extends TimedRobot {
     // chooser.addOption("My Auto", new MyAutoCommand());
     SmartDashboard.putData("Auto mode", m_chooser);
 
-    if (DriverStation.getInstance().getMatchType() != MatchType.None) {
-      new WristMM(Position.PRELOAD).start();;
-    }
+    // if (DriverStation.getInstance().getMatchType() != MatchType.None) {
+    //   new WristMM(Position.PRELOAD).start();;
+    // }
   }
 
   /**
