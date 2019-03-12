@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 import frc.robot.commands.ElevatorMM;
 import frc.robot.commands.WristMM;
 import frc.robot.subsystems.Elevator.Position;
+import frc.robot.subsystems.Wrist;
 
 public class PlacementMiddle extends CommandGroup {
   /**
@@ -18,7 +19,7 @@ public class PlacementMiddle extends CommandGroup {
    */
   public PlacementMiddle() {
     addParallel(new ElevatorMM(Position.MIDDLE));
-    addParallel(new WristMM(frc.robot.subsystems.Wrist.Position.MIDDLE));
+    addParallel(new WristMM(Wrist.Position.MIDDLE));
     // Add Commands here:
     // e.g. addSequential(new Command1());
     // addSequential(new Command2());

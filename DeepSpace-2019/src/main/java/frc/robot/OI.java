@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import frc.robot.commands.BeakClose;
 import frc.robot.commands.BeakOpen;
-import frc.robot.commands.ElevatorMM;
 import frc.robot.commands.ElevatorReset;
 import frc.robot.commands.ResetGyro;
 import frc.robot.commands.ShiftDown;
@@ -22,16 +21,13 @@ import frc.robot.commands.VADriveUntilDistance;
 import frc.robot.commands.VisionAssistedSteering;
 import frc.robot.commands.WristMM;
 import frc.robot.commands.WristReset;
-import frc.robot.commands.commands_auto.FieldMovement;
 import frc.robot.commands.groups.AllComeDown;
 import frc.robot.commands.groups.PlacementHigh;
 import frc.robot.commands.groups.PlacementMiddle;
 import frc.robot.commands.groups.PlacementShipCargo;
 import frc.robot.commands.groups.Preload;
-import frc.robot.commands.groups.VisionGrabHatch;
 import frc.robot.dynasty.JoystickAxis;
 import frc.robot.subsystems.Elevator;
-import frc.robot.subsystems.Elevator.Position;
 import frc.robot.subsystems.Wrist;
 
 /**
@@ -88,11 +84,11 @@ public class OI {
     driverLB.whenPressed(new BeakOpen());
     driverRB.whenPressed(new BeakClose());
     
-    driverA.whenPressed(new VisionAssistedSteering());
-    driverB.whenPressed(new VADriveUntilDistance(40));
+    driverX.whenPressed(new VisionAssistedSteering());
+    driverY.whenPressed(new VADriveUntilDistance(40));
 
-    driverX.whenPressed(new Preload());
-    driverY.whenPressed(new WristMM(Wrist.Position.PRELOAD));
+    driverA.whenPressed(new Preload());
+    driverB.whenPressed(new WristMM(Wrist.Position.PRELOAD));
     
     driveTrainForward = new JoystickAxis(driver, 1, true, 1);
     driveTrainTurn = new JoystickAxis(driver, 4, 0.5);

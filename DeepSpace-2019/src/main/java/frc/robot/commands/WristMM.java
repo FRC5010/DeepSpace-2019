@@ -33,32 +33,45 @@ public class WristMM extends Command {
   protected void initialize() {
 		SmartDashboard.putString("Command", this.getClass().getSimpleName());
     SmartDashboard.putString("Wrist MM", "Initialized");
-    setPoint = Wrist.HATCH_LOW;
+    setPoint = Wrist.ZERO;
     switch (position) {
       case LOW: {
-        if (RobotMap.elevator.isCargoGamePiece || Preload.isPreloading) {
+        if (RobotMap.elevator.isCargoGamePiece) {
           setPoint = Wrist.CARGO_LOW;
-        } 
+        } else {
+          if (Preload.isPreloading) {
+            setPoint = Wrist.HATCH_LOW;
+          }
+        }
         break;
       }
       case MIDDLE: {
-        if (RobotMap.elevator.isCargoGamePiece || Preload.isPreloading) {
+        if (RobotMap.elevator.isCargoGamePiece) {
           setPoint = Wrist.CARGO_MIDDLE;
+        } else {
+          if (Preload.isPreloading) {
+            setPoint = Wrist.HATCH_MIDDLE;
+          }
         }
         break;
       }
       case HIGH: {
-        if (RobotMap.elevator.isCargoGamePiece || Preload.isPreloading) {
+        if (RobotMap.elevator.isCargoGamePiece) {
           setPoint = Wrist.CARGO_HIGH;
+        } else {
+          if (Preload.isPreloading) {
+            setPoint = Wrist.HATCH_HIGH;
+          }
         }
         break;
       }
-      case PRELOAD: {
-        if (RobotMap.elevator.isCargoGamePiece) {
+      case SHIP: {
           setPoint = Wrist.CARGO_SHIP;
-        } else {
-          setPoint = Wrist.PRELOAD;
+          break;
         }
+      case PRELOAD: {
+          setPoint = Wrist.PRELOAD;
+          break;
        }
       }
       SmartDashboard.putNumber("Wrist MM Setpoint", setPoint);

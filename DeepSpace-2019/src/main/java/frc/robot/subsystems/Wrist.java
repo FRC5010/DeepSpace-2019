@@ -30,10 +30,10 @@ public class Wrist extends Subsystem {
   public static final double feedForward = 0.1;
   public static final double angleConversion = 20;
   public static double ZERO = 1;
-  public static double HATCH_LOW = -lowestAngle + 5;
-  public static double HATCH_MIDDLE = 0;
-  public static double HATCH_HIGH = 0;
-  public static double CARGO_LOW = -lowestAngle + 5;
+  public static double HATCH_LOW = -lowestAngle + 2;
+  public static double HATCH_MIDDLE = 10;
+  public static double HATCH_HIGH = 65;
+  public static double CARGO_LOW = -lowestAngle + 2;
   public static double CARGO_MIDDLE = 60;
   public static double CARGO_HIGH = 70;
   public static double CARGO_SHIP = 0;

@@ -61,7 +61,7 @@ public class ElevatorMM extends Command {
         break;
       }
       case SHIP: {
-        setPoint = Elevator.HATCH_LOW;
+        setPoint = Elevator.ZERO;
       }
       }
     }

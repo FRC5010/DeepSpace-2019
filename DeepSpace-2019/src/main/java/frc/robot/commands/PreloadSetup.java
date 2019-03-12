@@ -24,7 +24,6 @@ public class PreloadSetup extends Command {
   protected void initialize() {
     RobotMap.vision.toggleLimelight(true);
     RobotMap.wristMotor.setSelectedSensorPosition(2784);
-    RobotMap.elevator.isCargoGamePiece = true;
     Preload.isPreloading = true;
     Wrist.lastMMPosition = Position.PRELOAD;
     BallControl.gripBall = true;

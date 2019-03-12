@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
+import frc.robot.commands.groups.Preload;
 import frc.robot.subsystems.Wrist;
 
 public class BallControl extends Command {
@@ -44,7 +45,7 @@ public class BallControl extends Command {
     } else if (rightTrigger != 0) {
       move = rightTrigger;
       gripBall = true;
-    } else if (RobotMap.wrist.getCurrentPosition() < 2000) {
+    } else if (RobotMap.wrist.getCurrentPosition() < 2000 || Preload.isPreloading) {
       move = gripBall ? -.1 : 0;
     }
 

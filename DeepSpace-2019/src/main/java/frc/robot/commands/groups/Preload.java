@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 import frc.robot.RobotMap;
 import frc.robot.commands.BeakClose;
 import frc.robot.commands.BeakOpen;
-import frc.robot.commands.HoldAndWait;
+import frc.robot.commands.PreloadFinish;
 import frc.robot.commands.PreloadSetup;
 import frc.robot.commands.ResetGyro;
 import frc.robot.commands.ShiftUp;
@@ -25,14 +25,14 @@ public class Preload extends CommandGroup {
 
   public static boolean isPreloading = false;
   public Preload() {
-    addSequential(new ResetGyro());
-    addSequential(new ShiftUp());
-    addSequential(new BeakOpen());
     addSequential(new PreloadSetup());
+    addSequential(new ResetGyro());
+    addSequential(new BeakOpen());
     addSequential(new WristMM(Wrist.Position.HIGH));
     addSequential(new WristMM(Wrist.Position.MIDDLE));
+    addSequential(new ShiftUp());
     addSequential(new BeakClose());
     addSequential(new WristMM(Wrist.Position.LOW));
-    addSequential(new HoldAndWait());
+    addSequential(new PreloadFinish());
   }
 }

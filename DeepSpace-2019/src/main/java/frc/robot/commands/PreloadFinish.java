@@ -12,8 +12,8 @@ import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.commands.groups.Preload;
 
-public class HoldAndWait extends Command {
-  public HoldAndWait() {
+public class PreloadFinish extends Command {
+  public PreloadFinish() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
   }
@@ -21,9 +21,8 @@ public class HoldAndWait extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    RobotMap.elevator.isCargoGamePiece = false;
     Preload.isPreloading = false;
-    BallControl.gripBall = true;
+    BallControl.gripBall = false;
   }
 
   // Called repeatedly when this Command is scheduled to run
