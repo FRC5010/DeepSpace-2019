@@ -8,7 +8,6 @@
 package frc.robot.commands.groups;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.robot.RobotMap;
 import frc.robot.commands.BeakClose;
 import frc.robot.commands.BeakOpen;
 import frc.robot.commands.PreloadFinish;
@@ -16,6 +15,7 @@ import frc.robot.commands.PreloadSetup;
 import frc.robot.commands.ResetGyro;
 import frc.robot.commands.ShiftUp;
 import frc.robot.commands.WristMM;
+import frc.robot.commands.spinWheels;
 import frc.robot.subsystems.Wrist;
 
 public class Preload extends CommandGroup {
@@ -29,9 +29,12 @@ public class Preload extends CommandGroup {
     addSequential(new ResetGyro());
     addSequential(new BeakOpen());
     addSequential(new WristMM(Wrist.Position.HIGH));
-    addSequential(new WristMM(Wrist.Position.MIDDLE));
+    
+    addParallel(new WristMM(Wrist.Position.MIDDLE));
+    addParallel(new BeakClose());
     addSequential(new ShiftUp());
-    addSequential(new BeakClose());
+    //addSequential(new spinWheels());
+    //addParallel(new BeakClose());
     addSequential(new WristMM(Wrist.Position.LOW));
     addSequential(new PreloadFinish());
   }
