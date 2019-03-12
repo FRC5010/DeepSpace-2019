@@ -8,12 +8,13 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
-import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.commands.groups.Preload;
+import frc.robot.subsystems.Wrist;
+import frc.robot.subsystems.Wrist.Position;
 
-public class HoldAndWait extends Command {
-  public HoldAndWait() {
+public class PreloadSetup extends Command {
+  public PreloadSetup() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
   }
@@ -21,8 +22,11 @@ public class HoldAndWait extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    RobotMap.elevator.isCargoGamePiece = false;
-    Preload.isPreloading = false;
+    RobotMap.vision.toggleLimelight(true);
+    RobotMap.wristMotor.setSelectedSensorPosition(2784);
+    RobotMap.elevator.isCargoGamePiece = true;
+    Preload.isPreloading = true;
+    Wrist.lastMMPosition = Position.PRELOAD;
     BallControl.gripBall = true;
   }
 
@@ -34,7 +38,7 @@ public class HoldAndWait extends Command {
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return Robot.oi.driverHoldAutoRightTrigger.getValue() == 0;
+    return true;
   }
 
   // Called once after isFinished returns true

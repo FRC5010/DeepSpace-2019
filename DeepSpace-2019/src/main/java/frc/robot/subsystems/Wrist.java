@@ -43,7 +43,7 @@ public class Wrist extends Subsystem {
   private long lastPosition = 0;
   private int numTimesAtLastPosition = 0;
   public static enum Position {
-    LOW, MIDDLE, HIGH, PRELOAD
+    LOW, MIDDLE, SHIP, HIGH, PRELOAD
   }
   public static Position lastMMPosition = Position.LOW;
 
@@ -133,6 +133,7 @@ public class Wrist extends Subsystem {
         numTimesAtLastPosition = 0;
       }
       lastPosition = curPose;
+      SmartDashboard.putNumber("Wrist X@Err", numTimesAtLastPosition);
       return 20 <= numTimesAtLastPosition;
     } else {
       numTimesAtLastPosition = 0;

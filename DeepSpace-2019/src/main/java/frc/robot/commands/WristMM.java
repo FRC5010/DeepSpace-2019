@@ -10,6 +10,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
+import frc.robot.commands.groups.Preload;
 import frc.robot.subsystems.Wrist;
 import frc.robot.subsystems.Wrist.Position;
 import frc.robot.Robot;
@@ -35,32 +36,37 @@ public class WristMM extends Command {
     setPoint = Wrist.HATCH_LOW;
     switch (position) {
       case LOW: {
-        if (RobotMap.elevator.isCargoGamePiece) {
+        if (RobotMap.elevator.isCargoGamePiece || Preload.isPreloading) {
           setPoint = Wrist.CARGO_LOW;
         } 
         break;
       }
       case MIDDLE: {
-        if (RobotMap.elevator.isCargoGamePiece) {
+        if (RobotMap.elevator.isCargoGamePiece || Preload.isPreloading) {
           setPoint = Wrist.CARGO_MIDDLE;
         }
         break;
       }
       case HIGH: {
-        if (RobotMap.elevator.isCargoGamePiece) {
+        if (RobotMap.elevator.isCargoGamePiece || Preload.isPreloading) {
           setPoint = Wrist.CARGO_HIGH;
         }
         break;
       }
       case PRELOAD: {
-        setPoint = Wrist.PRELOAD;
+        if (RobotMap.elevator.isCargoGamePiece) {
+          setPoint = Wrist.CARGO_SHIP;
+        } else {
+          setPoint = Wrist.PRELOAD;
+        }
        }
       }
       SmartDashboard.putNumber("Wrist MM Setpoint", setPoint);
-    if (RobotMap.wrist.lastMMPosition == Position.LOW) {
+    if (Wrist.lastMMPosition == Position.LOW) {
       RobotMap.wrist.reset();
     }
     RobotMap.wrist.lastMMPosition = this.position;
+    SmartDashboard.putString("Wrist MM Position", position.toString());
   }
 
   // Called repeatedly when this Command is scheduled to run
@@ -79,23 +85,14 @@ public class WristMM extends Command {
       RobotMap.wrist.ticsToAngle(RobotMap.wrist.getCurrentPosition()));
     double lastError = err;
     double manualPower = Robot.oi.wristControl.getValue();
-    // Counts how long the wrist is at the same sensor position
-    if (((int) err) / 10 == ((int) lastError) / 10) {
-      timesAtPrevError++;
-    } else {
-      timesAtPrevError = 0;
-    }
-    lastError = err;
     // if it gets stuck down make that sensor value 0 or if its stuck up make it go
     // down
     if (err < 5) {
       RobotMap.wristMotor.setSelectedSensorPosition((int)RobotMap.wrist.angleToTics(setPoint));
     }
-    SmartDashboard.putNumber("Wrist MM err", err);
     return manualPower != 0 // moving the joystick will abort MM
       || RobotMap.wrist.isSomethingStuck(RobotMap.wristMotor.getMotorOutputPercent())
-      || err < 5
-     || timesAtPrevError > 20; // This means we're close enough
+      || err < 5;
   }
 
   // Called once after isFinished returns true

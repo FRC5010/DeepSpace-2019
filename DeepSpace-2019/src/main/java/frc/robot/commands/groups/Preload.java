@@ -12,6 +12,7 @@ import frc.robot.RobotMap;
 import frc.robot.commands.BeakClose;
 import frc.robot.commands.BeakOpen;
 import frc.robot.commands.HoldAndWait;
+import frc.robot.commands.PreloadSetup;
 import frc.robot.commands.ResetGyro;
 import frc.robot.commands.ShiftUp;
 import frc.robot.commands.WristMM;
@@ -21,16 +22,17 @@ public class Preload extends CommandGroup {
   /**
    * Add your docs here.
    */
+
+  public static boolean isPreloading = false;
   public Preload() {
-    addParallel(new ResetGyro());
-    addParallel(new ShiftUp());
-    RobotMap.vision.toggleLimelight(true);
-    addParallel(new BeakOpen());
-    RobotMap.wristMotor.setSelectedSensorPosition(2784);
+    addSequential(new ResetGyro());
+    addSequential(new ShiftUp());
+    addSequential(new BeakOpen());
+    addSequential(new PreloadSetup());
     addSequential(new WristMM(Wrist.Position.HIGH));
     addSequential(new WristMM(Wrist.Position.MIDDLE));
     addSequential(new BeakClose());
-    addParallel(new WristMM(Wrist.Position.LOW));
+    addSequential(new WristMM(Wrist.Position.LOW));
     addSequential(new HoldAndWait());
   }
 }

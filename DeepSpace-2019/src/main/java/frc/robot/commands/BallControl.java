@@ -17,7 +17,7 @@ public class BallControl extends Command {
   private double move;
   private double leftTrigger;
   private double rightTrigger;
-  private boolean gripBall = false;
+  public static boolean gripBall = false;
 
   public BallControl() {
     // Use requires() here to declare subsystem dependencies

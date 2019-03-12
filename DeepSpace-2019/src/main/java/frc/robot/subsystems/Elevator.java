@@ -33,12 +33,12 @@ public class Elevator extends Subsystem {
   public static double CARGO_LOW = 6000;
   public static double CARGO_MIDDLE = 8000;
   public static double CARGO_HIGH = 11500;
-  public static double CARGO_SHIP = 9100;
+  public static double CARGO_SHIP = 8000;
   public static double MAX_FWD_OUT = 1;
   public static double MAX_REV_OUT = -0.5;
 
   public static enum Position {
-    LOW, MIDDLE, HIGH
+    LOW, MIDDLE, HIGH, SHIP
   }
 
   public boolean isCargoGamePiece = false;

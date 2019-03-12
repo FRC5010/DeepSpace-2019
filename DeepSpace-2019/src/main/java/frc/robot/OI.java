@@ -26,6 +26,7 @@ import frc.robot.commands.commands_auto.FieldMovement;
 import frc.robot.commands.groups.AllComeDown;
 import frc.robot.commands.groups.PlacementHigh;
 import frc.robot.commands.groups.PlacementMiddle;
+import frc.robot.commands.groups.PlacementShipCargo;
 import frc.robot.commands.groups.Preload;
 import frc.robot.commands.groups.VisionGrabHatch;
 import frc.robot.dynasty.JoystickAxis;
@@ -90,10 +91,10 @@ public class OI {
     driverA.whenPressed(new VisionAssistedSteering());
     driverB.whenPressed(new VADriveUntilDistance(40));
 
-    driverX.whileHeld(new Preload());
+    driverX.whenPressed(new Preload());
     driverY.whenPressed(new WristMM(Wrist.Position.PRELOAD));
     
-    driveTrainForward = new JoystickAxis(driver, 1, true, .8);
+    driveTrainForward = new JoystickAxis(driver, 1, true, 1);
     driveTrainTurn = new JoystickAxis(driver, 4, 0.5);
 
     driverHoldAutoRightTrigger = new JoystickAxis(driver, 3);
@@ -107,7 +108,7 @@ public class OI {
     coDriverA.whenPressed(new AllComeDown());
     coDriverB.whenPressed(new PlacementMiddle());
     coDriverY.whenPressed(new PlacementHigh());
-    coDriverX.whenPressed(new WristMM(Wrist.Position.PRELOAD));
+    coDriverX.whenPressed(new PlacementShipCargo());
     
     elevatorLiftControl = new JoystickAxis(coDriver, 1, true, Elevator.MAX_FWD_OUT);
     elevatorLiftControl.setLowerLimit(Elevator.MAX_REV_OUT);

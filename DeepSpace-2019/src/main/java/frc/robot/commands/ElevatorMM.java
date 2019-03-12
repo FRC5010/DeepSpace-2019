@@ -42,6 +42,9 @@ public class ElevatorMM extends Command {
         setPoint = Elevator.CARGO_HIGH;
         break;
       }
+      case SHIP: {
+        setPoint = Elevator.CARGO_SHIP;
+      }
       }
     } else {
       switch (position) {
@@ -56,6 +59,9 @@ public class ElevatorMM extends Command {
       case HIGH: {
         setPoint = Elevator.HATCH_HIGH;
         break;
+      }
+      case SHIP: {
+        setPoint = Elevator.HATCH_LOW;
       }
       }
     }
