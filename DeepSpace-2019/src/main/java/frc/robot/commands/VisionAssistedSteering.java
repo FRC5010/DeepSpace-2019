@@ -11,10 +11,13 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
+import frc.robot.subsystems.DirectionSensor;
+import frc.robot.subsystems.Pose;
 import frc.robot.subsystems.VisionAssistedDrive;
 
 public class VisionAssistedSteering extends Command {
   VisionAssistedDrive vad;
+  private double lastHeadingError = 0;
 
   public VisionAssistedSteering () {
     requires(RobotMap.driveTrain);
@@ -25,6 +28,7 @@ public class VisionAssistedSteering extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+    lastHeadingError = 0;
 		SmartDashboard.putString("Command", this.getClass().getSimpleName());
   }
  
@@ -33,9 +37,26 @@ public class VisionAssistedSteering extends Command {
   protected void execute() {
     double output = Robot.oi.driveTrainForward.getValue();
     //double turn = VisionAssistedDrive.arcTowardsTarget();
-    double turn = vad.arcTowardsTarget();
+    double turn = vad.arcTowardsTarget();//turnTowards(0, lastHeadingError);
 
     RobotMap.driveTrain.drive(output - turn, output + turn);
+  }
+
+  public double turnTowards(double desiredHeading, double lastHeadingError) {
+    double turnAmt = 0;
+    if (Pose.getCurrentPose().limeLight.tValid) {
+      double heading = Pose.getCurrentPose().limeLight.tX;
+      double headingError = DirectionSensor.boundHalfDegrees(desiredHeading - heading);
+      double headingDelta = headingError - lastHeadingError;
+
+      turnAmt = vad.getSteerKp() * headingError + vad.getSteerKd() * headingDelta;
+
+      double steerMin = vad.getSteerMin();
+      turnAmt = Math.max(steerMin, Math.abs(turnAmt)) * Math.signum(turnAmt);
+      this.lastHeadingError = headingError;
+    }
+    SmartDashboard.putNumber(this.getClass().getSimpleName() + " Steer", turnAmt);
+    return turnAmt;
   }
 
   // Make this return true when this Command no longer needs to run execute()

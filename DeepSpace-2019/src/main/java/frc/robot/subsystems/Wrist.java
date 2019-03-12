@@ -32,7 +32,7 @@ public class Wrist extends Subsystem {
   public static double ZERO = 1;
   public static double HATCH_LOW = -lowestAngle + 2;
   public static double HATCH_MIDDLE = 10;
-  public static double HATCH_HIGH = 65;
+  public static double HATCH_HIGH = 60;
   public static double CARGO_LOW = -lowestAngle + 2;
   public static double CARGO_MIDDLE = 60;
   public static double CARGO_HIGH = 70;
@@ -133,7 +133,6 @@ public class Wrist extends Subsystem {
         numTimesAtLastPosition = 0;
       }
       lastPosition = curPose;
-      SmartDashboard.putNumber("Wrist X@Err", numTimesAtLastPosition);
       return 20 <= numTimesAtLastPosition;
     } else {
       numTimesAtLastPosition = 0;

@@ -149,7 +149,7 @@ public class Vision extends Subsystem {
   public static final double targetHeight = 29;
 
   // The largest possible ratio from the front
-  private static double originalRatio = 77.0 / 35.0; // TODO: figure out the correct ratio when facing directly in front
+  private static double originalRatio = 2.9; // TODO: figure out the correct ratio when facing directly in front
 
   // Matrix stuff
   private MatOfPoint3f mObjectPoints;
@@ -397,6 +397,7 @@ public class Vision extends Subsystem {
     double currentRatio = tHor / tVert;
     double ratio = Math.min(1, currentRatio / originalRatio); // finding acos of a value > 1 will give NaN
     return Math.toDegrees(Math.acos(ratio));
+    //return currentRatio;
   }
 
   private boolean smoothValues() {

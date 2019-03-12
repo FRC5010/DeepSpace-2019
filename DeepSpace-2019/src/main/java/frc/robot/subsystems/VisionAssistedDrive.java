@@ -128,18 +128,18 @@ public class VisionAssistedDrive {
       System.out.println("-------");
       double rotationAngle = currentPose.limeLight.tX;
       System.out.println("Angle: " + rotationAngle);
-      double approachAngle = currentPose.limeLight.aspectApproachAngle;
+      double approachAngle = currentPose.limeLight.tDistance / 3;
       System.out.println("Approach Angle: " + approachAngle);
       if (approachAngle > 20) {
         approachAngle = 20;
       }
-      if (currentPose.limeLight.leftRightRatio < 0) {
+      if (currentPose.limeLight.leftRightRatio > 0) {
         approachAngle = -approachAngle;
       }
       System.out.println("Desired Angle: " + approachAngle);
       
       double error = approachAngle - rotationAngle;
-      double steerAmt = -0.01 * error; //(Shifter.isLowGear ? lowGear.steerKp : highGear.steerKp)
+      double steerAmt = 0.01 * error; //(Shifter.isLowGear ? lowGear.steerKp : highGear.steerKp)
       System.out.println("SteerAmt: " + steerAmt);
 
       // double moveMin = Shifter.isLowGear ? lowGear.moveMin : highGear.moveMin;

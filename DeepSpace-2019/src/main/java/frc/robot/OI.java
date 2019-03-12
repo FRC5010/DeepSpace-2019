@@ -22,6 +22,7 @@ import frc.robot.commands.VisionAssistedSteering;
 import frc.robot.commands.WristMM;
 import frc.robot.commands.WristReset;
 import frc.robot.commands.groups.AllComeDown;
+import frc.robot.commands.groups.LowGearVAD;
 import frc.robot.commands.groups.PlacementHigh;
 import frc.robot.commands.groups.PlacementMiddle;
 import frc.robot.commands.groups.PlacementShipCargo;
@@ -84,8 +85,8 @@ public class OI {
     driverLB.whenPressed(new BeakOpen());
     driverRB.whenPressed(new BeakClose());
     
-    driverX.whenPressed(new VisionAssistedSteering());
-    driverY.whenPressed(new VADriveUntilDistance(40));
+    driverX.whenPressed(new LowGearVAD());
+    //driverY.whenPressed();
 
     driverA.whenPressed(new Preload());
     driverB.whenPressed(new WristMM(Wrist.Position.PRELOAD));
@@ -110,7 +111,7 @@ public class OI {
     elevatorLiftControl.setLowerLimit(Elevator.MAX_REV_OUT);
     elevatorGamePieceSelector = coDriverLB;
 
-    ballIntake = new JoystickAxis(coDriver, 2, 0.3);
+    ballIntake = new JoystickAxis(coDriver, 2, 0.5);
     ballIntake.setLowerLimit(0);
     ballOuttake = new JoystickAxis(coDriver, 3, true, 0.3);
     ballOuttake.setUpperLimit(0);
