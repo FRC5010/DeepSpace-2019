@@ -108,12 +108,12 @@ public class Vision extends Subsystem {
     }
 
     /** Project what the next value might be */
-    private static double linearFwdInterpolation(double x1, double y1, double x2, double y2, double x3) {
+    public static double linearFwdInterpolation(double x1, double y1, double x2, double y2, double x3) {
       return y2 + ((x3 - x2) * ((y2 - y1) / (x2 - x1)));
     }
 
     /** Determine an estimated value in between */
-    private static double linearMidInterpolation(double x1, double y1, double x2, double y2, double x3) {
+    public static double linearMidInterpolation(double x1, double y1, double x2, double y2, double x3) {
       return y1 + ((x3 - x1) * ((y2 - y1) / (x2 - x1)));
     }
 
