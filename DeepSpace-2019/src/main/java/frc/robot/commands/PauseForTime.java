@@ -7,12 +7,15 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.command.Command;
-import frc.robot.Robot;
-import frc.robot.commands.groups.Preload;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class PreloadFinish extends Command {
-  public PreloadFinish() {
+public class PauseForTime extends Command {
+  long finishTime, timeToPause;
+
+  public PauseForTime(long timeInMillis) {
+    this.timeToPause = timeInMillis;
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
   }
@@ -20,8 +23,8 @@ public class PreloadFinish extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    Preload.isPreloading = false;
-    BallControl.gripBall = false;
+    finishTime = timeToPause + RobotController.getFPGATime() / 1000;
+    SmartDashboard.putString(this.getClass().getSimpleName(), "Started");
   }
 
   // Called repeatedly when this Command is scheduled to run
@@ -32,7 +35,10 @@ public class PreloadFinish extends Command {
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return Robot.oi.driverHoldAutoRightTrigger.getValue() == 0;
+    long currentTime = RobotController.getFPGATime() / 1000;
+    boolean finished = (finishTime < currentTime);
+    SmartDashboard.putString(this.getClass().getSimpleName(), finished ? "Finished" : "Running");
+    return finished;
   }
 
   // Called once after isFinished returns true
@@ -44,5 +50,6 @@ public class PreloadFinish extends Command {
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
+    SmartDashboard.putString(this.getClass().getSimpleName(), "Interrupted");
   }
 }

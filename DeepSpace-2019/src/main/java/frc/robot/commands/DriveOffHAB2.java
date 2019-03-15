@@ -10,28 +10,32 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.RobotMap;
 import frc.robot.Robot;
+import frc.robot.RobotMap;
 import frc.robot.subsystems.DirectionSensor;
+import frc.robot.subsystems.Pose;
 import frc.robot.subsystems.VisionAssistedDrive;
 
-public class TurnToAnAngle extends Command {
+public class DriveOffHAB2 extends Command {
+  int numberOfBumps;
   VisionAssistedDrive vad;
-  double desiredHeading;
-  double lastHeadingError, prevError, timesAtPrevError;
+  double desiredHeading, speed;
+  double lastHeadingError, prevError;
   double startTime;
 
-  public TurnToAnAngle(double desiredHeading) {
+  public DriveOffHAB2(double speed) {
     requires(RobotMap.driveTrain);
     requires(RobotMap.direction);
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
     vad = RobotMap.visionDrive;
-    this.desiredHeading = desiredHeading;
+    this.desiredHeading = 0;
+    this.speed = speed;
     lastHeadingError = 0;
     prevError = 0;
-    timesAtPrevError = 0;
     startTime = 0;
+    numberOfBumps = 0;
+    SmartDashboard.putNumber(this.getClass().getSimpleName() + " Speed", speed);
   }
 
   // Called just before this Command runs the first time
@@ -39,8 +43,9 @@ public class TurnToAnAngle extends Command {
   protected void initialize() {
     lastHeadingError = 0;
     prevError = 0;
-    timesAtPrevError = 0;
+    numberOfBumps = 0;
     startTime = RobotController.getFPGATime() / 1000000.0;
+    speed = SmartDashboard.getNumber(this.getClass().getSimpleName() + " Speed", speed);
     SmartDashboard.putString(this.getClass().getSimpleName(), "Started");
   }
 
@@ -52,9 +57,9 @@ public class TurnToAnAngle extends Command {
     double currentTime = RobotController.getFPGATime() / 1000000.0;
     double timeDelta = currentTime - startTime;
 
-    turnAmt = vad.getSteerKp(true) * headingError + (vad.getSteerKd(true) * headingDelta / timeDelta);
+    turnAmt = vad.getSteerKp() * headingError + (vad.getSteerKd() * headingDelta / timeDelta);
 
-    double steerMin = vad.getSteerMin(true);
+    double steerMin = vad.getSteerMin();
     turnAmt = Math.max(steerMin, Math.abs(turnAmt)) * Math.signum(turnAmt);
     this.lastHeadingError = headingError;
     SmartDashboard.putNumber(this.getClass().getSimpleName() + " Steer", turnAmt);
@@ -64,24 +69,25 @@ public class TurnToAnAngle extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+    if (numberOfBumps == 0) {
+      if (Pose.getCurrentPose().pitch < -10) {
+        ++numberOfBumps;
+      }
+    } else if (numberOfBumps == 1) {
+      if (Pose.getCurrentPose().pitch > -10) {
+        ++numberOfBumps;
+      }
+    }
+    SmartDashboard.putNumber(this.getClass().getSimpleName() + " Bumps", numberOfBumps);
     double turnAmt = turnTowards();
-    RobotMap.driveTrain.drive(turnAmt, -turnAmt);
+    RobotMap.driveTrain.drive(speed + turnAmt, speed - turnAmt);
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
     double manualOverride = Robot.oi.driveTrainForward.getValue();
-    double steerOverride = Robot.oi.driveTrainTurn.getValue();
-    if ( ((int)lastHeadingError)/1 == ((int)prevError)/1 ) {
-      timesAtPrevError++;
-    } else {
-      timesAtPrevError = 0;
-    }
-    prevError = lastHeadingError;
-    boolean finished = (0 != manualOverride || 0 != steerOverride) ||  
-      (Math.abs(lastHeadingError) < 1) || timesAtPrevError > 20;
-
+    boolean finished = (manualOverride > 0) || numberOfBumps > 1;
     SmartDashboard.putString(this.getClass().getSimpleName(), finished ? "Finished" : "Running");
     return finished;  
   }
@@ -90,9 +96,6 @@ public class TurnToAnAngle extends Command {
   @Override
   protected void end() {
     RobotMap.driveTrain.stop();
-    lastHeadingError = 0;
-    prevError = 0;
-    timesAtPrevError = 0;
     SmartDashboard.putString(this.getClass().getSimpleName(), "Ended");
   }
 

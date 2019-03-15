@@ -10,10 +10,11 @@ package frc.robot.commands.groups;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import frc.robot.commands.BeakClose;
 import frc.robot.commands.BeakOpen;
+import frc.robot.commands.PauseForTime;
+import frc.robot.commands.PauseForTime;
 import frc.robot.commands.PreloadFinish;
 import frc.robot.commands.PreloadSetup;
 import frc.robot.commands.ResetGyro;
-import frc.robot.commands.ShiftUp;
 import frc.robot.commands.WristMM;
 //import frc.robot.commands.spinWheels;
 import frc.robot.subsystems.Wrist;
@@ -26,13 +27,11 @@ public class Preload extends CommandGroup {
   public static boolean isPreloading = false;
   public Preload() {
     addSequential(new PreloadSetup());
+    addSequential(new ResetGyro());
     addSequential(new BeakOpen());
     addSequential(new WristMM(Wrist.Position.HIGH));
-    addSequential(new ResetGyro());
-    addSequential(new ShiftUp());    
-    //addSequential(new spinWheels());
-    //addParallel(new BeakClose());
-    addSequential(new PreloadFinish());
+    addSequential(new PauseForTime(500));
     addSequential(new BeakClose());
+    addSequential(new PreloadFinish());
   }
 }

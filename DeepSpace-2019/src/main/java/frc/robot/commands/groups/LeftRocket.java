@@ -14,7 +14,6 @@ import frc.robot.commands.ShiftUp;
 import frc.robot.commands.VADriveUntilDistance;
 import frc.robot.commands.commands_auto.PathFollower5010;
 import frc.robot.commands.commands_auto.PathFollower5010.Direction;
-import frc.robot.subsystems.VisionAssistedDrive;
 
 public class LeftRocket extends CommandGroup {
   /**

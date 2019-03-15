@@ -49,6 +49,45 @@ public class DirectionSensor extends Subsystem {
     return 0;
   }
 
+  public double getPitch() {
+    double pitch = 0;
+    if (null != gyro) {
+      pitch = gyro.getPitch();
+      SmartDashboard.putNumber(this.getClass().getSimpleName() + " Pitch", pitch);
+    }
+    return pitch;
+  }
+
+  public double getRoll() {
+    double roll = gyro.getRoll();
+    SmartDashboard.putNumber(this.getClass().getSimpleName() + " Roll", roll);
+    return roll;
+  }
+
+  public double getYaw() {
+    double yaw = gyro.getYaw();
+    SmartDashboard.putNumber(this.getClass().getSimpleName() + " Yaw", yaw);
+    return yaw;
+  }
+
+  public double getAccelX() {
+    double accelX = gyro.getWorldLinearAccelX();
+    SmartDashboard.putNumber(this.getClass().getSimpleName() + " X Accel", accelX);
+    return accelX;
+  }
+
+  public double getAccelY() {
+    double accel = gyro.getWorldLinearAccelY();
+    SmartDashboard.putNumber(this.getClass().getSimpleName() + " Y Accel", accel);
+    return accel;
+  }
+
+  public double getAccelZ() {
+    double accelZ = gyro.getWorldLinearAccelZ();
+    SmartDashboard.putNumber(this.getClass().getSimpleName() + " Z Accel", accelZ);
+    return accelZ;
+  }
+
   public static double boundHalfDegrees(double angle_degrees) {
     while (angle_degrees >= 180.0)
       angle_degrees -= 360.0;
