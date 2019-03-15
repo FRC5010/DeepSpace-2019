@@ -93,7 +93,7 @@ public class Elevator extends Subsystem {
     elevatorMotor.configClosedLoopPeriod(1, 1, Constants.kTimeoutMs);
 
     // cruise velocity
-    elevatorMotor.configMotionCruiseVelocity(2500, Constants.kTimeoutMs);
+    elevatorMotor.configMotionCruiseVelocity(3600, Constants.kTimeoutMs);
     elevatorMotor.configMotionAcceleration(1500, Constants.kTimeoutMs);
 
     // zeroing sensor

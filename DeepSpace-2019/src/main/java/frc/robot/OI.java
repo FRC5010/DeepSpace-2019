@@ -92,7 +92,7 @@ public class OI {
     driverB.whenPressed(new WristMM(Wrist.Position.PRELOAD));
     
     driveTrainForward = new JoystickAxis(driver, 1, true, 1);
-    driveTrainTurn = new JoystickAxis(driver, 4, 0.5);
+    driveTrainTurn = new JoystickAxis(driver, 4, 0.65);
 
     driverHoldAutoRightTrigger = new JoystickAxis(driver, 3);
     speedReducerTrigger = new JoystickAxis(driver, 2);
@@ -111,9 +111,9 @@ public class OI {
     elevatorLiftControl.setLowerLimit(Elevator.MAX_REV_OUT);
     elevatorGamePieceSelector = coDriverLB;
 
-    ballIntake = new JoystickAxis(coDriver, 2, 0.5);
+    ballIntake = new JoystickAxis(coDriver, 2, .75);
     ballIntake.setLowerLimit(0);
-    ballOuttake = new JoystickAxis(coDriver, 3, true, 0.3);
+    ballOuttake = new JoystickAxis(coDriver, 3, true, 0.75);
     ballOuttake.setUpperLimit(0);
 
     wristControl = new JoystickAxis(coDriver, 5, true, Wrist.MAX_FWD_OUT);
