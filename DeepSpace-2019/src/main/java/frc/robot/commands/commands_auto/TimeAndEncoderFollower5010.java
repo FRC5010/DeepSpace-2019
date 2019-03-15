@@ -125,6 +125,7 @@ public class TimeAndEncoderFollower5010 {
             double segment_time = elapsed_time / segment_delta;
             int segment_prev = ((int)Math.floor(segment_time));
             int segment_next = ((int)Math.ceil(segment_time));
+            System.out.println("Previous Segment: " + segment_prev);
             if (segment_prev < trajectory.length()) {
                 segment = segment_prev;
                 prev_segment = trajectory.get(segment_prev);
@@ -146,7 +147,7 @@ public class TimeAndEncoderFollower5010 {
                     current_segment = prev_segment;
                 }
             } else { 
-                segment = trajectory.length();
+                segment = trajectory.length() - 1;
                 current_segment = trajectory.get(segment);
                 last_segment_count++; 
             }

@@ -63,10 +63,6 @@ public class Robot extends TimedRobot {
 
     // chooser.addOption("My Auto", new MyAutoCommand());
     SmartDashboard.putData("Auto mode", m_chooser);
-
-    // if (DriverStation.getInstance().getMatchType() != MatchType.None) {
-    //   new WristMM(Position.PRELOAD).start();;
-    // }
   }
 
   /**
@@ -79,7 +75,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    Pose.update(RobotController.getFPGATime());
+    if (isDisabled()) {
+      Pose.update(RobotController.getFPGATime());
+    }
   }
 
   /**
@@ -129,6 +127,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousPeriodic() {
+    Pose.update(RobotController.getFPGATime());
     if (oi.driveTrainForward.getValue() != 0 || oi.driveTrainTurn.getValue() != 0) {
       m_autonomousCommand.cancel();
     }
@@ -151,8 +150,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
+    Pose.update(RobotController.getFPGATime());
     Scheduler.getInstance().run();
-    Instrum.Process(RobotMap.elevatorMotor, new StringBuilder());
   }
 
   /**
@@ -160,5 +159,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void testPeriodic() {
+    Pose.update(RobotController.getFPGATime());
   }
 }

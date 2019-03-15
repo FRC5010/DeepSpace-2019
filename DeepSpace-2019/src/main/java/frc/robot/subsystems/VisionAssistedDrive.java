@@ -37,39 +37,88 @@ public class VisionAssistedDrive {
   }
 
   class GearPID {
-    public PIDValues steer, move;
+    public PIDValues steer, move, turnInPlace;
     
-    public GearPID(PIDValues steer, PIDValues move) {
+    public GearPID(PIDValues steer, PIDValues move, PIDValues turnInPlace) {
       this.steer = steer;
       this.move = move;
+      this.turnInPlace = turnInPlace;
     }
   }
 
-  public GearPID lowGear = new GearPID(new PIDValues(0.005, 0, 0.25, 0.09), new PIDValues(0.008, 0, 0, 0.08));
-  public GearPID highGear = new GearPID(new PIDValues(0.015, 0, 0, 0.08), new PIDValues(0.06, 0, 0.2, 0.08));
+  public GearPID lowGear = new GearPID(
+    new PIDValues(0.005, 0, 0.25, 0.09), 
+    new PIDValues(0.008, 0, 0, 0.08),
+    new PIDValues(0.01, 0, 0, 0.1)
+    );
+  public GearPID highGear = new GearPID(
+    new PIDValues(0.015, 0, 0, 0.08), 
+    new PIDValues(0.06, 0, 0.2, 0.08),
+    new PIDValues(0.08, 0, 0.02, 0.1)
+    );
 
   public double getSteerKp() {
-    lowGear.steer.kp = SmartDashboard.getNumber("lowGear.steer.kp", lowGear.steer.kp);
-    highGear.steer.kp = SmartDashboard.getNumber("highGear.steer.kp", highGear.steer.kp);
-    return Shifter.isLowGear ? lowGear.steer.kp : highGear.steer.kp;
+    return getSteerKp(false);
+  }
+
+  public double getSteerKp(boolean turnInPlace) {
+    if (turnInPlace) {
+      lowGear.turnInPlace.kp = SmartDashboard.getNumber("lowGear.turnInPlace.kp", lowGear.turnInPlace.kp);
+      highGear.turnInPlace.kp = SmartDashboard.getNumber("highGear.turnInPlace.kp", highGear.turnInPlace.kp);
+      return Shifter.isLowGear ? lowGear.turnInPlace.kp : highGear.turnInPlace.kp;
+    } else {
+      lowGear.steer.kp = SmartDashboard.getNumber("lowGear.steer.kp", lowGear.steer.kp);
+      highGear.steer.kp = SmartDashboard.getNumber("highGear.steer.kp", highGear.steer.kp);
+      return Shifter.isLowGear ? lowGear.steer.kp : highGear.steer.kp;
+    }
   }
 
   public double getSteerKi() {
-    lowGear.steer.ki = SmartDashboard.getNumber("lowGear.steer.ki", lowGear.steer.ki);
-    highGear.steer.ki = SmartDashboard.getNumber("highGear.steer.ki", highGear.steer.ki);
-    return Shifter.isLowGear ? lowGear.steer.ki : highGear.steer.ki;
+    return getSteerKi(false);
+  }
+
+  public double getSteerKi(boolean turnInPlace) {
+    if (turnInPlace) {
+      lowGear.turnInPlace.ki = SmartDashboard.getNumber("lowGear.turnInPlace.ki", lowGear.turnInPlace.ki);
+      highGear.turnInPlace.ki = SmartDashboard.getNumber("highGear.turnInPlace.ki", highGear.turnInPlace.ki);
+      return Shifter.isLowGear ? lowGear.turnInPlace.ki : highGear.turnInPlace.ki;
+    } else {
+      lowGear.steer.ki = SmartDashboard.getNumber("lowGear.steer.ki", lowGear.steer.ki);
+      highGear.steer.ki = SmartDashboard.getNumber("highGear.steer.ki", highGear.steer.ki);
+      return Shifter.isLowGear ? lowGear.steer.ki : highGear.steer.ki;
+    }
   }
 
   public double getSteerKd() {
-    lowGear.steer.kd = SmartDashboard.getNumber("lowGear.steer.kd", lowGear.steer.kd);
-    highGear.steer.kd = SmartDashboard.getNumber("highGear.steer.kd", highGear.steer.kd);
-    return Shifter.isLowGear ? lowGear.steer.kd : highGear.steer.kd;
+    return getSteerKd(false);
+  }
+
+  public double getSteerKd(boolean turnInPlace) {
+    if (turnInPlace) {
+      lowGear.turnInPlace.kd = SmartDashboard.getNumber("lowGear.turnInPlace.kd", lowGear.turnInPlace.kd);
+      highGear.turnInPlace.kd = SmartDashboard.getNumber("highGear.turnInPlace.kd", highGear.turnInPlace.kd);
+      return Shifter.isLowGear ? lowGear.turnInPlace.kd : highGear.turnInPlace.kd;
+    } else {
+      lowGear.steer.kd = SmartDashboard.getNumber("lowGear.steer.kd", lowGear.steer.kd);
+      highGear.steer.kd = SmartDashboard.getNumber("highGear.steer.kd", highGear.steer.kd);
+      return Shifter.isLowGear ? lowGear.steer.kd : highGear.steer.kd;
+    }
   }
 
   public double getSteerMin() {
-    lowGear.steer.min = SmartDashboard.getNumber("lowGear.steer.min", lowGear.steer.min);
-    highGear.steer.min = SmartDashboard.getNumber("highGear.steer.min", highGear.steer.min);
-    return Shifter.isLowGear ? lowGear.steer.min : highGear.steer.min;
+    return getSteerKd(false);
+  }
+
+  public double getSteerMin(boolean turnInPlace) {
+    if (turnInPlace) {
+      lowGear.turnInPlace.min = SmartDashboard.getNumber("lowGear.turnInPlace.min", lowGear.turnInPlace.min);
+      highGear.turnInPlace.min = SmartDashboard.getNumber("highGear.turnInPlace.min", highGear.turnInPlace.min);
+      return Shifter.isLowGear ? lowGear.turnInPlace.min : highGear.turnInPlace.min;
+    } else {
+      lowGear.steer.min = SmartDashboard.getNumber("lowGear.steer.min", lowGear.steer.min);
+      highGear.steer.min = SmartDashboard.getNumber("highGear.steer.min", highGear.steer.min);
+      return Shifter.isLowGear ? lowGear.steer.min : highGear.steer.min;
+    }
   }
 
   public double getMoveKp() {

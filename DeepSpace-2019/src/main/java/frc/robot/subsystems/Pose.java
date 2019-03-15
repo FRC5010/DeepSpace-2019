@@ -10,7 +10,6 @@ package frc.robot.subsystems;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
@@ -29,11 +28,12 @@ public class Pose {
     public final double elevatorEncoder;
     public final double totalAmps;
     public final double elevatorAmps;
+    public final double pitch;
 
     // public static final Map<Long, Pose> poseMap = new HashMap<Long, Pose>();
     public static final List<Pose> poseList = new ArrayList<Pose>();
     private static Pose currentPose = new Pose();
-    private static long poseListLimit = 200;
+    private static long poseListLimit = 20;
 
     public Pose(long timestamp) {
         this.timestamp = timestamp;
@@ -55,6 +55,7 @@ public class Pose {
         // limeLight.leftRightRatio = RobotMap.vision.getLeftRightRatio();
         limeLight.aspectApproachAngle = RobotMap.vision.getAspectApproachAngle();
         heading = RobotMap.direction.angle();
+        pitch = RobotMap.direction.getPitch();
         driveTrainEncoderLeft = RobotMap.distance.getLeftRaw();
         driveTrainEncoderRight = RobotMap.distance.getRightRaw();
         elevatorEncoder = RobotMap.elevator.getCurrentPosition();
@@ -75,6 +76,7 @@ public class Pose {
         driveTrainEncoderLeft = 0;
         driveTrainEncoderRight = 0;
         heading = 0.0;
+        pitch = 0.0;
         elevatorEncoder = 0.0;
         totalAmps = 0;
         elevatorAmps = 0.0;
@@ -99,7 +101,7 @@ public class Pose {
         poseList.add(currentPose);
 
         if (poseList.size() > poseListLimit) {
-            Pose removePose = poseList.remove(0);
+            poseList.remove(0);
             // poseMap.remove(removePose.timestamp, removePose);
         }
 
