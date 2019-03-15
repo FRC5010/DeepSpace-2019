@@ -18,7 +18,7 @@ public class LowGearVAD extends CommandGroup {
    */
   public LowGearVAD() {
     addSequential(new ShiftDown());
-    addSequential(new VADriveUntilDistance(40));
+    addSequential(new VADriveUntilDistance(30));
     addSequential(new ShiftUp());
     // Add Commands here:
     // e.g. addSequential(new Command1());

@@ -33,7 +33,7 @@ public class WristMM extends Command {
   protected void initialize() {
 		SmartDashboard.putString("Command", this.getClass().getSimpleName());
     SmartDashboard.putString("Wrist MM", "Initialized");
-    setPoint = Wrist.ZERO;
+    setPoint = Wrist.HATCH_LOW;
     switch (position) {
       case LOW: {
         if (RobotMap.elevator.isCargoGamePiece) {

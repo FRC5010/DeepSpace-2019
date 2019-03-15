@@ -30,9 +30,9 @@ public class Preload extends CommandGroup {
     addSequential(new WristMM(Wrist.Position.HIGH));
     addSequential(new ResetGyro());
     addSequential(new ShiftUp());    
-    addSequential(new BeakClose());
     //addSequential(new spinWheels());
     //addParallel(new BeakClose());
     addSequential(new PreloadFinish());
+    addSequential(new BeakClose());
   }
 }

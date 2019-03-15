@@ -538,7 +538,7 @@ public class Vision extends Subsystem {
       table.getEntry("pipeline").setNumber(ppipelineNumber);
     } else {
       table.getEntry("camMode").setNumber(0);
-      table.getEntry("stream").setNumber(0);
+      table.getEntry("stream").setNumber(2);
       return;
     }
   }

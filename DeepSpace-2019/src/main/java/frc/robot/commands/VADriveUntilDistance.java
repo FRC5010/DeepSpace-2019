@@ -51,7 +51,7 @@ public class VADriveUntilDistance extends Command {
   protected void execute() {
     SmartDashboard.putString(this.getClass().getSimpleName(), "working");
 
-    double output = moveTowardsTarget(setpoint, lastError);
+    double output = Math.min(moveTowardsTarget(setpoint, lastError), 0.5);
     //double turn = VisionAssistedDrive.arcTowardsTarget();
     double turn = turnTowards(0, lastHeadingError);
 
