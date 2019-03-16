@@ -27,8 +27,8 @@ import frc.robot.util.Constants;
  */
 public class Wrist extends Subsystem {
   public static double lowestAngle = 35;
-  public static final double feedForward = 0.1;
-  public static final double angleConversion = 20;
+  public static final double feedForward = 0.13;
+  public static final double angleConversion = 23;
   public static double ZERO = 1;
   public static double HATCH_LOW = -lowestAngle + 2;
   public static double HATCH_MIDDLE = 10;
@@ -37,7 +37,7 @@ public class Wrist extends Subsystem {
   public static double CARGO_MIDDLE = 60;
   public static double CARGO_HIGH = 70;
   public static double CARGO_SHIP = 0;
-  public static double PRELOAD = 83;
+  public static double PRELOAD = 78;
   public static double MAX_FWD_OUT = 1;
   public static double MAX_REV_OUT = -0.3;
   private long lastPosition = 0;

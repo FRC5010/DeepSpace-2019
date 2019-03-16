@@ -17,8 +17,7 @@ import frc.robot.commands.ResetGyro;
 import frc.robot.commands.ShiftDown;
 import frc.robot.commands.ShiftUp;
 import frc.robot.commands.ToggleMotorSafety;
-import frc.robot.commands.VADriveUntilDistance;
-import frc.robot.commands.VisionAssistedSteering;
+import frc.robot.commands.TurnToAnAngle;
 import frc.robot.commands.WristMM;
 import frc.robot.commands.WristReset;
 import frc.robot.commands.groups.AllComeDown;
@@ -86,7 +85,7 @@ public class OI {
     driverRB.whenPressed(new BeakClose());
     
     driverX.whenPressed(new LowGearVAD());
-    //driverY.whenPressed();
+    driverY.whenPressed(new TurnToAnAngle(45));
 
     driverA.whenPressed(new Preload());
     driverB.whenPressed(new WristMM(Wrist.Position.PRELOAD));

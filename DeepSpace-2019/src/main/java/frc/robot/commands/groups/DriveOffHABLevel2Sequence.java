@@ -10,6 +10,7 @@ package frc.robot.commands.groups;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import frc.robot.commands.DriveOffHAB2;
 import frc.robot.commands.PreloadFinish;
+import frc.robot.commands.ResetGyro;
 import frc.robot.commands.ShiftDown;
 import frc.robot.commands.ShiftUp;
 
@@ -18,8 +19,9 @@ public class DriveOffHABLevel2Sequence extends CommandGroup {
    * Add your docs here.
    */
   public DriveOffHABLevel2Sequence() {
+    addSequential(new ResetGyro());
     addSequential(new ShiftDown());
-    addSequential(new DriveOffHAB2(.2));
+    addSequential(new DriveOffHAB2(.35));
     addSequential(new ShiftUp());
     addSequential(new PreloadFinish());
 

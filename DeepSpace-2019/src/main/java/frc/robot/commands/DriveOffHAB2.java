@@ -70,11 +70,11 @@ public class DriveOffHAB2 extends Command {
   @Override
   protected void execute() {
     if (numberOfBumps == 0) {
-      if (Pose.getCurrentPose().pitch < -10) {
+      if (Pose.getCurrentPose().pitch < -15) {
         ++numberOfBumps;
       }
     } else if (numberOfBumps == 1) {
-      if (Pose.getCurrentPose().pitch > -10) {
+      if (Pose.getCurrentPose().pitch > -5) {
         ++numberOfBumps;
       }
     }
@@ -86,7 +86,7 @@ public class DriveOffHAB2 extends Command {
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    double manualOverride = Robot.oi.driveTrainForward.getValue();
+    double manualOverride = Math.abs(Robot.oi.driveTrainForward.getValue());
     boolean finished = (manualOverride > 0) || numberOfBumps > 1;
     SmartDashboard.putString(this.getClass().getSimpleName(), finished ? "Finished" : "Running");
     return finished;  

@@ -18,6 +18,7 @@ public class LeftShipSideX2 extends CommandGroup {
    */
   public LeftShipSideX2() {
     addSequential(new Preload());
+    addSequential(new DriveOffHABLevel2Sequence());
 
     addSequential(new PathFollower5010(MotionProfiles.LStoShip2L, Direction.kForward));
 //    addSequential(new VisionReleaseHatch());

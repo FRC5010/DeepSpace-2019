@@ -9,24 +9,20 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.RobotMap;
-import frc.robot.commands.groups.Preload;
-import frc.robot.subsystems.Wrist;
-import frc.robot.subsystems.Wrist.Position;
 
-public class PreloadSetup extends Command {
-  public PreloadSetup() {
+public class LimeLightLEDState extends Command {
+  int state;
+
+  public LimeLightLEDState(int state) {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
+    this.state = state;
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    RobotMap.vision.toggleLimelight(true);
-    RobotMap.wristMotor.setSelectedSensorPosition(RobotMap.wrist.angleToTics(78));
-    Preload.isPreloading = true;
-    Wrist.lastMMPosition = Position.PRELOAD;
-    BallControl.gripBall = true;
+    RobotMap.vision.setLimeLightLEDMode(state);
   }
 
   // Called repeatedly when this Command is scheduled to run

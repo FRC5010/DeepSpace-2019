@@ -509,6 +509,10 @@ public class Vision extends Subsystem {
     return smoothed.aspectApproachAngle;
   }
 
+  public void setLimeLightLEDMode(int state) {
+    table.getEntry("ledMode").setNumber(state);
+  }
+
   public void toggleLimelight() {
     lightOn = !lightOn;
     table.getEntry("ledMode").setNumber(lightOn ? 3 : 1);

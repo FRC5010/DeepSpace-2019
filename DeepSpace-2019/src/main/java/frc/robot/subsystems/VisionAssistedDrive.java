@@ -47,8 +47,8 @@ public class VisionAssistedDrive {
   }
 
   public GearPID lowGear = new GearPID(
-    new PIDValues(0.005, 0, 0.25, 0.09), 
-    new PIDValues(0.008, 0, 0, 0.08),
+    new PIDValues(0.005, 0, 0.05, 0.02), 
+    new PIDValues(0.01, 0, 0, 0.1),
     new PIDValues(0.01, 0, 0, 0.1)
     );
   public GearPID highGear = new GearPID(
