@@ -259,7 +259,7 @@ public class Vision extends Subsystem {
   void printValues() {
     SmartDashboard.putBoolean("Valid Target c", current.tValid);
     SmartDashboard.putBoolean("Valid Target s", smoothed.tValid);
-//    SmartDashboard.putNumber("lastValid TS", lastValid);
+    //    SmartDashboard.putNumber("lastValid TS", lastValid);
 
     // outputting all current/raw values
     SmartDashboard.putNumber("Target X raw", Double.isNaN(current.tX) ? 0.0 : current.tX);

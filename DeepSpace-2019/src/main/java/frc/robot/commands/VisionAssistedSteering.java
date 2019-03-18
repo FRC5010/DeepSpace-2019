@@ -37,7 +37,7 @@ public class VisionAssistedSteering extends Command {
   protected void execute() {
     double output = Robot.oi.driveTrainForward.getValue();
     //double turn = VisionAssistedDrive.arcTowardsTarget();
-    double turn = vad.arcTowardsTarget();//turnTowards(0, lastHeadingError);
+    double turn = turnTowards(0, lastHeadingError);
 
     RobotMap.driveTrain.drive(output - turn, output + turn);
   }
@@ -49,7 +49,7 @@ public class VisionAssistedSteering extends Command {
       double headingError = DirectionSensor.boundHalfDegrees(desiredHeading - heading);
       double headingDelta = headingError - lastHeadingError;
 
-      turnAmt = vad.getSteerKp() * headingError + vad.getSteerKd() * headingDelta;
+      turnAmt = vad.getSteerKp(true) * headingError + vad.getSteerKd(true) * headingDelta;
 
       double steerMin = vad.getSteerMin();
       turnAmt = Math.max(steerMin, Math.abs(turnAmt)) * Math.signum(turnAmt);
