@@ -55,7 +55,6 @@ public class VisionAssistedSteering extends Command {
       turnAmt = Math.max(steerMin, Math.abs(turnAmt)) * Math.signum(turnAmt);
       this.lastHeadingError = headingError;
     }
-    SmartDashboard.putNumber(this.getClass().getSimpleName() + " Steer", turnAmt);
     return turnAmt;
   }
 

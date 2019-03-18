@@ -8,6 +8,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 import frc.robot.commands.groups.Preload;
 import frc.robot.subsystems.Wrist;
@@ -22,6 +23,7 @@ public class PreloadSetup extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+		SmartDashboard.putString("Command", this.getClass().getSimpleName());
     RobotMap.vision.toggleLimelight(true);
     RobotMap.wristMotor.setSelectedSensorPosition(RobotMap.wrist.angleToTics(78));
     Preload.isPreloading = true;

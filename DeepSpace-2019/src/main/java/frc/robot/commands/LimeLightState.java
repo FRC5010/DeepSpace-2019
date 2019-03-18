@@ -9,6 +9,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 import frc.robot.subsystems.Vision;
 
@@ -27,6 +28,7 @@ public class LimeLightState extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+		SmartDashboard.putString("Command", this.getClass().getSimpleName());
     switch (state) {
       case AUTO: {
         RobotMap.vision.setLimeLightLEDMode(Vision.LEDMode.ON);

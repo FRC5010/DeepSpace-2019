@@ -37,11 +37,11 @@ public class TurnToAnAngle extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+    SmartDashboard.putString("Command", this.getClass().getSimpleName());
     lastHeadingError = 0;
     prevError = 0;
     timesAtPrevError = 0;
     startTime = RobotController.getFPGATime() / 1000000.0;
-    SmartDashboard.putString(this.getClass().getSimpleName(), "Started");
   }
 
   public double turnTowards() {
@@ -57,7 +57,6 @@ public class TurnToAnAngle extends Command {
     double steerMin = vad.getSteerMin(true);
     turnAmt = Math.max(steerMin, Math.abs(turnAmt)) * Math.signum(turnAmt);
     this.lastHeadingError = headingError;
-    SmartDashboard.putNumber(this.getClass().getSimpleName() + " Steer", turnAmt);
     return turnAmt;
   }
 
@@ -82,7 +81,6 @@ public class TurnToAnAngle extends Command {
     boolean finished = (0 != manualOverride || 0 != steerOverride) ||  
       (Math.abs(lastHeadingError) < 1) || timesAtPrevError > 20;
 
-    SmartDashboard.putString(this.getClass().getSimpleName(), finished ? "Finished" : "Running");
     return finished;  
   }
 
@@ -93,7 +91,6 @@ public class TurnToAnAngle extends Command {
     lastHeadingError = 0;
     prevError = 0;
     timesAtPrevError = 0;
-    SmartDashboard.putString(this.getClass().getSimpleName(), "Ended");
   }
 
   // Called when another command which requires one or more of the same
@@ -101,6 +98,5 @@ public class TurnToAnAngle extends Command {
   @Override
   protected void interrupted() {
     end();
-    SmartDashboard.putString(this.getClass().getSimpleName(), "Interrupted");
   }
 }

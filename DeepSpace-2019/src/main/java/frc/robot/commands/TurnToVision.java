@@ -37,11 +37,11 @@ public class TurnToVision extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+		SmartDashboard.putString("Command", this.getClass().getSimpleName());
     lastHeadingError = 0;
     prevError = 0;
     timesAtPrevError = 0;
     startTime = RobotController.getFPGATime() / 1000000.0;
-    SmartDashboard.putString(this.getClass().getSimpleName(), "Started");
   }
 
   public double turnTowards() {

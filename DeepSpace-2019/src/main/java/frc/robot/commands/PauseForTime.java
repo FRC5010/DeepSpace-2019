@@ -23,8 +23,8 @@ public class PauseForTime extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+		SmartDashboard.putString("Command", this.getClass().getSimpleName());
     finishTime = timeToPause + RobotController.getFPGATime() / 1000;
-    SmartDashboard.putString(this.getClass().getSimpleName(), "Started");
   }
 
   // Called repeatedly when this Command is scheduled to run
@@ -37,7 +37,6 @@ public class PauseForTime extends Command {
   protected boolean isFinished() {
     long currentTime = RobotController.getFPGATime() / 1000;
     boolean finished = (finishTime < currentTime);
-    SmartDashboard.putString(this.getClass().getSimpleName(), finished ? "Finished" : "Running");
     return finished;
   }
 
@@ -50,6 +49,5 @@ public class PauseForTime extends Command {
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
-    SmartDashboard.putString(this.getClass().getSimpleName(), "Interrupted");
   }
 }

@@ -7,8 +7,9 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 
 /**
@@ -27,9 +28,11 @@ public class BeakIntake extends Subsystem {
 
   public void beakOpen(){
     RobotMap.beakSolenoid.set(DoubleSolenoid.Value.kForward);
+    SmartDashboard.putBoolean("Beak Open", true);
   }
 
   public void beakClose(){
     RobotMap.beakSolenoid.set(DoubleSolenoid.Value.kReverse);
+    SmartDashboard.putBoolean("Beak Open", false);
   }
 }

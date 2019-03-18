@@ -41,12 +41,12 @@ public class DriveOffHAB2 extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+		SmartDashboard.putString("Command", this.getClass().getSimpleName());
     lastHeadingError = 0;
     prevError = 0;
     numberOfBumps = 0;
     startTime = RobotController.getFPGATime() / 1000000.0;
     speed = SmartDashboard.getNumber(this.getClass().getSimpleName() + " Speed", speed);
-    SmartDashboard.putString(this.getClass().getSimpleName(), "Started");
   }
 
   public double turnTowards() {
@@ -62,7 +62,6 @@ public class DriveOffHAB2 extends Command {
     double steerMin = vad.getSteerMin();
     turnAmt = Math.max(steerMin, Math.abs(turnAmt)) * Math.signum(turnAmt);
     this.lastHeadingError = headingError;
-    SmartDashboard.putNumber(this.getClass().getSimpleName() + " Steer", turnAmt);
     return turnAmt;
   }
 
@@ -88,7 +87,6 @@ public class DriveOffHAB2 extends Command {
   protected boolean isFinished() {
     double manualOverride = Math.abs(Robot.oi.driveTrainForward.getValue());
     boolean finished = (manualOverride > 0) || numberOfBumps > 1;
-    SmartDashboard.putString(this.getClass().getSimpleName(), finished ? "Finished" : "Running");
     return finished;  
   }
 
@@ -96,7 +94,6 @@ public class DriveOffHAB2 extends Command {
   @Override
   protected void end() {
     RobotMap.driveTrain.stop();
-    SmartDashboard.putString(this.getClass().getSimpleName(), "Ended");
   }
 
   // Called when another command which requires one or more of the same
