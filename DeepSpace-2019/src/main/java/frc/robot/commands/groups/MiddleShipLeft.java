@@ -9,10 +9,12 @@ package frc.robot.commands.groups;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import frc.robot.RobotMap_Paths.MotionProfiles;
-import frc.robot.commands.LimeLightLEDState;
+import frc.robot.commands.LimeLightState;
 import frc.robot.commands.ShiftDown;
 import frc.robot.commands.ShiftUp;
+import frc.robot.commands.VADriveUntilDistance;
 import frc.robot.commands.WristMM;
+import frc.robot.commands.LimeLightState.State;
 import frc.robot.commands.commands_auto.PathFollower5010;
 import frc.robot.commands.commands_auto.PathFollower5010.Direction;
 import frc.robot.subsystems.Wrist;
@@ -27,11 +29,12 @@ public class MiddleShipLeft extends CommandGroup {
     // Middle start to Ship left-front bay
     addSequential(new ShiftUp());
     addParallel(new WristMM(Wrist.Position.LOW));
-    addSequential(new PathFollower5010(MotionProfiles.MStoShip1L, Direction.kForward));
+    addSequential(new PathFollower5010(MotionProfiles.MStoShip1S, Direction.kForward));
+    addSequential(new LimeLightState(State.AUTO));
     addSequential(new ShiftDown());
-    addSequential(new VisionReleaseHatch());
+    addSequential(new VADriveUntilDistance(25));
     addSequential(new ShiftUp());
-    addSequential(new PathFollower5010(MotionProfiles.backupShip1L, Direction.kRevNormal));
+    addParallel(new LimeLightState(State.DRIVER));
 
     // Add Commands here:
     // e.g. addSequential(new Command1());

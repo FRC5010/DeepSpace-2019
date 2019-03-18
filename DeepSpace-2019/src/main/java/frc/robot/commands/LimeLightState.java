@@ -7,13 +7,18 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.RobotMap;
+import frc.robot.subsystems.Vision;
 
-public class LimeLightLEDState extends Command {
-  int state;
+public class LimeLightState extends Command {
+  public static enum State { AUTO, DRIVER, BLINK_ON, BLINK_OFF }
+  State state;
+  long endTime = 0;
+  boolean done = true;
 
-  public LimeLightLEDState(int state) {
+  public LimeLightState(State state) {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
     this.state = state;
@@ -22,18 +27,47 @@ public class LimeLightLEDState extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    RobotMap.vision.setLimeLightLEDMode(state);
+    switch (state) {
+      case AUTO: {
+        RobotMap.vision.setLimeLightLEDMode(Vision.LEDMode.ON);
+        RobotMap.vision.setCamMode(Vision.CamMode.VISION);
+        done = true;
+        break;
+      }      
+      case DRIVER: {
+        RobotMap.vision.setLimeLightLEDMode(Vision.LEDMode.BLINK);
+        RobotMap.vision.setCamMode(Vision.CamMode.DRIVER);
+        endTime = RobotController.getFPGATime() + 500000;
+        done = false;
+        break;
+      }
+      case BLINK_ON: {
+        RobotMap.vision.setLimeLightLEDMode(Vision.LEDMode.BLINK);
+        endTime = RobotController.getFPGATime() + 500000;
+        done = false;
+        break;
+      }
+      case BLINK_OFF: {
+        RobotMap.vision.setLimeLightLEDMode(Vision.LEDMode.OFF);
+        done = true;
+        break;
+      }
+    }
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+    if (endTime > RobotController.getFPGATime()) {
+      done = true;
+      RobotMap.vision.setLimeLightLEDMode(Vision.LEDMode.OFF);
+    }
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return true;
+    return done;
   }
 
   // Called once after isFinished returns true
@@ -45,5 +79,6 @@ public class LimeLightLEDState extends Command {
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
+    done = true;
   }
 }

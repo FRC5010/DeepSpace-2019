@@ -9,6 +9,9 @@ package frc.robot.commands.groups;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import frc.robot.RobotMap_Paths.MotionProfiles;
+import frc.robot.commands.LimeLightState;
+import frc.robot.commands.LimeLightState.State;
+import frc.robot.commands.ShiftUp;
 import frc.robot.commands.commands_auto.PathFollower5010;
 import frc.robot.commands.commands_auto.PathFollower5010.Direction;
 
@@ -19,8 +22,9 @@ public class RightRocket extends CommandGroup {
   public RightRocket() {
     addSequential(new Preload());
 
+    addSequential(new ShiftUp());
     addSequential(new PathFollower5010(MotionProfiles.RStoRRkt1, Direction.kForward));
-    addSequential(new VisionReleaseHatch());
+    addParallel(new LimeLightState(State.DRIVER));
     // Add Commands here:
     // e.g. addSequential(new Command1());
     // addSequential(new Command2());

@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import frc.robot.commands.BeakClose;
 import frc.robot.commands.BeakOpen;
 import frc.robot.commands.ElevatorReset;
+import frc.robot.commands.LimeLightState;
 import frc.robot.commands.ResetGyro;
 import frc.robot.commands.ShiftDown;
 import frc.robot.commands.ShiftUp;
@@ -20,6 +21,7 @@ import frc.robot.commands.ToggleMotorSafety;
 import frc.robot.commands.TurnToAnAngle;
 import frc.robot.commands.WristMM;
 import frc.robot.commands.WristReset;
+import frc.robot.commands.LimeLightState.State;
 import frc.robot.commands.groups.AllComeDown;
 import frc.robot.commands.groups.LowGearVAD;
 import frc.robot.commands.groups.PlacementHigh;
@@ -85,7 +87,7 @@ public class OI {
     driverRB.whenPressed(new BeakClose());
     
     driverX.whenPressed(new LowGearVAD());
-    driverY.whenPressed(new TurnToAnAngle(45));
+    driverY.whenPressed(new LimeLightState(State.DRIVER));
 
     driverA.whenPressed(new Preload());
     driverB.whenPressed(new WristMM(Wrist.Position.PRELOAD));

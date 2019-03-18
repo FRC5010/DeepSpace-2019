@@ -8,22 +8,22 @@
 package frc.robot.commands.groups;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.robot.commands.LimeLightLEDState;
+import frc.robot.commands.LimeLightState;
 import frc.robot.commands.ShiftDown;
 import frc.robot.commands.ShiftUp;
 import frc.robot.commands.VADriveUntilDistance;
+import frc.robot.commands.LimeLightState.State;
 
 public class LowGearVAD extends CommandGroup {
   /**
    * Add your docs here.
    */
   public LowGearVAD() {
-    addParallel(new LimeLightLEDState(3));
+    addParallel(new LimeLightState(State.AUTO));
     addSequential(new ShiftDown());
     addSequential(new VADriveUntilDistance(30));
-    addParallel(new LimeLightLEDState(2));
     addSequential(new ShiftUp());
-    addParallel(new LimeLightLEDState(1));
+    addParallel(new LimeLightState(State.DRIVER));
     // Add Commands here:
     // e.g. addSequential(new Command1());
     // addSequential(new Command2());

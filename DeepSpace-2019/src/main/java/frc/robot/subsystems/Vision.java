@@ -509,8 +509,9 @@ public class Vision extends Subsystem {
     return smoothed.aspectApproachAngle;
   }
 
-  public void setLimeLightLEDMode(int state) {
-    table.getEntry("ledMode").setNumber(state);
+  public static enum LEDMode { PIPELINE, OFF, BLINK, ON }
+  public void setLimeLightLEDMode(LEDMode state) {
+    table.getEntry("ledMode").setNumber(state.ordinal());
   }
 
   public void toggleLimelight() {
@@ -523,10 +524,23 @@ public class Vision extends Subsystem {
     table.getEntry("ledMode").setNumber(forceOn ? 3 : 1);
   }
 
+  public static enum CamMode { VISION, DRIVER }
+
+  public void setCamMode(CamMode mode) {
+    NetworkTableEntry camMode = table.getEntry("camMode");
+    camMode.setNumber(mode.ordinal());
+  }
+
   public void toggleCamMode() {
     NetworkTableEntry camMode = table.getEntry("camMode");
     double current = camMode.getDouble(0);
     camMode.setDouble((0.0 == current) ? 1 : 0);
+  }
+
+  public static enum Stream { SIDE_BY_SIDE, PIP_MAIN, PIP_SECONDARY }
+  public void setStreaming(Stream stream) {
+    NetworkTableEntry streamMode = table.getEntry("stream");
+    streamMode.setNumber(stream.ordinal());
   }
 
   public double getPipeline() {

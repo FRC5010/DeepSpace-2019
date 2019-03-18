@@ -9,10 +9,12 @@ package frc.robot.commands.groups;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import frc.robot.commands.DriveOffHAB2;
+import frc.robot.commands.LimeLightState;
 import frc.robot.commands.PreloadFinish;
 import frc.robot.commands.ResetGyro;
 import frc.robot.commands.ShiftDown;
 import frc.robot.commands.ShiftUp;
+import frc.robot.commands.LimeLightState.State;
 
 public class DriveOffHABLevel2Sequence extends CommandGroup {
   /**
@@ -23,6 +25,7 @@ public class DriveOffHABLevel2Sequence extends CommandGroup {
     addSequential(new ShiftDown());
     addSequential(new DriveOffHAB2(.35));
     addSequential(new ShiftUp());
+    addParallel(new LimeLightState(State.DRIVER));
     addSequential(new PreloadFinish());
 
     // Add Commands here:
