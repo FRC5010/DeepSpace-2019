@@ -19,10 +19,10 @@ public class LowGearVAD extends CommandGroup {
    * Add your docs here.
    */
   public LowGearVAD() {
-   // addParallel(new LimeLightState(State.AUTO));
+    addSequential(new LimeLightState(State.AUTO));
     addSequential(new ShiftDown());
     addSequential(new VADriveUntilDistance(30));
     addSequential(new ShiftUp());
-   // addParallel(new LimeLightState(State.DRIVER));
+    addParallel(new LimeLightState(State.DRIVER));
   }
 }
