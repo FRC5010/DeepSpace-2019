@@ -18,13 +18,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.WristMM;
 import frc.robot.commands.groups.DriveOffHABLevel1;
 import frc.robot.commands.groups.LeftRocket;
-import frc.robot.commands.groups.LeftShipFrontAndSide;
-import frc.robot.commands.groups.LeftShipSideX2;
+import frc.robot.commands.groups.LeftShipFront;
+import frc.robot.commands.groups.LeftShipSide;
 import frc.robot.commands.groups.MiddleShipLeft;
 import frc.robot.commands.groups.MiddleShipRight;
 import frc.robot.commands.groups.RightRocket;
-import frc.robot.commands.groups.RightShipFrontAndSide;
-import frc.robot.commands.groups.RightShipSideX2;
+import frc.robot.commands.groups.RightShipFront;
+import frc.robot.commands.groups.RightShipSide;
 import frc.robot.subsystems.Pose;
 import frc.robot.subsystems.Wrist.Position;
 import frc.robot.util.Instrum;
@@ -52,14 +52,15 @@ public class Robot extends TimedRobot {
     oi = new OI();
 
     m_chooser.setDefaultOption("HAB Level 1", new DriveOffHABLevel1());
-    m_chooser.setDefaultOption("Left Rocket", new LeftRocket());
-    m_chooser.setDefaultOption("Left Ship Front+Side", new LeftShipFrontAndSide());
-    m_chooser.setDefaultOption("Left Ship SideX2", new LeftShipSideX2());
+    m_chooser.setDefaultOption("Middle Ship Straight On", new MiddleShipLeft());
     m_chooser.setDefaultOption("Middle Ship Left", new MiddleShipLeft());
     m_chooser.setDefaultOption("Middle Ship Right", new MiddleShipRight());
+    m_chooser.setDefaultOption("Left Ship Front", new LeftShipFront());
+    m_chooser.setDefaultOption("Right Ship Front", new RightShipFront());
+    m_chooser.setDefaultOption("Left Ship Side", new LeftShipSide());
+    m_chooser.setDefaultOption("Right Ship Side", new RightShipSide());
+    m_chooser.setDefaultOption("Left Rocket", new LeftRocket());
     m_chooser.setDefaultOption("Right Rocket", new RightRocket());
-    m_chooser.setDefaultOption("Right Ship Front+Side", new RightShipFrontAndSide());
-    m_chooser.setDefaultOption("Right Ship SideX2", new RightShipSideX2());
 
     // chooser.addOption("My Auto", new MyAutoCommand());
     SmartDashboard.putData("Auto mode", m_chooser);

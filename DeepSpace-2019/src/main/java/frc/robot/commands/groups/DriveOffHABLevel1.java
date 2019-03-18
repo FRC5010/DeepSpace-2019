@@ -20,8 +20,8 @@ public class DriveOffHABLevel1 extends CommandGroup {
    */
   public DriveOffHABLevel1() {
     addSequential(new Preload());
+    addParallel(new LimeLightState(State.BLINK_ON));
     addSequential(new PathFollower5010(MotionProfiles.HAB1, Direction.kForward));
-    addParallel(new LimeLightState(State.DRIVER));
     // Add Commands here:
     // e.g. addSequential(new Command1());
     // addSequential(new Command2());

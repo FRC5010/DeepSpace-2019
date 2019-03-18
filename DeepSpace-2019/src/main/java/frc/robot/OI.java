@@ -27,6 +27,7 @@ import frc.robot.commands.groups.LowGearVAD;
 import frc.robot.commands.groups.PlacementHigh;
 import frc.robot.commands.groups.PlacementMiddle;
 import frc.robot.commands.groups.PlacementShipCargo;
+import frc.robot.commands.groups.TurnToVisionTarget;
 import frc.robot.dynasty.JoystickAxis;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Wrist;
@@ -88,7 +89,7 @@ public class OI {
     driverX.whenPressed(new LowGearVAD());
     driverY.whenPressed(new LimeLightState(State.DRIVER));
 
-    driverA.whenPressed(new TurnToVision());
+    driverA.whenPressed(new TurnToVisionTarget());
     driverB.whenPressed(new WristMM(Wrist.Position.PRELOAD));
     
     driveTrainForward = new JoystickAxis(driver, 1, true, 1);

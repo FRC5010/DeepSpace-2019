@@ -10,9 +10,10 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.RobotMap;
 import frc.robot.Robot;
+import frc.robot.RobotMap;
 import frc.robot.subsystems.DirectionSensor;
+import frc.robot.subsystems.Pose;
 import frc.robot.subsystems.VisionAssistedDrive;
 
 public class TurnToVision extends Command {
@@ -26,7 +27,7 @@ public class TurnToVision extends Command {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
     vad = RobotMap.visionDrive;
-   desiredHeading =1;
+    desiredHeading = 0;
     lastHeadingError = 0;
     prevError = 0;
     timesAtPrevError = 0;
@@ -45,19 +46,21 @@ public class TurnToVision extends Command {
 
   public double turnTowards() {
     double turnAmt = 0;
-    double heading = RobotMap.vision.getX();
-    double headingError = (desiredHeading - heading);
-    double headingDelta = headingError - lastHeadingError;
-    double currentTime = RobotController.getFPGATime() / 1000000.0;
-    double timeDelta = currentTime - startTime;
+    if (Pose.getCurrentPose().limeLight.tValid) {
+      double heading = RobotMap.vision.getX();
+      double headingError = (desiredHeading - heading);
+      double headingDelta = DirectionSensor.boundHalfDegrees(headingError - lastHeadingError);
+      double currentTime = RobotController.getFPGATime() / 1000000.0;
+      double timeDelta = currentTime - startTime;
 
-    turnAmt = vad.getSteerKp(true) * headingError + (vad.getSteerKd(true) * headingDelta / timeDelta);
+      turnAmt = vad.getSteerKp(true) * headingError + (vad.getSteerKd(true) * headingDelta / timeDelta);
 
-    double steerMin = vad.getSteerMin(true);
-    turnAmt = Math.max(steerMin, Math.abs(turnAmt)) * Math.signum(turnAmt);
-    this.lastHeadingError = headingError;
+      double steerMin = vad.getSteerMin(true);
+      turnAmt = Math.max(steerMin, Math.abs(turnAmt)) * Math.signum(turnAmt);
+      this.lastHeadingError = headingError;
+      SmartDashboard.putNumber(this.getClass().getSimpleName() + " err", headingError);
+    }
     SmartDashboard.putNumber(this.getClass().getSimpleName() + " Steer", turnAmt);
-    SmartDashboard.putNumber(this.getClass().getSimpleName() + " err", headingError);
     return turnAmt;
   }
 
@@ -65,7 +68,7 @@ public class TurnToVision extends Command {
   @Override
   protected void execute() {
     double turnAmt = turnTowards();
-    RobotMap.driveTrain.drive(turnAmt, -turnAmt);
+    RobotMap.driveTrain.drive(-turnAmt, turnAmt);
   }
 
   // Make this return true when this Command no longer needs to run execute()

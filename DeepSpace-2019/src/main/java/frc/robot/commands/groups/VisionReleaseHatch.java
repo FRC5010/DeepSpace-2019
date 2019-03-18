@@ -10,6 +10,8 @@ package frc.robot.commands.groups;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import frc.robot.commands.BeakOpen;
 import frc.robot.commands.LimeLightState;
+import frc.robot.commands.ShiftDown;
+import frc.robot.commands.ShiftUp;
 import frc.robot.commands.VADriveUntilDistance;
 import frc.robot.commands.LimeLightState.State;
 
@@ -35,8 +37,10 @@ public class VisionReleaseHatch extends CommandGroup {
     // a CommandGroup containing them would require both the chassis and the
     // arm.
     addSequential(new LimeLightState(State.AUTO));
+    addSequential(new ShiftDown());
     addSequential(new VADriveUntilDistance(25));
     addSequential(new BeakOpen());
-    addSequential(new LimeLightState(State.DRIVER));
+    addSequential(new ShiftUp());
+    addParallel(new LimeLightState(State.DRIVER));
   }
 }

@@ -58,7 +58,7 @@ public class LimeLightState extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    if (endTime > RobotController.getFPGATime()) {
+    if (endTime < RobotController.getFPGATime()) {
       done = true;
       RobotMap.vision.setLimeLightLEDMode(Vision.LEDMode.OFF);
     }

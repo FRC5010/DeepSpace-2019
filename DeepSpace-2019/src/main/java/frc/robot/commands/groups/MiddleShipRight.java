@@ -29,7 +29,7 @@ public class MiddleShipRight extends CommandGroup {
     // Middle start to Ship right-front bay
     addSequential(new ShiftUp());
     addParallel(new WristMM(Wrist.Position.LOW));
-    addSequential(new PathFollower5010(MotionProfiles.MStoShip1S, Direction.kForward));
+    addSequential(new PathFollower5010(MotionProfiles.MStoShip1R, Direction.kForward));
     addSequential(new LimeLightState(State.AUTO));
     addSequential(new ShiftDown());
     addSequential(new VADriveUntilDistance(25));
