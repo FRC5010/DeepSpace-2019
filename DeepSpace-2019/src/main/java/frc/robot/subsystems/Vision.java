@@ -23,6 +23,7 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.RobotMap;
 
 /**
  * Add your docs here.
@@ -452,7 +453,7 @@ public class Vision extends Subsystem {
   }
 
   public static double calculateDistance(double tY, double targetHeight) {
-    double yInRadians = Math.toRadians(tY);
+    double yInRadians = Math.toRadians(RobotMap.direction.getPitch() + tY);
     double distance = Math.abs((LIME_LIGHT_HEIGHT - targetHeight) / Math.tan(yInRadians));
     return distance;
   }
