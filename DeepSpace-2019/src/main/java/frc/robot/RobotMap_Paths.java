@@ -35,7 +35,7 @@ public class RobotMap_Paths {
 
      public static enum MotionProfiles {
           // Middle Start
-          MStoShip1S, MStoShip1R,
+          MStoShip1L, MStoShip1S, MStoShip1R, HAB1,
           // Left Rocket
           LStoLRkt1, //backupLRkt1, LRkt1toLP, LPtoLRkt2, finalLRkt2,
           // Left Start Side X2 
@@ -45,11 +45,11 @@ public class RobotMap_Paths {
           // Right Rocket
           RStoRRkt1, //backupRRkt1, RRkt1toRP, RPtoRRkt2, finalRRkt2,
           // Right Start Front & Side
-          HAB1, backupShip1R, // Ship1RtoRP, //RPtoShip2R, finalShip2R,
+          RStoShip1R, backupShip1R, // Ship1RtoRP, //RPtoShip2R, finalShip2R,
           // Right Start Side X2
           RStoShip2R, backupShip2R, //Ship2RtoRP, RPtoShip3R, finalShip3R,
           // Test routines
-          testPath, exit_level_two
+          testPath,
      }
 
      private static boolean errorLoadingPaths = false;
