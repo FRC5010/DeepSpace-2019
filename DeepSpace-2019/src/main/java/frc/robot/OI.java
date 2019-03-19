@@ -112,7 +112,7 @@ public class OI {
     elevatorLiftControl.setLowerLimit(Elevator.MAX_REV_OUT);
     elevatorGamePieceSelector = coDriverLB;
 
-    ballIntake = new JoystickAxis(coDriver, 2, .75);
+    ballIntake = new JoystickAxis(coDriver, 2, -.75);
     ballIntake.setLowerLimit(0);
     ballOuttake = new JoystickAxis(coDriver, 3, true, 0.75);
     ballOuttake.setUpperLimit(0);

@@ -58,7 +58,8 @@ public class Elevator extends Subsystem {
 
     elevatorMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, Constants.kPIDLoopIdx,
         Constants.kTimeoutMs);
-    elevatorMotor.setSensorPhase(true);
+
+    elevatorMotor.setSensorPhase(!RobotMap.isComp);
     elevatorMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, Constants.kTimeoutMs);
     elevatorMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, Constants.kTimeoutMs);
     elevatorMotor.configNeutralDeadband(Constants.kNeutralDeadband, Constants.kTimeoutMs);

@@ -35,7 +35,7 @@ public class BallControl extends Command {
   @Override
   protected void execute() {
     leftTrigger = Robot.oi.ballIntake.getValue();
-    rightTrigger = Robot.oi.ballOuttake.getValue();
+    rightTrigger = -Robot.oi.ballOuttake.getValue();
     SmartDashboard.putNumber("leftTrigger: ", leftTrigger);
     SmartDashboard.putNumber("rightTrigger: ", rightTrigger);
     if (leftTrigger != 0) {
@@ -45,7 +45,7 @@ public class BallControl extends Command {
       move = rightTrigger;
       gripBall = true;
     } else if (RobotMap.wrist.getCurrentPosition() < 2000 || Preload.isPreloading) {
-      move = gripBall ? -.1 : 0;
+      move = gripBall ? .1 : 0;
     }
 
     RobotMap.ballIntake.ballControl(move);

@@ -78,6 +78,7 @@ public class RobotMap {
   public static BeakIntake beakIntake;
   public static boolean checkMotorSafety = true;
   public static PowerDistributionPanel pdp;
+  public static boolean isComp;
 
   // For example to map the left and right motors, you could define the
   // following variables to use with your drivetrain subsystem.
@@ -89,14 +90,17 @@ public class RobotMap {
   // public static int rangefinderPort = 1;
   // public static int rangefinderModule = 1;
   public static void initComp() {
+    isComp=true;
     SmartDashboard.putString("Robot", "Competition");
     initRobotComponents();
     initMotorsComp();
     initSubsystems();
     initCommands();
+    RobotMap_Paths.init();
   }
 
   public static void initPractice() {
+    isComp=false;
     SmartDashboard.putString("Robot", "Practice");
     initRobotComponents();
     initMotorsPrac();
