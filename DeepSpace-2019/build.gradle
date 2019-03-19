@@ -23,6 +23,9 @@ deploy {
             targets << "roborio"
             // Debug can be overridden by command line, for use with VSCode
             debug = frc.getDebugOrDefault(false)
+            jvmArgs = [
+                "-XX:+UseConcMarkSweepGC"  // Use the old garbage collector for good results.
+            ]
         }
         // Built in artifact to deploy arbitrary files to the roboRIO.
         fileTreeArtifact('frcStaticFileDeploy') {
