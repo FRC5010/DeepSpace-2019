@@ -146,7 +146,7 @@ public class Vision extends Subsystem {
 
   private static long lastValid = 0;
 
-  public static final double LIME_LIGHT_HEIGHT = 33; // Measured on Comp Bot
+  public static double LIME_LIGHT_HEIGHT = 36.75; // Measured on Comp Bot
   public static final double targetHeight = 29;
 
   // The largest possible ratio from the front
@@ -185,7 +185,7 @@ public class Vision extends Subsystem {
     mDistortionCoefficients = new MatOfDouble(2.9684613693070039e-01, -1.4380252254747885e+00, -2.2098421479494509e-03,
          -3.3894563533907176e-03, 2.5344430354806740e+00);
 //    mDistortionCoefficients = new MatOfDouble(0);
-    SmartDashboard.putNumber("Vision Pitch", -.35);
+    SmartDashboard.putNumber("Vision Pitch", -3);
   }
 
   @Override
@@ -455,7 +455,7 @@ public class Vision extends Subsystem {
 
   public static double calculateDistance(double tY, double targetHeight) {
     double vPitch = SmartDashboard.getNumber("Vision Pitch", 0.0);
-    double yInRadians = Math.toRadians(tY);// + vPitch - RobotMap.direction.getPitch());
+    double yInRadians = Math.toRadians(tY + vPitch);// - RobotMap.direction.getPitch());
     double distance = Math.abs((LIME_LIGHT_HEIGHT - targetHeight) / Math.tan(yInRadians));
     return distance;
   }

@@ -171,6 +171,7 @@ public class RobotMap {
 
     elevatorMotor = new WPI_TalonSRX(3);
     elevatorMotor2 = new WPI_TalonSRX(1);
+    Vision.LIME_LIGHT_HEIGHT = 33;
   }
 
   public static void initSubsystems() {

@@ -25,7 +25,7 @@ public class PreloadSetup extends Command {
   protected void initialize() {
 		SmartDashboard.putString("Command", this.getClass().getSimpleName());
     RobotMap.vision.toggleLimelight(true);
-    RobotMap.wristMotor.setSelectedSensorPosition(RobotMap.wrist.angleToTics(78));
+    RobotMap.wristMotor.setSelectedSensorPosition(RobotMap.wrist.angleToTics(Wrist.PRELOAD));
     Preload.isPreloading = true;
     Wrist.lastMMPosition = Position.PRELOAD;
     BallControl.gripBall = true;
