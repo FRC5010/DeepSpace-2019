@@ -30,7 +30,7 @@ public class Elevator extends Subsystem {
   public static double HATCH_LOW = 1;
   public static double HATCH_MIDDLE = 7500;
   public static double HATCH_HIGH = 14857;
-  public static double CARGO_LOW = 6000;
+  public static double CARGO_LOW = 1;
   public static double CARGO_MIDDLE = 8000;
   public static double CARGO_HIGH = 14000;
   public static double CARGO_SHIP = 8000;
@@ -95,7 +95,7 @@ public class Elevator extends Subsystem {
 
     // cruise velocity
     elevatorMotor.configMotionCruiseVelocity(3600, Constants.kTimeoutMs);
-    elevatorMotor.configMotionAcceleration(1500, Constants.kTimeoutMs);
+    elevatorMotor.configMotionAcceleration(2500, Constants.kTimeoutMs);
 
     // zeroing sensor
     elevatorMotor.setSelectedSensorPosition(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs);

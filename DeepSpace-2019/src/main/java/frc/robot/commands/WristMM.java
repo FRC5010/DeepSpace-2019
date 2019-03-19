@@ -37,7 +37,7 @@ public class WristMM extends Command {
     switch (position) {
       case LOW: {
         if (RobotMap.elevator.isCargoGamePiece) {
-          setPoint = Wrist.CARGO_LOW;
+          setPoint = Wrist.CARGO_MIDDLE;
         } else {
           if (Preload.isPreloading) {
             setPoint = Wrist.HATCH_LOW;
