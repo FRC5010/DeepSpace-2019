@@ -19,7 +19,6 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 import frc.robot.commands.MoveWrist;
-import frc.robot.commands.WristMM;
 import frc.robot.util.Constants;
 
 /**
@@ -27,8 +26,8 @@ import frc.robot.util.Constants;
  */
 public class Wrist extends Subsystem {
   public static double lowestAngle = 42;
-  public static final double feedForward = 0.13;
-  public static final double angleConversion = 23;
+  public static double feedForward = 0.13;
+  public static double angleConversion = 23;
   public static double ZERO = 1;
   public static double HATCH_LOW = -lowestAngle + 2;
   public static double HATCH_MIDDLE = 10;

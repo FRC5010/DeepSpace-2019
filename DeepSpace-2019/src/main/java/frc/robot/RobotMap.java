@@ -171,7 +171,11 @@ public class RobotMap {
 
     elevatorMotor = new WPI_TalonSRX(3);
     elevatorMotor2 = new WPI_TalonSRX(1);
+
     Vision.LIME_LIGHT_HEIGHT = 33;
+    Vision.VISION_PITCH = -0.35;
+    Wrist.lowestAngle = 35;
+    Wrist.feedForward = 0.9;
   }
 
   public static void initSubsystems() {
