@@ -27,7 +27,7 @@ public class PreloadSetup extends Command {
     RobotMap.vision.toggleLimelight(true);
     RobotMap.wristMotor.setSelectedSensorPosition(RobotMap.wrist.angleToTics(Wrist.PRELOAD));
     Preload.isPreloading = true;
-    Wrist.lastMMPosition = Position.PRELOAD;
+    Wrist.lastMMPosition = Wrist.PRELOAD;
     BallControl.gripBall = true;
   }
 

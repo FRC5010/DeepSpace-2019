@@ -73,12 +73,12 @@ public class WristMM extends Command {
           setPoint = Wrist.PRELOAD;
           break;
        }
-      }
-      SmartDashboard.putNumber("Wrist MM Setpoint", setPoint);
-    if (Wrist.lastMMPosition == Position.LOW) {
+    }
+    SmartDashboard.putNumber("Wrist MM Setpoint", setPoint);
+    if (Wrist.lastMMPosition == Wrist.HATCH_LOW) {
       RobotMap.wrist.reset();
     }
-    RobotMap.wrist.lastMMPosition = this.position;
+    RobotMap.wrist.lastMMPosition = setPoint;
     SmartDashboard.putString("Wrist MM Position", position.toString());
   }
 
@@ -96,24 +96,20 @@ public class WristMM extends Command {
   protected boolean isFinished() {
     double err = Math.abs(setPoint -
       RobotMap.wrist.ticsToAngle(RobotMap.wrist.getCurrentPosition()));
-    double lastError = err;
     double manualPower = Robot.oi.wristControl.getValue();
     // if it gets stuck down make that sensor value 0 or if its stuck up make it go
     // down
-    if (err < 5) {
+    boolean isStuck = RobotMap.wrist.isSomethingStuck(RobotMap.wristMotor.getMotorOutputPercent());
+    if (err < 5 || (isStuck && Wrist.lastMMPosition == Wrist.HATCH_LOW)) {
       RobotMap.wristMotor.setSelectedSensorPosition((int)RobotMap.wrist.angleToTics(setPoint));
     }
     return manualPower != 0 // moving the joystick will abort MM
-      || RobotMap.wrist.isSomethingStuck(RobotMap.wristMotor.getMotorOutputPercent())
-      || err < 5;
+      || isStuck || err < 5;
   }
 
   // Called once after isFinished returns true
   @Override
   protected void end() {
-    if (position == Position.LOW) {
-      RobotMap.wristMotor.setSelectedSensorPosition(RobotMap.wrist.angleToTics(Wrist.CARGO_LOW));
-    }
     SmartDashboard.putString("Wrist MM", "Done");
     RobotMap.wrist.returnToManualControl();
   }

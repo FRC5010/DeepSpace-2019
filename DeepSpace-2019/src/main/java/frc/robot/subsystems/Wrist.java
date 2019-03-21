@@ -28,7 +28,7 @@ public class Wrist extends Subsystem {
   public static double lowestAngle = 42;
   public static double feedForward = 0.13;
   public static double angleConversion = 23;
-  public static double ZERO = 1;
+  public static double ZERO = -lowestAngle;
   public static double HATCH_LOW = -lowestAngle - 2;
   public static double HATCH_MIDDLE = 10;
   public static double HATCH_HIGH = 40;
@@ -44,7 +44,7 @@ public class Wrist extends Subsystem {
   public static enum Position {
     LOW, MIDDLE, SHIP, HIGH, PRELOAD
   }
-  public static Position lastMMPosition = Position.LOW;
+  public static double lastMMPosition = HATCH_LOW;
 
   public Wrist() {
     wristMotor.configFactoryDefault();
