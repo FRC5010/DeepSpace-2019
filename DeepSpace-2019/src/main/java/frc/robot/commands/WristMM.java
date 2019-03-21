@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 import frc.robot.commands.groups.Preload;
 import frc.robot.subsystems.Wrist;
-import frc.robot.subsystems.Wrist.Position;
 import frc.robot.Robot;
 
 public class WristMM extends Command {
@@ -78,7 +77,7 @@ public class WristMM extends Command {
     if (Wrist.lastMMPosition == Wrist.HATCH_LOW) {
       RobotMap.wrist.reset();
     }
-    RobotMap.wrist.lastMMPosition = setPoint;
+    Wrist.lastMMPosition = setPoint;
     SmartDashboard.putString("Wrist MM Position", position.toString());
   }
 
