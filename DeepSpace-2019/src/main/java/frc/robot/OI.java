@@ -27,6 +27,7 @@ import frc.robot.commands.groups.LowGearVAD;
 import frc.robot.commands.groups.PlacementHigh;
 import frc.robot.commands.groups.PlacementMiddle;
 import frc.robot.commands.groups.PlacementShipCargo;
+import frc.robot.commands.groups.Preload;
 import frc.robot.commands.groups.TurnToVisionTarget;
 import frc.robot.dynasty.JoystickAxis;
 import frc.robot.subsystems.Elevator;
@@ -77,7 +78,7 @@ public class OI {
 
   public OI() {
     /** Driver controls */
-    driverStart.whenPressed(new WristReset());
+    driverStart.whenPressed(new Preload());
     driverBack.whenPressed(new ResetGyro());
 
     driverJoyLB.whenPressed(new ShiftDown());
@@ -90,10 +91,10 @@ public class OI {
     driverY.whenPressed(new LimeLightState(State.DRIVER));
 
     driverA.whenPressed(new TurnToVisionTarget());
-    driverB.whenPressed(new WristMM(Wrist.Position.PRELOAD));
+   // driverB.whenPressed(new WristMM(Wrist.Position.PRELOAD));
     
-    driveTrainForward = new JoystickAxis(driver, 1, true, 1);
-    driveTrainTurn = new JoystickAxis(driver, 4, 0.65);
+    driveTrainForward = new JoystickAxis(driver, 1, true, .85);
+    driveTrainTurn = new JoystickAxis(driver, 4, 0.55);
 
     driverHoldAutoRightTrigger = new JoystickAxis(driver, 3);
     speedReducerTrigger = new JoystickAxis(driver, 2);
@@ -102,6 +103,7 @@ public class OI {
     coDriverStart.whenPressed(new ElevatorReset());
     coDriverBack.whenPressed(new WristReset());
     coDriverJoyLB.whenPressed(new ToggleMotorSafety());
+    coDriverRB.whenPressed(new WristMM(Wrist.Position.PRELOAD));
 
     coDriverA.whenPressed(new AllComeDown());
     coDriverB.whenPressed(new PlacementMiddle());
@@ -112,9 +114,9 @@ public class OI {
     elevatorLiftControl.setLowerLimit(Elevator.MAX_REV_OUT);
     elevatorGamePieceSelector = coDriverLB;
 
-    ballIntake = new JoystickAxis(coDriver, 2, -.75);
+    ballIntake = new JoystickAxis(coDriver, 2, -.5);
     ballIntake.setLowerLimit(0);
-    ballOuttake = new JoystickAxis(coDriver, 3, true, 0.75);
+    ballOuttake = new JoystickAxis(coDriver, 3, true, 0.45);
     ballOuttake.setUpperLimit(0);
 
     wristControl = new JoystickAxis(coDriver, 5, true, Wrist.MAX_FWD_OUT);

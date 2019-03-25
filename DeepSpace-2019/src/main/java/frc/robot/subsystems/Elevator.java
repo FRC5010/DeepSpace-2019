@@ -33,7 +33,7 @@ public class Elevator extends Subsystem {
   public static double CARGO_LOW = 1;
   public static double CARGO_MIDDLE = 8000;
   public static double CARGO_HIGH = 14000;
-  public static double CARGO_SHIP = 8000;
+  public static double CARGO_SHIP = 7500;
   public static double MAX_FWD_OUT = 1;
   public static double MAX_REV_OUT = -0.5;
 

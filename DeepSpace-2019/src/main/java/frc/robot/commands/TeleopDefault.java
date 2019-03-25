@@ -41,11 +41,7 @@ public class TeleopDefault extends Command {
     } else {
       //System.out.println("speed normal");
     }
-    RobotMap.driveTrain.drive(moveAmt + steerAmt, moveAmt - steerAmt);
-    
-    if (Robot.oi.driverStart.get()) {
-      RobotMap.vision.toggleLimelight();
-    }
+    RobotMap.driveTrain.drive(moveAmt + steerAmt, moveAmt - steerAmt);    
   }
 
   // Make this return true when this Command no longer needs to run execute()

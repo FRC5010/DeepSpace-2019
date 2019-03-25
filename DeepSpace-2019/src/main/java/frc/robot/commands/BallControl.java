@@ -45,7 +45,7 @@ public class BallControl extends Command {
       move = rightTrigger;
       gripBall = true;
     } else if (RobotMap.wrist.getCurrentPosition() < 2000 || Preload.isPreloading) {
-      move = gripBall ? .1 : 0;
+      move = gripBall ? .2 : 0;
     }
 
     RobotMap.ballIntake.ballControl(move);

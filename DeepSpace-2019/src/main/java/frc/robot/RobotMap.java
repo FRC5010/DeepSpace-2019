@@ -37,6 +37,7 @@ import frc.robot.subsystems.Shifter;
 import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.VisionAssistedDrive;
 import frc.robot.subsystems.Wrist;
+import frc.robot.subsystems.Vision.Stream;
 
 /**
  * The RobotMap is a mapping from the ports sensors and actuators are wired into
@@ -187,6 +188,7 @@ public class RobotMap {
     driveTrain = new DriveTrain();
     vision = new Vision();
     vision.changePipeline(-1);
+    vision.setStreaming(Stream.PIP_SECONDARY);
     visionDrive = new VisionAssistedDrive();
     ballIntake = new BallIntake();
     beakIntake = new BeakIntake();

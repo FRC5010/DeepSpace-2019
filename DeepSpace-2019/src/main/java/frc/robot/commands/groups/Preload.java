@@ -29,7 +29,7 @@ public class Preload extends CommandGroup {
     addSequential(new ResetGyro());
     addSequential(new BeakOpen());
     addSequential(new WristMM(Wrist.Position.HIGH));
-    addSequential(new PauseForTime(500));
+    addSequential(new PauseForTime(750));
     addSequential(new BeakClose());
     addSequential(new PreloadFinish());
   }
