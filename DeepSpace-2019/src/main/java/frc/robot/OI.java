@@ -19,7 +19,8 @@ import frc.robot.commands.ResetGyro;
 import frc.robot.commands.ShiftDown;
 import frc.robot.commands.ShiftUp;
 import frc.robot.commands.ToggleMotorSafety;
-import frc.robot.commands.TurnToVision;
+import frc.robot.commands.TurnToAnAngle;
+import frc.robot.commands.VisionAssistedSteering;
 import frc.robot.commands.WristMM;
 import frc.robot.commands.WristReset;
 import frc.robot.commands.groups.AllComeDown;
@@ -28,9 +29,9 @@ import frc.robot.commands.groups.PlacementHigh;
 import frc.robot.commands.groups.PlacementMiddle;
 import frc.robot.commands.groups.PlacementShipCargo;
 import frc.robot.commands.groups.Preload;
-import frc.robot.commands.groups.TurnToVisionTarget;
 import frc.robot.dynasty.JoystickAxis;
 import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Pose;
 import frc.robot.subsystems.Wrist;
 
 /**
@@ -90,8 +91,8 @@ public class OI {
     driverX.whenPressed(new LowGearVAD());
     driverY.whenPressed(new LimeLightState(State.DRIVER));
 
-    driverA.whenPressed(new TurnToVisionTarget());
-   // driverB.whenPressed(new WristMM(Wrist.Position.PRELOAD));
+    driverA.whenPressed(new VisionAssistedSteering());
+    driverB.whenPressed(new LimeLightState(State.AUTO));
     
     driveTrainForward = new JoystickAxis(driver, 1, true, .85);
     driveTrainTurn = new JoystickAxis(driver, 4, 0.55);
@@ -119,7 +120,7 @@ public class OI {
     ballOuttake = new JoystickAxis(coDriver, 3, true, 0.45);
     ballOuttake.setUpperLimit(0);
 
-    wristControl = new JoystickAxis(coDriver, 5, true, Wrist.MAX_FWD_OUT);
+    wristControl = new JoystickAxis(coDriver, 5, true, 1);
     wristControl.setLowerLimit(Wrist.MAX_REV_OUT);
   }
 }

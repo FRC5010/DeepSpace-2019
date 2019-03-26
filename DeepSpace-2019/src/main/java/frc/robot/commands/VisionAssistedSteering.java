@@ -17,7 +17,11 @@ import frc.robot.subsystems.VisionAssistedDrive;
 
 public class VisionAssistedSteering extends Command {
   VisionAssistedDrive vad;
+
+  private double desiredHeading = 0;
   private double lastHeadingError = 0;
+  private double prevError = 0;
+  private int timesAtPrevError = 0;
 
   public VisionAssistedSteering () {
     requires(RobotMap.driveTrain);
@@ -28,6 +32,9 @@ public class VisionAssistedSteering extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+    desiredHeading = -(Pose.getCurrentPose().heading) + Pose.getCurrentPose().limeLight.tX;
+    SmartDashboard.putNumber("Pose heading", -Pose.getCurrentPose().heading);
+    SmartDashboard.putNumber("Desired heading vision", desiredHeading);
     lastHeadingError = 0;
 		SmartDashboard.putString("Command", this.getClass().getSimpleName());
   }
@@ -37,31 +44,39 @@ public class VisionAssistedSteering extends Command {
   protected void execute() {
     double output = Robot.oi.driveTrainForward.getValue();
     //double turn = VisionAssistedDrive.arcTowardsTarget();
-    double turn = turnTowards(0, lastHeadingError);
+    double turn = turnTowards(desiredHeading, lastHeadingError);
 
-    RobotMap.driveTrain.drive(output - turn, output + turn);
+    RobotMap.driveTrain.drive(output + turn, output - turn);
   }
 
   public double turnTowards(double desiredHeading, double lastHeadingError) {
     double turnAmt = 0;
-    if (Pose.getCurrentPose().limeLight.tValid) {
-      double heading = Pose.getCurrentPose().limeLight.tX;
-      double headingError = DirectionSensor.boundHalfDegrees(desiredHeading - heading);
-      double headingDelta = headingError - lastHeadingError;
+    double heading = -Pose.getCurrentPose().heading;
+    double headingError = DirectionSensor.boundHalfDegrees(desiredHeading - heading);
+    double headingDelta = headingError - lastHeadingError;
 
-      turnAmt = vad.getSteerKp(true) * headingError + vad.getSteerKd(true) * headingDelta;
+    turnAmt = vad.getSteerKp(true) * headingError + vad.getSteerKd(true) * headingDelta;
 
-      double steerMin = vad.getSteerMin();
-      turnAmt = Math.max(steerMin, Math.abs(turnAmt)) * Math.signum(turnAmt);
-      this.lastHeadingError = headingError;
-    }
+    double steerMin = vad.getSteerMin();
+    turnAmt = Math.max(steerMin, Math.abs(turnAmt)) * Math.signum(turnAmt);
+    this.lastHeadingError = headingError;
     return turnAmt;
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return true;
+    //double manualOverride = Robot.oi.driveTrainForward.getValue();
+    double steerOverride = Robot.oi.driveTrainTurn.getValue();
+    if (((int) lastHeadingError) / 1 == ((int) prevError) / 1 ) {
+      timesAtPrevError++;
+    } else {
+      timesAtPrevError = 0;
+    }
+    prevError = lastHeadingError;
+    boolean finished = steerOverride != 0 ||  (Math.abs(lastHeadingError) < 1 && Math.abs(lastHeadingError) < 1) || timesAtPrevError > 20;
+    SmartDashboard.putBoolean("Vision Finished", finished);
+    return finished;
   }
 
   // Called once after isFinished returns true

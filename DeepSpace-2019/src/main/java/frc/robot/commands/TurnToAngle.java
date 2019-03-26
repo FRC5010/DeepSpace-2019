@@ -10,6 +10,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.command.PIDCommand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
+import frc.robot.Robot;
 import frc.robot.subsystems.DirectionSensor;
 
 public class TurnToAngle extends PIDCommand {
@@ -73,7 +74,10 @@ public class TurnToAngle extends PIDCommand {
 	@Override
 	protected boolean isFinished() {
 		SmartDashboard.putNumber("Error", getPIDController().getError());
-		return getPIDController().onTarget();
+		return getPIDController().onTarget() ||
+		Robot.oi.driveTrainForward.getValue()!=0 ||
+		Robot.oi.driveTrainTurn.getValue() !=0;
+
 
 	}
 

@@ -101,15 +101,13 @@ public class VADriveUntilDistance extends Command {
   protected boolean isFinished() {
     double manualOverride = Robot.oi.driveTrainForward.getValue();
     double steerOverride = Robot.oi.driveTrainTurn.getValue();
-    if ( ((int)lastError)/1 == ((int)prevError)/1 ) {
+    if (((int) lastError) / 1 == ((int) prevError) / 1 ) {
       timesAtPrevError++;
     } else {
       timesAtPrevError = 0;
     }
     prevError = lastError;
-    boolean finished = 0 != manualOverride || 0 != steerOverride ||  
-      (Math.abs(lastHeadingError) < 1 && Math.abs(lastError) < 1)
-      || timesAtPrevError > 20;
+    boolean finished = manualOverride != 0 || steerOverride != 0 ||  (Math.abs(lastHeadingError) < 1 && Math.abs(lastError) < 1) || timesAtPrevError > 20;
     SmartDashboard.putBoolean("Vision Finished", finished);
     return finished;
   }

@@ -37,7 +37,7 @@ public class Wrist extends Subsystem {
   public static double CARGO_HIGH = 70;
   public static double CARGO_SHIP = 0;
   public static double PRELOAD = 78;
-  public static double MAX_FWD_OUT = .5;
+  public static double MAX_FWD_OUT = 0.5;
   public static double MAX_REV_OUT = -0.3;
   private long lastPosition = 0;
   private int numTimesAtLastPosition = 0;
@@ -57,7 +57,7 @@ public class Wrist extends Subsystem {
     // configing outputs
     wristMotor.configNominalOutputForward(0, Constants.kTimeoutMs);
     wristMotor.configNominalOutputReverse(0, Constants.kTimeoutMs);
-    wristMotor.configPeakOutputForward(MAX_FWD_OUT, Constants.kTimeoutMs);
+    wristMotor.configPeakOutputForward(0.5, Constants.kTimeoutMs);
     wristMotor.configPeakOutputReverse(MAX_REV_OUT, Constants.kTimeoutMs);
 
     SmartDashboard.putNumber("Wrist P", Constants.wristGains.kP);

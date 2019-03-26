@@ -32,6 +32,7 @@ public class TurnToAnAngle extends Command {
     prevError = 0;
     timesAtPrevError = 0;
     startTime = 0;
+    vad.printPIDValues();
   }
 
   // Called just before this Command runs the first time

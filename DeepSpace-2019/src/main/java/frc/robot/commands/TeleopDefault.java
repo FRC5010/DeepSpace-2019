@@ -37,9 +37,8 @@ public class TeleopDefault extends Command {
     steerAmt = Robot.oi.driveTrainTurn.getValue();
     if (Robot.oi.speedReducerTrigger.getValue() != 0) {
       steerAmt *= 0.5;
-      //System.out.println("speed reduced");
-    } else {
-      //System.out.println("speed normal");
+    } else if (Robot.oi.driverHoldAutoRightTrigger.getValue() != 0 && moveAmt != 0) {
+      moveAmt = -1;
     }
     RobotMap.driveTrain.drive(moveAmt + steerAmt, moveAmt - steerAmt);    
   }

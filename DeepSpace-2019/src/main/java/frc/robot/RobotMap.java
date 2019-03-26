@@ -37,6 +37,7 @@ import frc.robot.subsystems.Shifter;
 import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.VisionAssistedDrive;
 import frc.robot.subsystems.Wrist;
+import frc.robot.subsystems.Vision.CamMode;
 import frc.robot.subsystems.Vision.Stream;
 
 /**
@@ -187,7 +188,8 @@ public class RobotMap {
     shifter = new Shifter();
     driveTrain = new DriveTrain();
     vision = new Vision();
-    vision.changePipeline(-1);
+    //vision.changePipeline(-1);
+    vision.setCamMode(CamMode.DRIVER);
     vision.setStreaming(Stream.PIP_SECONDARY);
     visionDrive = new VisionAssistedDrive();
     ballIntake = new BallIntake();

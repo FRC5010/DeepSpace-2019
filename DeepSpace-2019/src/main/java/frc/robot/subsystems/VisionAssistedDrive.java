@@ -54,7 +54,7 @@ public class VisionAssistedDrive {
   public GearPID highGear = new GearPID(
     new PIDValues(0.015, 0, 0, 0.08), 
     new PIDValues(0.06, 0, 0.2, 0.08),
-    new PIDValues(0.08, 0, 0.02, 0.1)
+    new PIDValues(0.08, 0, 0.25, 0.1)
     );
 
   public double getSteerKp() {
@@ -150,6 +150,11 @@ public class VisionAssistedDrive {
     SmartDashboard.putNumber("lowGear.steer.ki", lowGear.steer.ki);
     SmartDashboard.putNumber("lowGear.steer.kd", lowGear.steer.kd);
     SmartDashboard.putNumber("lowGear.steer.min", lowGear.steer.min);
+    
+    SmartDashboard.putNumber("lowGear.turnInPlace.kp", lowGear.turnInPlace.kp);
+    SmartDashboard.putNumber("lowGear.turnInPlace.ki", lowGear.turnInPlace.ki);
+    SmartDashboard.putNumber("lowGear.turnInPlace.kd", lowGear.turnInPlace.kd);
+    SmartDashboard.putNumber("lowGear.turnInPlace.min", lowGear.turnInPlace.min);
 
     SmartDashboard.putNumber("lowGear.move.kp", lowGear.move.kp);
     SmartDashboard.putNumber("lowGear.move.ki", lowGear.move.ki);
@@ -160,6 +165,11 @@ public class VisionAssistedDrive {
     SmartDashboard.putNumber("highGear.steer.ki", highGear.steer.ki);
     SmartDashboard.putNumber("highGear.steer.kd", highGear.steer.kd);
     SmartDashboard.putNumber("highGear.steer.min", highGear.steer.min);
+
+    SmartDashboard.putNumber("highGear.turnInPlace.kp", highGear.turnInPlace.kp);
+    SmartDashboard.putNumber("highGear.turnInPlace.ki", highGear.turnInPlace.ki);
+    SmartDashboard.putNumber("highGear.turnInPlace.kd", highGear.turnInPlace.kd);
+    SmartDashboard.putNumber("highGear.turnInPlace.min", highGear.turnInPlace.min);
 
     SmartDashboard.putNumber("highGear.move.kp", highGear.move.kp);
     SmartDashboard.putNumber("highGear.move.ki", highGear.move.ki);
