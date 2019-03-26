@@ -11,8 +11,10 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 import frc.robot.commands.groups.Preload;
+import frc.robot.subsystems.Vision.CamMode;
+import frc.robot.subsystems.Vision.LEDMode;
+import frc.robot.subsystems.Vision.Stream;
 import frc.robot.subsystems.Wrist;
-import frc.robot.subsystems.Wrist.Position;
 
 public class PreloadSetup extends Command {
   public PreloadSetup() {
@@ -24,7 +26,9 @@ public class PreloadSetup extends Command {
   @Override
   protected void initialize() {
 		SmartDashboard.putString("Command", this.getClass().getSimpleName());
-    RobotMap.vision.toggleLimelight(true);
+    RobotMap.vision.setLimeLightLEDMode(LEDMode.ON);
+    RobotMap.vision.setCamMode(CamMode.DRIVER);
+    RobotMap.vision.setStreaming(Stream.PIP_MAIN);
     RobotMap.wristMotor.setSelectedSensorPosition(RobotMap.wrist.angleToTics(Wrist.PRELOAD));
     Preload.isPreloading = true;
     Wrist.lastMMPosition = Wrist.PRELOAD;
