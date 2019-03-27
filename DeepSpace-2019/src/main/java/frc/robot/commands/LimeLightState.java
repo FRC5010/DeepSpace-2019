@@ -35,9 +35,12 @@ public class LimeLightState extends Command {
     SmartDashboard.putString("Command", this.getClass().getSimpleName());
     switch (state) {
     case AUTO: {
-      RobotMap.vision.setLimeLightLEDMode(Vision.LEDMode.ON);
-      RobotMap.vision.setCamMode(Vision.CamMode.VISION);
-      endTime = RobotController.getFPGATime() + 250000;
+      RobotMap.vision.setLimeLightLEDMode(Vision.LEDMode.PIPELINE);
+      endTime = RobotController.getFPGATime();
+      // if (RobotMap.vision.getCamMode() == CamMode.DRIVER.ordinal()) {
+      //   RobotMap.vision.setCamMode(Vision.CamMode.VISION);
+      //   endTime += 250000;
+      // }
       done = false;
       break;
     }
@@ -68,8 +71,10 @@ public class LimeLightState extends Command {
     if (!done) {
       if (endTime < RobotController.getFPGATime()) {
         done = true;
-        if (state != State.AUTO) {
+        if (state == State.DRIVER) {
           RobotMap.vision.setLimeLightLEDMode(Vision.LEDMode.OFF);
+        } else {
+          RobotMap.vision.setLimeLightLEDMode(Vision.LEDMode.PIPELINE);
         }
       }
     }
