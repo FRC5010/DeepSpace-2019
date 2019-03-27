@@ -95,7 +95,7 @@ public class OI {
     driverA.whenPressed(new TurnToVisionTarget());
     driverB.whenPressed(new LimeLightState(State.AUTO));
     
-    driveTrainForward = new JoystickAxis(driver, 1, true, .85);
+    driveTrainForward = new JoystickAxis(driver, 1, true, .95);
     driveTrainTurn = new JoystickAxis(driver, 4, 0.55);
 
     driverHoldAutoRightTrigger = new JoystickAxis(driver, 3);

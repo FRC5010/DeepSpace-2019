@@ -22,7 +22,7 @@ public class RightShipSide extends CommandGroup {
    */
   public RightShipSide() {
     addSequential(new Preload());
-    addSequential(new DriveOffHABLevel2Sequence());
+    //addSequential(new DriveOffHABLevel2Sequence());
 
     // Right start to Ship right-side first bay
     addSequential(new ShiftUp());

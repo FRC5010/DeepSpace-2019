@@ -22,7 +22,7 @@ public class LeftShipSide extends CommandGroup {
    */
   public LeftShipSide() {
     addSequential(new Preload());
-    addSequential(new DriveOffHABLevel2Sequence());
+    //addSequential(new DriveOffHABLevel2Sequence());
 
     addSequential(new ShiftUp());
     addSequential(new PathFollower5010(MotionProfiles.LStoShip2L, Direction.kForward));
