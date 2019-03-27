@@ -518,10 +518,6 @@ public class Vision extends Subsystem {
     table.getEntry("ledMode").setNumber(state.ordinal());
   }
 
-  public int getLimeLightLEDMode() {
-    return table.getEntry("ledMode").getNumber(LEDMode.OFF.ordinal()).intValue();
-  }
-
   public void toggleLimelight() {
     lightOn = !lightOn;
     table.getEntry("ledMode").setNumber(lightOn ? 3 : 1);
@@ -537,11 +533,6 @@ public class Vision extends Subsystem {
   public void setCamMode(CamMode mode) {
     NetworkTableEntry camMode = table.getEntry("camMode");
     camMode.setNumber(mode.ordinal());
-  }
-
-  public int getCamMode() {
-    NetworkTableEntry camMode = table.getEntry("camMode");
-    return camMode.getNumber(CamMode.DRIVER.ordinal()).intValue();
   }
 
   public void toggleCamMode() {
