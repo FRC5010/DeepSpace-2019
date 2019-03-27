@@ -10,6 +10,7 @@ package frc.robot.commands.groups;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import frc.robot.commands.LimeLightState;
 import frc.robot.commands.LimeLightState.State;
+import frc.robot.commands.ShiftDown;
 import frc.robot.commands.VisionAssistedSteering;
 
 public class TurnToVisionTarget extends CommandGroup {
@@ -18,6 +19,7 @@ public class TurnToVisionTarget extends CommandGroup {
    */
   public TurnToVisionTarget() {
     addSequential(new LimeLightState(State.AUTO));
+    addSequential(new ShiftDown());
     addSequential(new VisionAssistedSteering());
     addParallel(new LimeLightState(State.DRIVER));
   }

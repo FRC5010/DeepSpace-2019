@@ -188,7 +188,6 @@ public class RobotMap {
     shifter = new Shifter();
     driveTrain = new DriveTrain();
     vision = new Vision();
-    //vision.changePipeline(-1);
     vision.setCamMode(CamMode.DRIVER);
     vision.setStreaming(Stream.PIP_SECONDARY);
     visionDrive = new VisionAssistedDrive();
