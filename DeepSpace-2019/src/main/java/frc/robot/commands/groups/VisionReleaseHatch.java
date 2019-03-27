@@ -41,6 +41,6 @@ public class VisionReleaseHatch extends CommandGroup {
     addSequential(new VADriveUntilDistance(25));
     addSequential(new BeakOpen());
     addSequential(new ShiftUp());
-    addParallel(new LimeLightState(State.BLINK_ON));
+    addParallel(new LimeLightState(State.DRIVER));
   }
 }
