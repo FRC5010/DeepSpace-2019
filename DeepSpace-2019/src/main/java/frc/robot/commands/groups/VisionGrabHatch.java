@@ -41,6 +41,6 @@ public class VisionGrabHatch extends CommandGroup {
     addSequential(new VADriveUntilDistance(25));
     addSequential(new BeakClose());
     addSequential(new ShiftUp());
-    addParallel(new LimeLightState(State.DRIVER));
+    addParallel(new LimeLightState(State.BLINK_ON));
   }
 }
