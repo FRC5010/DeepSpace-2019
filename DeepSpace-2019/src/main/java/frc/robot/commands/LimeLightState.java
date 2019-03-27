@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 import frc.robot.subsystems.Vision;
-import frc.robot.subsystems.Vision.Stream;
 
 public class LimeLightState extends Command {
   public static enum State {
@@ -45,7 +44,6 @@ public class LimeLightState extends Command {
     case DRIVER: {
       RobotMap.vision.setLimeLightLEDMode(Vision.LEDMode.BLINK);
       RobotMap.vision.setCamMode(Vision.CamMode.DRIVER);
-      RobotMap.vision.setStreaming(Stream.PIP_SECONDARY);
       endTime = RobotController.getFPGATime() + 500000;
       done = false;
       break;
