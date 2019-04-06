@@ -39,6 +39,7 @@ import frc.robot.subsystems.VisionAssistedDrive;
 import frc.robot.subsystems.Wrist;
 import frc.robot.subsystems.Vision.CamMode;
 import frc.robot.subsystems.Vision.Stream;
+import frc.robot.util.Constants;
 
 /**
  * The RobotMap is a mapping from the ports sensors and actuators are wired into
@@ -164,8 +165,22 @@ public class RobotMap {
 
     rightMotor1.setInverted(true);
     rightMotor2.setInverted(true);
+    
+    
+    leftMotor1.configPeakCurrentLimit(Constants.kPeakCurrentAmps, Constants.kTimeoutMs);
+		leftMotor1.configPeakCurrentDuration(Constants.kPeakTimeMs, Constants.kTimeoutMs);
+		leftMotor1.configContinuousCurrentLimit(Constants.kContinCurrentAmps, Constants.kTimeoutMs);
+    leftMotor1.enableCurrentLimit(true); // Honor initial setting
+    
+    
+    rightMotor1.configPeakCurrentLimit(Constants.kPeakCurrentAmps, Constants.kTimeoutMs);
+		rightMotor1.configPeakCurrentDuration(Constants.kPeakTimeMs, Constants.kTimeoutMs);
+		rightMotor1.configContinuousCurrentLimit(Constants.kContinCurrentAmps, Constants.kTimeoutMs);
+    rightMotor1.enableCurrentLimit(true); // Honor initial setting
+    
     rightMotor2.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 4);
     leftMotor2.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 2);
+
 
     intakeMotor = new WPI_VictorSPX(0);
 
@@ -189,7 +204,7 @@ public class RobotMap {
     driveTrain = new DriveTrain();
     vision = new Vision();
     vision.setCamMode(CamMode.DRIVER);
-    vision.setStreaming(Stream.PIP_SECONDARY);
+    vision.setStreaming(Stream.SIDE_BY_SIDE);
     visionDrive = new VisionAssistedDrive();
     ballIntake = new BallIntake();
     beakIntake = new BeakIntake();

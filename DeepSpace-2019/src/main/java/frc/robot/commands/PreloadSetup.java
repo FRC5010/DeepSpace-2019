@@ -28,7 +28,7 @@ public class PreloadSetup extends Command {
 		SmartDashboard.putString("Command", this.getClass().getSimpleName());
     RobotMap.vision.setLimeLightLEDMode(LEDMode.ON);
     RobotMap.vision.setCamMode(CamMode.DRIVER);
-    RobotMap.vision.setStreaming(Stream.PIP_MAIN);
+    RobotMap.vision.setStreaming(Stream.SIDE_BY_SIDE);
     RobotMap.wristMotor.setSelectedSensorPosition(RobotMap.wrist.angleToTics(Wrist.PRELOAD));
     Preload.isPreloading = true;
     Wrist.lastMMPosition = Wrist.PRELOAD;

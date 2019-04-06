@@ -45,7 +45,7 @@ public class LimeLightState extends Command {
     case DRIVER: {
       RobotMap.vision.setLimeLightLEDMode(Vision.LEDMode.BLINK);
       RobotMap.vision.setCamMode(Vision.CamMode.DRIVER);
-      RobotMap.vision.setStreaming(Stream.PIP_SECONDARY);
+      RobotMap.vision.setStreaming(Stream.SIDE_BY_SIDE);
       endTime = RobotController.getFPGATime() + 500000;
       done = false;
       break;

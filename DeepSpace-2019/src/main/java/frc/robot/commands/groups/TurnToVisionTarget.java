@@ -19,7 +19,6 @@ public class TurnToVisionTarget extends CommandGroup {
    */
   public TurnToVisionTarget() {
     addSequential(new LimeLightState(State.AUTO));
-    addSequential(new ShiftDown());
     addSequential(new VisionAssistedSteering());
     addParallel(new LimeLightState(State.DRIVER));
   }

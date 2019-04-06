@@ -23,7 +23,7 @@ public class DriveOffHABLevel2Sequence extends CommandGroup {
   public DriveOffHABLevel2Sequence() {
     addSequential(new ResetGyro());
     addSequential(new ShiftDown());
-    addSequential(new DriveOffHAB2(.35));
+    addSequential(new DriveOffHAB2(.25));
     addSequential(new ShiftUp());
     addParallel(new LimeLightState(State.DRIVER));
     addSequential(new PreloadFinish());

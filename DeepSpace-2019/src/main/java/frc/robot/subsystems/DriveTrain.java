@@ -7,7 +7,10 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -20,8 +23,8 @@ import frc.robot.commands.TeleopDefault;
 public class DriveTrain extends Subsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
-  TalonSRX rightMotors = RobotMap.rightMotor1;
-  TalonSRX leftMotors = RobotMap.leftMotor1;
+  WPI_TalonSRX rightMotors = RobotMap.rightMotor1;
+  WPI_TalonSRX leftMotors = RobotMap.leftMotor1;
 
   @Override
   public void initDefaultCommand() {
@@ -38,6 +41,10 @@ public class DriveTrain extends Subsystem {
   public void drive(double leftPower, double rightPower){
     leftMotors.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, leftPower);
     rightMotors.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, rightPower);
+    SmartDashboard.putNumber("Left Current Draw", leftMotors.getOutputCurrent());
+    SmartDashboard.putNumber("Right Current Draw", rightMotors.getOutputCurrent());
+    SmartDashboard.putNumber("Left Voltage", leftMotors.getMotorOutputPercent());
+    SmartDashboard.putNumber("Right Voltage", rightMotors.getMotorOutputPercent());
   }
 }
 

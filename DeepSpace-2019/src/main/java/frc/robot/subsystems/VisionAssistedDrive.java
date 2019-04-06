@@ -52,9 +52,9 @@ public class VisionAssistedDrive {
     new PIDValues(0.01, 0, 0, 0.1)
     );
   public GearPID highGear = new GearPID(
-    new PIDValues(0.015, 0, 0, 0.08), 
+    new PIDValues(0.015, 0, 0, 0.08),
     new PIDValues(0.06, 0, 0.2, 0.08),
-    new PIDValues(0.08, 0, 0.25, 0.1)
+    new PIDValues(0.08, 0, 0.5, 0.1)
     );
 
   public double getSteerKp() {

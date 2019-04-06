@@ -22,6 +22,7 @@ import frc.robot.commands.groups.LeftShipFront;
 import frc.robot.commands.groups.LeftShipSide;
 import frc.robot.commands.groups.MiddleShipLeft;
 import frc.robot.commands.groups.MiddleShipRight;
+import frc.robot.commands.groups.Preload;
 import frc.robot.commands.groups.RightRocket;
 import frc.robot.commands.groups.RightShipFront;
 import frc.robot.commands.groups.RightShipSide;
@@ -61,7 +62,7 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Right Ship Side", new RightShipSide());
     m_chooser.setDefaultOption("Left Rocket", new LeftRocket());
     m_chooser.setDefaultOption("Right Rocket", new RightRocket());
-
+    m_chooser.setDefaultOption("talib", new Preload());
     // chooser.addOption("My Auto", new MyAutoCommand());
     SmartDashboard.putData("Auto mode", m_chooser);
   }
