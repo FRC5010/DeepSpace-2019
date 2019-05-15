@@ -75,18 +75,34 @@ public class PathFollower5010 extends Command {
 		// velocity you provided in the trajectory configuration (it translates m/s to a
 		// -1 to 1 scale that your
 		// motors can read)
-		double kv = 1.0 / RobotMap_Paths.max_velocity;
+		double Lkv;
+		double Rkv;
+		double Lka;
+		double Rka;
+		if(isFwd == Direction.kForward){
+				Lkv = 1.0 / RobotMap_Paths.max_velocity;
+				Rkv = 1.0 / RobotMap_Paths.max_velocity;
+				Lka = .1;
+				Rka = .1;
+		}else{
+				 Lkv = 1.0 / RobotMap_Paths.max_velocity;
+				 Rkv = 1.0 / RobotMap_Paths.max_velocity;
+				 Lka = .1;
+				 Rka = .1;
+
+		}
+			
 		// The fifth argument is your acceleration gain. Tweak this if you want to get
 		// to a higher or lower speed quicker
-		double ka = 0.1;
+	
 		// Sixth - The position error tolerance to achieve before isFinished will return
 		// true
 		double ket = .1;
 		// Seventh - The heading error tolerance to achieve before isFinished will
 		// return true
 		double kht = 1;
-		left.configurePIDVA(kp, 0.0, kd, kv, ka, ket, kht);
-		right.configurePIDVA(kp, 0.0, kd, kv, ka, ket, kht);
+		left.configurePIDVA(kp, 0.0, kd, Lkv, Lka, ket, kht);
+		right.configurePIDVA(kp, 0.0, kd, Rkv, Rka, ket, kht);
 	}
 
 	// Called repeatedly when this Command is scheduled to run

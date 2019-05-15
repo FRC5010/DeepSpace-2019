@@ -33,7 +33,7 @@ public class DriveTrainCharacterizer extends Command {
 		this.leftEncoder = RobotMap.leftEncoder;
 		this.rightEncoder = RobotMap.rightEncoder;
 	}
-
+	
 	private FileWriter fw;
 
 	// Called just before this Command runs the first time
@@ -52,7 +52,7 @@ public class DriveTrainCharacterizer extends Command {
 			scale = -1;
 		}
 
-		String path = "/U/DriveCharacterization/" + name;
+		String path = "/home/lvuser/" + name;
 
 		if (mode.equals(TestMode.QUASI_STATIC)) {
 			System.out.println("QUASI STATIC");
@@ -110,7 +110,7 @@ public class DriveTrainCharacterizer extends Command {
 		double leftAcc = leftDv / dt;
 		double rightAcc = rightDv / dt;
 		String result = leftVolt + ", " + leftVel + ", " + leftAcc + ", " + rightVolt + ", " + rightVel + ", "
-				+ rightAcc + "\n";
+		 		+ rightAcc  + "\n";
 		try {
 			fw.write(result);
 		} catch (IOException e) {

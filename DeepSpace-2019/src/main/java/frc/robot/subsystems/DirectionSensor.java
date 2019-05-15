@@ -71,19 +71,22 @@ public class DirectionSensor extends Subsystem {
   }
 
   public double getAccelX() {
-    double accelX = gyro.getWorldLinearAccelX();
+    //double accelX = gyro.getWorldLinearAccelX();
+    double accelX = gyro.getRawAccelX();
     SmartDashboard.putNumber(this.getClass().getSimpleName() + " X Accel", accelX);
     return accelX;
   }
 
   public double getAccelY() {
-    double accel = gyro.getWorldLinearAccelY();
+    //double accel = gyro.getWorldLinearAccelY();
+    double accel = gyro.getRawAccelY();
     SmartDashboard.putNumber(this.getClass().getSimpleName() + " Y Accel", accel);
     return accel;
   }
 
   public double getAccelZ() {
-    double accelZ = gyro.getWorldLinearAccelZ();
+    //double accelZ = gyro.getWorldLinearAccelZ();
+    double accelZ = gyro.getRawAccelZ();
     SmartDashboard.putNumber(this.getClass().getSimpleName() + " Z Accel", accelZ);
     return accelZ;
   }
