@@ -22,7 +22,7 @@ public class EncoderFollower5010 {
     double wheel_circumference;
 
     double kp, ki, kd, kv, ka, ket, kht;
-    double Vint = .01;
+    double vint;
     double last_error, heading, last_heading_error;
 
     int segment;
@@ -70,9 +70,9 @@ public class EncoderFollower5010 {
      * @param ket The encoder error tolerance to achieve before isFinished will return true
      * @param kht The heading error tolerance to achieve before isFinished will return true
      */
-    public void configurePIDVA(double kp, double ki, double kd, double kv, double ka, double ket, double kht) {
+    public void configurePIDVA(double kp, double ki, double kd, double kv, double ka, double ket, double kht, double vint) {
         this.kp = kp; this.ki = ki; this.kd = kd;
-        this.kv = kv; this.ka = ka; this.ket = ket; this.kht = kht ;
+        this.kv = kv; this.ka = ka; this.ket = ket; this.kht = kht ; this.vint= vint;
     }
 
     /**
@@ -119,7 +119,7 @@ public class EncoderFollower5010 {
             double calculated_value =
                     kp * error +                                    // Proportional
                     kd * ((error - last_error) / next_segment.dt) +          // Derivative
-                    (kv * next_segment.velocity + ka * next_segment.acceleration +Vint); //all hail equation 14  
+                    (kv * next_segment.velocity + ka * next_segment.acceleration +vint); //all hail equation 14  
             last_error = error;
             
             heading = next_segment.heading;

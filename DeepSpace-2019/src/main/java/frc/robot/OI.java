@@ -18,6 +18,7 @@ import frc.robot.commands.DriveTrainCharacterizer.TestMode;
 import frc.robot.commands.ElevatorReset;
 import frc.robot.commands.LimeLightState;
 import frc.robot.commands.LimeLightState.State;
+import frc.robot.commands.commands_auto.FieldMovement;
 import frc.robot.commands.ShiftDown;
 import frc.robot.commands.ShiftUp;
 import frc.robot.commands.ToggleMotorSafety;
@@ -79,7 +80,7 @@ public class OI {
 
   public OI() {
     /** Driver controls */
-    driverStart.whenPressed(new Preload());
+    driverStart.whenPressed(new FieldMovement());
     driverBack.whenPressed(new DriveTrainCharacterizer(TestMode.QUASI_STATIC, Direction.Forward));
 
     driverJoyLB.whenPressed(new ShiftDown());

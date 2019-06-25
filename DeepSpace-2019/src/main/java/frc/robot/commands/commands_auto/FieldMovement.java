@@ -20,9 +20,9 @@ public class FieldMovement extends CommandGroup {
    */
   public FieldMovement() {
     // Basic Test paths
-    addSequential(new PathFollower5010(MotionProfiles.testPath, Direction.kRevNormal));
+   // addSequential(new PathFollower5010(MotionProfiles.testPath, Direction.kRevNormal));
     addSequential(new PathFollower5010(MotionProfiles.testPath, Direction.kForward));
-    addSequential(new PathFollower5010(MotionProfiles.testPath, Direction.kRevFlipped));
+   // addSequential(new PathFollower5010(MotionProfiles.testPath, Direction.kRevFlipped));
     //addSequential(new PathForward(RobotMap_Paths.testL,RobotMap_Paths.testR));
     //addSequential(new PathReverse(RobotMap_Paths.testL,RobotMap_Paths.testR));
     

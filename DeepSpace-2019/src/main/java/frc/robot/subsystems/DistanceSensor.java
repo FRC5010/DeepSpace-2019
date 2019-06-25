@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DistanceSensor extends Subsystem {
 	
-	double rightDPP = .16;//1 / 25.4; //.039;
+	double rightDPP = 0.0032725;
 	//right encoder reversed?
 	
 	

@@ -79,16 +79,22 @@ public class PathFollower5010 extends Command {
 		double Rkv;
 		double Lka;
 		double Rka;
+		double Rvint;
+		double Lvint;
 		if(isFwd == Direction.kForward){
-				Lkv = 1.0 / RobotMap_Paths.max_velocity;
-				Rkv = 1.0 / RobotMap_Paths.max_velocity;
-				Lka = .1;
-				Rka = .1;
+				Lkv =0.178;
+				Rkv =0.171 ;
+				Lka = 0.0005102038686;
+				Rka = 0.008398880472;
+				Rvint = 0.0604;
+				Lvint = 0.0768;
 		}else{
-				 Lkv = 1.0 / RobotMap_Paths.max_velocity;
-				 Rkv = 1.0 / RobotMap_Paths.max_velocity;
-				 Lka = .1;
-				 Rka = .1;
+				 Lkv = 0.178;
+				 Rkv = 0.172;
+				 Lka =-0.002955356636;
+				 Rka = -0.006656921477 ;
+				 Rvint = -0.0785;
+				Lvint = -0.0556;
 
 		}
 			
@@ -101,8 +107,8 @@ public class PathFollower5010 extends Command {
 		// Seventh - The heading error tolerance to achieve before isFinished will
 		// return true
 		double kht = 1;
-		left.configurePIDVA(kp, 0.0, kd, Lkv, Lka, ket, kht);
-		right.configurePIDVA(kp, 0.0, kd, Rkv, Rka, ket, kht);
+		left.configurePIDVA(kp, 0.0, kd, Lkv, Lka, ket, kht, Lvint);
+		right.configurePIDVA(kp, 0.0, kd, Rkv, Rka, ket, kht, Rvint);
 	}
 
 	// Called repeatedly when this Command is scheduled to run
