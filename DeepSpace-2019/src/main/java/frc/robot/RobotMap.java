@@ -106,7 +106,8 @@ public class RobotMap {
     isComp=false;
     SmartDashboard.putString("Robot", "Practice");
     initRobotComponents();
-    initMotorsPrac();
+    //initMotorsPrac();
+    initMotorsComp();
     initSubsystems();
     initCommands();
     RobotMap_Paths.init();
@@ -218,6 +219,7 @@ public class RobotMap {
   public static void init() {
     // The init function for different robots. Change based on functions above.
     File fieldMapFile = new File(Filesystem.getOperatingDirectory().toPath() + "/robot.txt");
+    System.out.println(Filesystem.getOperatingDirectory().toPath() + "/robot.txt");
     RobotMap_Paths.deployPath = Filesystem.getDeployDirectory().getAbsolutePath() + "/paths/";
     String data = "";
     try {
@@ -226,7 +228,8 @@ public class RobotMap {
         data = reader.readLine();
       }
       if (data.compareToIgnoreCase("PRACTICE") == 0 && RobotBase.isReal()) {
-        initPractice();
+        initComp();
+
       } else if (data.compareToIgnoreCase("COMP") == 0 && RobotBase.isReal()) {
         initComp();
       } else if (data.compareToIgnoreCase("HOBBES") == 0 && RobotBase.isReal()) {

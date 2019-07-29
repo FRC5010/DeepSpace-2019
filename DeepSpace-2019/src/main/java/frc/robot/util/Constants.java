@@ -31,7 +31,7 @@ public class Constants {
 	public final static double kNeutralDeadband = 0.001;
 
 	/* Current threshold to trigger current limit */
-	public static final int kPeakCurrentAmps = 40;
+	public static final int kPeakCurrentAmps = 38;
 
 	/* Duration after current exceed Peak Current to trigger current limit */
 	public static final int kPeakTimeMs = 500;

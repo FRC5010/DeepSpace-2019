@@ -80,7 +80,7 @@ public class OI {
 
   public OI() {
     /** Driver controls */
-    driverStart.whenPressed(new FieldMovement());
+    driverStart.whenPressed(new Preload());
     driverBack.whenPressed(new DriveTrainCharacterizer(TestMode.QUASI_STATIC, Direction.Forward));
 
     driverJoyLB.whenPressed(new ShiftDown());
@@ -105,7 +105,7 @@ public class OI {
     coDriverStart.whenPressed(new ElevatorReset());
     coDriverBack.whenPressed(new WristReset());
     coDriverJoyLB.whenPressed(new ToggleMotorSafety());
-    coDriverRB.whenPressed(new WristMM(Wrist.Position.PRELOAD));
+   //bad coDriverRB.whenPressed(new WristMM(Wrist.Position.PRELOAD));
 
     coDriverA.whenPressed(new AllComeDown());
     coDriverB.whenPressed(new PlacementMiddle());

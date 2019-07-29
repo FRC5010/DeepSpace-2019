@@ -31,7 +31,7 @@ public class ElevatorMM extends Command {
     if (RobotMap.elevator.isCargoGamePiece) {
       switch (position) {
       case LOW: {
-        setPoint = Elevator.HATCH_LOW;
+        setPoint =250;
         break;
       }
       case MIDDLE: {

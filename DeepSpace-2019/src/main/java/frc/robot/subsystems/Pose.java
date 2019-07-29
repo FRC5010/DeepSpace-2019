@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 import frc.robot.subsystems.Vision.Values;
@@ -24,6 +25,10 @@ public class Pose {
 
     public final long driveTrainEncoderLeft;
     public final long driveTrainEncoderRight;
+    public final double driveTrainRateLeft;
+    public final double driveTrainRateRight;
+    public final double driveTrainAccLeft;
+    public final double driveTrainAccRight;
     public final double heading;
     public final double elevatorEncoder;
     public final double totalAmps;
@@ -34,9 +39,13 @@ public class Pose {
     public static final List<Pose> poseList = new ArrayList<Pose>();
     private static Pose currentPose = new Pose();
     private static long poseListLimit = 20;
+    private static long lastTimeStamp = RobotController.getFPGATime();
+    private static double lastLeftRate = 0.0;
+    private static double lastRightRate = 0.0;
 
     public Pose(long timestamp) {
         this.timestamp = timestamp;
+        SmartDashboard.putNumber("Timestamp", timestamp/1000000.0);
         limeLight = new Values(0.0);
         limeLight.tValid = RobotMap.vision.isTargetValid();
         limeLight.tX = RobotMap.vision.getX();
@@ -58,6 +67,18 @@ public class Pose {
         pitch = RobotMap.direction.getPitch();
         driveTrainEncoderLeft = RobotMap.distance.getLeftRaw();
         driveTrainEncoderRight = RobotMap.distance.getRightRaw();
+        driveTrainRateLeft = RobotMap.distance.getLeftRate();
+        driveTrainRateRight = RobotMap.distance.getRightRate();
+
+        double dt = (timestamp - lastTimeStamp) / 1000000.0;
+        double dRateLeft = (driveTrainRateLeft - lastLeftRate);
+        double dRateRight = (driveTrainRateRight - lastRightRate);
+        lastTimeStamp = timestamp;
+        driveTrainAccLeft = dRateLeft / dt;
+        driveTrainAccRight = dRateRight / dt;
+        SmartDashboard.putNumber("Left Acc", driveTrainAccLeft);
+        SmartDashboard.putNumber("Right Acc", driveTrainAccRight);
+
         elevatorEncoder = RobotMap.elevator.getCurrentPosition();
         if (RobotBase.isReal()) {
         totalAmps = RobotMap.pdp.getTotalCurrent();
@@ -80,6 +101,10 @@ public class Pose {
         elevatorEncoder = 0.0;
         totalAmps = 0;
         elevatorAmps = 0.0;
+        driveTrainAccLeft = 0.0;
+        driveTrainAccRight = 0.0;
+        driveTrainRateLeft = 0.0;
+        driveTrainRateRight = 0.0;
     }
 
     public static Pose getCurrentPose() {

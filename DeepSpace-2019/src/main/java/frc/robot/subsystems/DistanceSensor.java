@@ -38,9 +38,19 @@ public class DistanceSensor extends Subsystem {
 	
 	public int getRightRaw() {
 		SmartDashboard.putNumber("right encoder getRaw", RobotMap.rightEncoder.getRaw());
-		return RobotMap.rightEncoder.getRaw();
-		
+		return RobotMap.rightEncoder.getRaw();		
 	}
+
+	public double getRightRate() {
+		SmartDashboard.putNumber("right encoder getRate", RobotMap.rightEncoder.getRate());
+		return RobotMap.rightEncoder.getRate();
+	}
+
+	public double getLeftRate() {
+		SmartDashboard.putNumber("left encoder getRate", RobotMap.leftEncoder.getRate());
+		return RobotMap.leftEncoder.getRate();
+	}
+
 	public void reset() {
 		RobotMap.rightEncoder.reset();
 		RobotMap.leftEncoder.reset();
