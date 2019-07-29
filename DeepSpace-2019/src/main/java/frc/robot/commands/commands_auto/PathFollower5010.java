@@ -62,8 +62,8 @@ public class PathFollower5010 extends Command {
 		left.reset();
 		right.reset();
 		RobotMap.distance.reset();
-		left.configureEncoder(RobotMap.distance.getLeftRaw(), RobotMap.encoderPPR, RobotMap_Paths.wheel_diameter);
-		right.configureEncoder(RobotMap.distance.getRightRaw(), RobotMap.encoderPPR, RobotMap_Paths.wheel_diameter);
+		left.configureEncoder(RobotMap.leftEncoder, RobotMap.direction, RobotMap.encoderPPR, RobotMap_Paths.wheel_diameter);
+		right.configureEncoder(RobotMap.rightEncoder, RobotMap.direction, RobotMap.encoderPPR, RobotMap_Paths.wheel_diameter);
 
 		// The first argument is the proportional gain. Usually this will be quite high
 		double kp = 1.0;
@@ -114,9 +114,8 @@ public class PathFollower5010 extends Command {
 	// Called repeatedly when this Command is scheduled to run
 	@Override
   protected void execute() {
-	double gyro_heading = RobotMap.direction.angle();
-	double l = left.calculate(RobotMap.distance.getLeftRaw(), gyro_heading);
-	double r = right.calculate(RobotMap.distance.getRightRaw(), gyro_heading);
+	double l = left.calculate();
+	double r = right.calculate();
 		
 	Trajectory.Segment lseg = left.getSegment();
 	Trajectory.Segment rseg = right.getSegment();

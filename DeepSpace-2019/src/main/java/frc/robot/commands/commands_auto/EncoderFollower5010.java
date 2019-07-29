@@ -1,9 +1,15 @@
 package frc.robot.commands.commands_auto;
 
+import com.kauailabs.navx.frc.AHRS;
+
+import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 import frc.robot.commands.commands_auto.PathFollower5010.Direction;
 import frc.robot.subsystems.DirectionSensor;
+import frc.robot.util.Logger;
 import jaci.pathfinder.Pathfinder;
 import jaci.pathfinder.Trajectory;
 
@@ -28,6 +34,9 @@ public class EncoderFollower5010 {
     int segment;
     Trajectory trajectory;
     Trajectory.Segment next_segment;
+    Logger log;
+    Encoder encoder;
+    DirectionSensor gyro;
 
     /** Constructor
     * @param traj a previously generated trajectory
@@ -39,6 +48,7 @@ public class EncoderFollower5010 {
         this.isFwd = isFwd;
         this.isRight = isRight;
         last_segment_max = 10;
+        log = new Logger(this.getClass().getSimpleName() + (isRight ? "_right_" : "_left_") + isFwd);
     }
 
     // Private so no one can use it, incorrectly
@@ -82,8 +92,10 @@ public class EncoderFollower5010 {
      * @param ticks_per_revolution  How many ticks per revolution the encoder has
      * @param wheel_diameter        The diameter of your wheels (or pulleys for track systems) in meters
      */
-    public void configureEncoder(int initial_position, int ticks_per_revolution, double wheel_diameter) {
-        encoder_offset = initial_position;
+    public void configureEncoder(Encoder encoder, DirectionSensor gyro, int ticks_per_revolution, double wheel_diameter) {
+        this.encoder = encoder;
+        this.gyro = gyro;
+        encoder_offset = encoder.get();
         encoder_tick_count = ticks_per_revolution;
         wheel_circumference = Math.PI * wheel_diameter;
     }
@@ -105,7 +117,9 @@ public class EncoderFollower5010 {
      * @param gHeading      Current gyro heading
      * @return              The desired output for your motor controller
      */
-    public double calculate(int encoder_tick, double gyro_heading) {
+    public double calculate() {
+        int encoder_tick = encoder.get();
+        double gyro_heading = gyro.angle();
         // Number of Revolutions * Wheel Circumference
         if (isFwd != Direction.kForward) { encoder_tick = -encoder_tick; }
         double distance_covered = ((double)(encoder_tick - encoder_offset) / encoder_tick_count)
@@ -153,6 +167,18 @@ public class EncoderFollower5010 {
                 calculated_value = -calculated_value;
             }
 
+            double aVel = encoder.getRate();
+            log.entry("timestamp", Long.valueOf(RobotController.getFPGATime()));
+            log.entry("xVel", Double.valueOf(next_segment.velocity));
+            log.entry("aVel", Double.valueOf(aVel));
+            log.entry("eVel", Double.valueOf(next_segment.velocity - aVel));
+            log.entry("xPosition", Double.valueOf(next_segment.position));
+            log.entry("aPosition", Double.valueOf(distance_covered));
+            log.entry("ePosition", Double.valueOf(error));
+            log.entry("xHeading", Double.valueOf(next_segment.heading));
+            log.entry("aHeading", Double.valueOf(gyro_heading));
+            log.entry("eHeading", Double.valueOf(next_segment.heading - gyro_heading));
+            log.writeEntries();
             return calculated_value;
         } else return 0;
     }
