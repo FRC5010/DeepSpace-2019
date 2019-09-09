@@ -18,6 +18,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.BuiltInAccelerometer;
+import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Filesystem;
@@ -35,10 +36,10 @@ import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Shifter;
 import frc.robot.subsystems.Vision;
-import frc.robot.subsystems.VisionAssistedDrive;
-import frc.robot.subsystems.Wrist;
 import frc.robot.subsystems.Vision.CamMode;
 import frc.robot.subsystems.Vision.Stream;
+import frc.robot.subsystems.VisionAssistedDrive;
+import frc.robot.subsystems.Wrist;
 import frc.robot.util.Constants;
 
 /**
@@ -115,8 +116,8 @@ public class RobotMap {
 
   public static void initRobotComponents() {
     builtInAccelerometer = new BuiltInAccelerometer(Accelerometer.Range.k4G);
-    rightEncoder = new Encoder(0, 1);
-    leftEncoder = new Encoder(2, 3);
+    rightEncoder = new Encoder(0, 1, false, EncodingType.k1X);
+    leftEncoder = new Encoder(2, 3, false, EncodingType.k1X);
     encoderPPR = 480;
     gyro = new AHRS(Port.kUSB1);
     beakSolenoid = new DoubleSolenoid(2, 1);

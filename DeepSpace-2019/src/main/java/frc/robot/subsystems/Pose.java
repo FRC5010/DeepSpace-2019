@@ -66,13 +66,16 @@ public class Pose {
         heading = RobotMap.direction.angle();
         pitch = RobotMap.direction.getPitch();
         driveTrainEncoderLeft = RobotMap.distance.getLeftRaw();
-        driveTrainEncoderRight = RobotMap.distance.getRightRaw();
+        driveTrainEncoderRight = RobotMap.distance.getLeftRaw();
         driveTrainRateLeft = RobotMap.distance.getLeftRate();
         driveTrainRateRight = RobotMap.distance.getRightRate();
 
-        double dt = (timestamp - lastTimeStamp) / 1000000.0;
+        double dt = (timestamp - lastTimeStamp) / 10000.0;
         double dRateLeft = (driveTrainRateLeft - lastLeftRate);
         double dRateRight = (driveTrainRateRight - lastRightRate);
+        
+        lastLeftRate = driveTrainRateLeft;
+        lastRightRate = driveTrainRateRight;
         lastTimeStamp = timestamp;
         driveTrainAccLeft = dRateLeft / dt;
         driveTrainAccRight = dRateRight / dt;

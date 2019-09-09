@@ -7,9 +7,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DistanceSensor extends Subsystem {
 	
-	double rightDPP = 0.0032725;
-	//right encoder reversed?
-	
+	public static double rightDPP = 0.5 * Math.PI / 120;
+	// Uses 120 pulses per rotation from k1X 	
 	
 	public DistanceSensor() {
 		RobotMap.rightEncoder.reset();
@@ -25,19 +24,21 @@ public class DistanceSensor extends Subsystem {
 		super(name);
 	}
 	public double getDistance() {
-		SmartDashboard.putNumber("right encoder getRaw", RobotMap.rightEncoder.getRaw());
+		SmartDashboard.putNumber("right encoder getRaw", RobotMap.rightEncoder.get());
 		
-		SmartDashboard.putNumber("left encoder getRaw", RobotMap.leftEncoder.getRaw());
+		SmartDashboard.putNumber("left encoder getRaw", RobotMap.leftEncoder.get());
+		SmartDashboard.putNumber("left encoder get Distance",RobotMap.leftEncoder.getDistance());
+		SmartDashboard.putNumber("right encoder get distance", RobotMap.rightEncoder.getDistance());
 		return RobotMap.rightEncoder.getDistance();
 	}
 	
 	public int getLeftRaw() {
-		SmartDashboard.putNumber("left encoder getRaw", RobotMap.leftEncoder.getRaw());
+		SmartDashboard.putNumber("left encoder getRaw", RobotMap.leftEncoder.get());
 		return RobotMap.leftEncoder.getRaw();
 	}
 	
 	public int getRightRaw() {
-		SmartDashboard.putNumber("right encoder getRaw", RobotMap.rightEncoder.getRaw());
+		SmartDashboard.putNumber("right encoder getRaw", RobotMap.rightEncoder.get());
 		return RobotMap.rightEncoder.getRaw();		
 	}
 

@@ -66,11 +66,11 @@ public class PathFollower5010 extends Command {
 		right.configureEncoder(RobotMap.rightEncoder, RobotMap.direction, RobotMap.encoderPPR, RobotMap_Paths.wheel_diameter);
 
 		// The first argument is the proportional gain. Usually this will be quite high
-		double kp = 1.0;
+		double kp = 0.0;
 		// The second argument is the integral gain. This is unused for motion profiling
 		// The third argument is the derivative gain. Tweak this if you are unhappy with
 		// the tracking of the trajectory
-		double kd = 0.01;
+		double kd = 0.00;
 		// The fourth argument is the velocity ratio. This is 1 over the maximum
 		// velocity you provided in the trajectory configuration (it translates m/s to a
 		// -1 to 1 scale that your
@@ -82,20 +82,19 @@ public class PathFollower5010 extends Command {
 		double Rvint;
 		double Lvint;
 		if(isFwd == Direction.kForward){
-				Lkv =0.178;
-				Rkv =0.171 ;
+				Lkv =0.0434;
+				Rkv =0.0421 ;
 				Lka = 0.0005102038686;
 				Rka = 0.008398880472;
-				Rvint = 0.0604;
-				Lvint = 0.0768;
+				Rvint = 0.0935;
+				Lvint = 0.0829;
 		}else{
-				 Lkv = 0.178;
-				 Rkv = 0.172;
+				 Lkv = -0.0434;
+				 Rkv = -0.0421;
 				 Lka =-0.002955356636;
 				 Rka = -0.006656921477 ;
-				 Rvint = -0.0785;
-				Lvint = -0.0556;
-
+				 Rvint = -0.0935;
+				Lvint = -0.0829;
 		}
 			
 		// The fifth argument is your acceleration gain. Tweak this if you want to get
@@ -162,11 +161,26 @@ public class PathFollower5010 extends Command {
 	// Called once after isFinished retu0rns true
 	@Override
 	protected void end() {
+		// if(isFinished()) {
+		// 	if (left.isFinished())
+		// 		System.out.println("LEFT THOUGHT I WAS FINISHED");
+		// 	if (right.isFinished())
+		// 		System.out.println("RIGHT THOUGHT I WAS FINISHED");
+		// 	if(Robot.oi.driveTrainForward.getValue() != 0)
+		// 		System.out.println("DRIVER INTERRUPTED ON THROTTLE");
+		// 	if(Robot.oi.driveTrainTurn.getValue() != 0)
+		// 		System.out.println("DRIVER INTERRUPTED ON STEER");
+		// } else {
+		// 	System.out.println("I DON'T KNOW WHY I'M ENDING");
+		// }
+		left.end();
+		right.end();
 	}
 
 	// Called when another command which requires one or more of the same
 	// subsystems is scheduled to run
 	@Override
 	protected void interrupted() {
+		System.out.println("I WAS INTERRUPTED!");
 	}
 }

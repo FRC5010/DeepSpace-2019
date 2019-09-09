@@ -107,6 +107,7 @@ public class EncoderFollower5010 {
         last_error = 0; segment = 0;
         last_heading_error = 0; next_segment = null;
         encoder_offset = 0; last_segment_count = 0;
+        log.clear();
     }
 
     /**
@@ -181,6 +182,10 @@ public class EncoderFollower5010 {
             log.writeEntries();
             return calculated_value;
         } else return 0;
+    }
+
+    public void end() {
+        log.closeFileWriter();
     }
 
     /**

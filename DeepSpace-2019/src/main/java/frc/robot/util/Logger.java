@@ -7,13 +7,22 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import edu.wpi.first.wpilibj.RobotController;
+
 public class Logger {
     FileWriter fw;
     Map<String, Object> entries = new HashMap<>();
     boolean firstWrite = true;
+    String subSystem;
 
     public Logger(String subSystem) {
-        String path = "/home/lvuser/" + subSystem + ".csv";
+        this.subSystem = subSystem;
+    }
+
+    public void clear() {
+        entries = new HashMap<>();
+        firstWrite = true;
+        String path = "/home/lvuser/" + subSystem + RobotController.getFPGATime() + ".csv";
         try {
             File f = new File(path);
             if (f.exists()) {
@@ -24,9 +33,6 @@ public class Logger {
             e.printStackTrace();
         }
     }
-    public void clear() {
-        entries = new HashMap<>();
-    }
 
     public void entry(String key, Object value) {
         entries.put(key, value);
@@ -36,7 +42,10 @@ public class Logger {
         if (firstWrite) {
             String titles = entries.keySet().stream().collect(Collectors.joining(", "));
             try {
+                System.out.println(titles);
                 fw.write(titles);
+                fw.write("\r\n");
+                fw.flush();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -44,9 +53,21 @@ public class Logger {
         }
         String values = entries.values().stream().map(Object::toString).collect(Collectors.joining(", "));
         try {
+            System.out.println(values);
             fw.write(values);
+            fw.write("\r\n");
+            fw.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
-}
+    }
+
+    public void closeFileWriter() {
+        try {
+            fw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
 }
