@@ -40,23 +40,26 @@ public class Logger {
 
     public void writeEntries() {
         if (firstWrite) {
-            String titles = entries.keySet().stream().collect(Collectors.joining(", "));
+            String titles = entries.keySet().stream()
+                .sorted().collect(Collectors.joining(", "));
             try {
                 System.out.println(titles);
                 fw.write(titles);
                 fw.write("\r\n");
-                fw.flush();
             } catch (IOException e) {
                 e.printStackTrace();
             }
             firstWrite = false;
         }
-        String values = entries.values().stream().map(Object::toString).collect(Collectors.joining(", "));
+        String values = entries.keySet().stream()
+            .sorted()
+            .map(k -> entries.get(k))
+            .map(Object::toString)
+            .collect(Collectors.joining(", "));
         try {
             System.out.println(values);
             fw.write(values);
             fw.write("\r\n");
-            fw.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -64,6 +67,7 @@ public class Logger {
 
     public void closeFileWriter() {
         try {
+            fw.flush();
             fw.close();
         } catch (IOException e) {
             e.printStackTrace();

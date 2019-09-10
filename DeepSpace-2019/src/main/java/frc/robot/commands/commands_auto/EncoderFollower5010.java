@@ -150,6 +150,7 @@ public class EncoderFollower5010 {
             double last_heading_error = DirectionSensor.boundHalfDegrees(desired_heading - gyro_heading);
             double turn = 0.8 * (-1.0 / 80.0) * last_heading_error;
 
+            log.entry("Out Cal", Double.valueOf(calculated_value));
 
             if (isRight) {
                 calculated_value -= turn;
@@ -169,16 +170,17 @@ public class EncoderFollower5010 {
             }
 
             double aVel = encoder.getRate();
-            log.entry("timestamp", Long.valueOf(RobotController.getFPGATime()));
-            log.entry("xVel", Double.valueOf(next_segment.velocity));
-            log.entry("aVel", Double.valueOf(aVel));
-            log.entry("eVel", Double.valueOf(next_segment.velocity - aVel));
-            log.entry("xPosition", Double.valueOf(next_segment.position));
-            log.entry("aPosition", Double.valueOf(distance_covered));
-            log.entry("ePosition", Double.valueOf(error));
-            log.entry("xHeading", Double.valueOf(next_segment.heading));
-            log.entry("aHeading", Double.valueOf(gyro_heading));
-            log.entry("eHeading", Double.valueOf(next_segment.heading - gyro_heading));
+            log.entry("Timestamp", Long.valueOf(RobotController.getFPGATime()));
+            log.entry("Out Trn", Double.valueOf(calculated_value));
+            log.entry("Pos Act", Double.valueOf(next_segment.position));
+            log.entry("Pos Err", Double.valueOf(error));
+            log.entry("Pos Exp", Double.valueOf(distance_covered));
+            log.entry("Vel Act", Double.valueOf(aVel));
+            log.entry("Vel Err", Double.valueOf(next_segment.velocity - aVel));
+            log.entry("Vel Exp", Double.valueOf(next_segment.velocity));
+            log.entry("ang Act", Double.valueOf(gyro_heading));
+            log.entry("ang Err", Double.valueOf(next_segment.heading - gyro_heading));
+            log.entry("ang Exp", Double.valueOf(next_segment.heading));
             log.writeEntries();
             return calculated_value;
         } else return 0;

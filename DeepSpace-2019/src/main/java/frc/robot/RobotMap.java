@@ -144,6 +144,11 @@ public class RobotMap {
     rightMotor2.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 3);
     leftMotor2.set(com.ctre.phoenix.motorcontrol.ControlMode.Follower, 2);
 
+    rightMotor1.configVoltageCompSaturation(12); // "full output" will now scale to 12 Volts for all control modes when enabled.
+		rightMotor1.enableVoltageCompensation(true); // turn on/off feature
+		leftMotor1.configVoltageCompSaturation(12); // "full output" will now scale to 12 Volts for all control modes when enabled.
+		leftMotor1.enableVoltageCompensation(true); // turn on/off feature
+
     intakeMotor = new WPI_VictorSPX(0);
 
     wristMotor = new WPI_TalonSRX(4);

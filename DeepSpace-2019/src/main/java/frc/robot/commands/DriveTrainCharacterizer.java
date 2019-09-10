@@ -53,7 +53,11 @@ public class DriveTrainCharacterizer extends Command {
 		}
 
 		String path = "/home/lvuser/" + name;
-
+		RobotMap.rightMotor1.configVoltageCompSaturation(12); // "full output" will now scale to 12 Volts for all control modes when enabled.
+		RobotMap.rightMotor1.enableVoltageCompensation(true); // turn on/off feature
+		RobotMap.leftMotor1.configVoltageCompSaturation(12); // "full output" will now scale to 12 Volts for all control modes when enabled.
+		RobotMap.leftMotor1.enableVoltageCompensation(true); // turn on/off feature
+		
 		if (mode.equals(TestMode.QUASI_STATIC)) {
 			System.out.println("QUASI STATIC");
 			System.out.println(RobotMap.rightMotor1.configOpenloopRamp(90, 10).name());
