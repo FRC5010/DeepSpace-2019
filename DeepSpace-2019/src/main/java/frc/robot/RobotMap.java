@@ -122,7 +122,7 @@ public class RobotMap {
     gyro = new AHRS(Port.kUSB1);
     beakSolenoid = new DoubleSolenoid(2, 1);
     beakIntake = new BeakIntake();
-    shiftSolenoid = new Solenoid(0);
+    shiftSolenoid = new Solenoid(3);
     pdp = new PowerDistributionPanel();
   }
 
@@ -149,7 +149,7 @@ public class RobotMap {
 		leftMotor1.configVoltageCompSaturation(12); // "full output" will now scale to 12 Volts for all control modes when enabled.
 		leftMotor1.enableVoltageCompensation(true); // turn on/off feature
 
-    intakeMotor = new WPI_VictorSPX(0);
+    intakeMotor = new WPI_VictorSPX(8);
 
     wristMotor = new WPI_TalonSRX(4);
 

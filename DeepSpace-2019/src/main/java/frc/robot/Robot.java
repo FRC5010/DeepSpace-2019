@@ -52,16 +52,16 @@ public class Robot extends TimedRobot {
     RobotMap.init();
     oi = new OI();
 
-    m_chooser.setDefaultOption("HAB Level 1", new DriveOffHABLevel1());
-    m_chooser.setDefaultOption("Middle Ship Straight On", new MiddleShipLeft());
-    m_chooser.setDefaultOption("Middle Ship Left", new MiddleShipLeft());
-    m_chooser.setDefaultOption("Middle Ship Right", new MiddleShipRight());
-    m_chooser.setDefaultOption("Left Ship Front", new LeftShipFront());
-    m_chooser.setDefaultOption("Right Ship Front", new RightShipFront());
-    m_chooser.setDefaultOption("Left Ship Side", new LeftShipSide());
-    m_chooser.setDefaultOption("Right Ship Side", new RightShipSide());
-    m_chooser.setDefaultOption("Left Rocket", new LeftRocket());
-    m_chooser.setDefaultOption("Right Rocket", new RightRocket());
+    m_chooser.addOption("HAB Level 1", new DriveOffHABLevel1());
+    m_chooser.addOption("Middle Ship Straight On", new MiddleShipLeft());
+    m_chooser.addOption("Middle Ship Left", new MiddleShipLeft());
+    m_chooser.addOption("Middle Ship Right", new MiddleShipRight());
+    m_chooser.addOption("Left Ship Front", new LeftShipFront());
+    m_chooser.addOption("Right Ship Front", new RightShipFront());
+    m_chooser.addOption("Left Ship Side", new LeftShipSide());
+    m_chooser.addOption("Right Ship Side", new RightShipSide());
+    m_chooser.addOption("Left Rocket", new LeftRocket());
+    m_chooser.addOption("Right Rocket", new RightRocket());
     m_chooser.setDefaultOption("talib", new Preload());
     // chooser.addOption("My Auto", new MyAutoCommand());
     SmartDashboard.putData("Auto mode", m_chooser);
